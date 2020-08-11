@@ -1,0 +1,8 @@
+<resources>
+    <string name="app_name">Good-Tilt</string>
+    <string name="HOME">홈</string>
+    <string name="BACK">뒤로</string>
+    <string name="RECENT">최근 앱</string>
+    <string name="PLAY_PAUSE">음악 시작 및 정지</string>
+    <string name="NEXT">다음 음악</string>
+</resources>

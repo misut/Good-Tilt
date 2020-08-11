@@ -6,13 +6,133 @@
     android:layout_height="match_parent"
     tools:context=".MainActivity">
 
+    <Button
+        android:id="@+id/serviceButton"
+        android:layout_width="wrap_content"
+        android:layout_height="50dp"
+        android:text="서비스 시작"
+        app:layout_constraintBottom_toBottomOf="@id/accessButton"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toEndOf="@id/overlayButton"
+        app:layout_constraintTop_toTopOf="@id/accessButton"
+        app:layout_constraintVertical_bias="1.0" />
+
     <TextView
+        android:id="@+id/textViewMod"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Hello World!"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
+        android:text="인 앱 모드"
+        android:layout_marginTop="15dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toStartOf="@id/modeButton"
+        app:layout_constraintTop_toBottomOf="@+id/actionSpinner" />
+
+    <Button
+        android:id="@+id/modeButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="모드 전환"
+        app:layout_constraintBottom_toBottomOf="@+id/textViewMod"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/textViewMod"
+        app:layout_constraintTop_toTopOf="@+id/textViewMod" />
+
+    <Spinner
+        android:id="@+id/actionSpinner"
+        android:layout_width="0dp"
+        android:layout_height="50dp"
+        android:layout_marginTop="204dp"
+        app:layout_constraintEnd_toEndOf="@+id/serviceButton"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="@+id/accessButton"
         app:layout_constraintTop_toTopOf="parent" />
+
+    <Button
+        android:id="@+id/overlayButton"
+        android:layout_width="wrap_content"
+        android:layout_height="50dp"
+        android:text="오버레이 허용"
+        app:layout_constraintBottom_toBottomOf="@+id/accessButton"
+        app:layout_constraintEnd_toStartOf="@+id/serviceButton"
+        app:layout_constraintHorizontal_bias="0.939"
+        app:layout_constraintStart_toEndOf="@+id/accessButton"
+        app:layout_constraintTop_toTopOf="@+id/accessButton"
+        app:layout_constraintVertical_bias="0.178" />
+
+    <Button
+        android:id="@+id/accessButton"
+        android:layout_width="wrap_content"
+        android:layout_height="50dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="36dp"
+        android:text="접근성 허용"
+        app:layout_constraintEnd_toStartOf="@+id/overlayButton"
+        app:layout_constraintHorizontal_bias="0.121"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textViewY" />
+
+    <TextView
+        android:id="@+id/textViewY"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="TextView"
+        app:layout_constraintBottom_toBottomOf="@id/textViewX"
+        app:layout_constraintEnd_toStartOf="@id/textViewZ"
+        app:layout_constraintStart_toEndOf="@+id/textViewX"
+        app:layout_constraintTop_toTopOf="@id/textViewX"
+        app:layout_constraintVertical_bias="1.0" />
+
+    <TextView
+        android:id="@+id/textViewX"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="15dp"
+        android:layout_marginTop="16dp"
+        android:text="Hello World!"
+        app:layout_constraintEnd_toStartOf="@id/textViewY"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textView2" />
+
+    <TextView
+        android:id="@+id/textViewZ"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="15dp"
+        android:text="TextView"
+        app:layout_constraintBottom_toBottomOf="@id/textViewX"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@id/textViewY"
+        app:layout_constraintTop_toTopOf="@id/textViewX"
+        app:layout_constraintVertical_bias="1.0" />
+
+    <TextView
+        android:id="@+id/textView2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="32dp"
+        android:text="자이로 센서 값"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+
+    <ScrollView
+        android:id="@+id/scrollView2"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginTop="20dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="@+id/textViewZ"
+        app:layout_constraintStart_toStartOf="@+id/textViewX"
+        app:layout_constraintTop_toBottomOf="@+id/textViewMod">
+
+        <TextView
+            android:id="@+id/logList"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:text="로그" />
+    </ScrollView>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
