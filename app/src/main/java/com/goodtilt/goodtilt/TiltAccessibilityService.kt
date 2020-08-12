@@ -1,25 +1,11 @@
 package com.goodtilt.goodtilt
 
 import android.accessibilityservice.AccessibilityService
-import android.accessibilityservice.AccessibilityServiceInfo
-import android.app.Notification
-import android.app.NotificationChannel
-import android.app.NotificationManager
-import android.app.Service
-import android.content.Context
-import android.content.Intent
-import android.graphics.PixelFormat
-import android.hardware.input.InputManager
-import android.media.AudioManager
-import android.os.Build
-import android.os.IBinder
-import android.os.SystemClock
+import android.accessibilityservice.GestureDescription
+import android.graphics.Path
 import android.util.Log
-import android.view.*
+import android.view.View
 import android.view.accessibility.AccessibilityEvent
-import android.widget.LinearLayout
-import androidx.core.app.NotificationCompat
-import java.lang.reflect.Method
 
 
 class TiltAccessibilityService : AccessibilityService() {
@@ -31,6 +17,17 @@ class TiltAccessibilityService : AccessibilityService() {
         fun doAction(action: Int) {
             instance?.performGlobalAction(action)
         }
+
+        fun mouseDraw(path : Path){
+            val description = GestureDescription.StrokeDescription(path, 0, 0)
+            instance?.dispatchGesture(
+                GestureDescription.Builder().addStroke(description).build(),
+                object : GestureResultCallback() {
+                },
+                null
+            )
+        }
+
 
     }
 
