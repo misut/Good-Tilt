@@ -18,17 +18,18 @@ class TiltAccessibilityService : AccessibilityService() {
             instance?.performGlobalAction(action)
         }
 
-        fun mouseDraw(path : Path){
-            val description = GestureDescription.StrokeDescription(path, 0, 0)
-            instance?.dispatchGesture(
+        fun mouseDraw(path : Path) : Boolean{
+            val description = GestureDescription.StrokeDescription(path, 0, 2)
+            val ret = instance?.dispatchGesture(
                 GestureDescription.Builder().addStroke(description).build(),
                 object : GestureResultCallback() {
                 },
                 null
             )
+            if(ret != null)
+                return ret
+            return false
         }
-
-
     }
 
     override fun onServiceConnected() {
@@ -44,7 +45,6 @@ class TiltAccessibilityService : AccessibilityService() {
         this.serviceInfo = info
         */
         instance = this
-        Log.i("dd", "dddd")
     }
 
 

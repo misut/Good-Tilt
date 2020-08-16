@@ -7,12 +7,14 @@ import android.app.NotificationManager
 import android.app.Service
 import android.content.Context
 import android.content.Intent
+import android.graphics.Path
 import android.graphics.PixelFormat
 import android.hardware.Sensor
 import android.hardware.SensorManager
 import android.media.AudioManager
 import android.os.Build
 import android.os.IBinder
+import android.util.Log
 import android.view.*
 import android.widget.LinearLayout
 import android.widget.Toast
@@ -24,12 +26,19 @@ class EventService : Service() {
     var keyEvent = KeyAction.HOME
     private val sensorListener = MisutListener(null,::onActionOccur)
     private lateinit var sensorManager: SensorManager
+    private var swipePosX = 0.0f
+    private var swipePosY = 0.0f
 
     override fun onCreate() {
         super.onCreate()
 
+        swipePosX = resources.displayMetrics.widthPixels / 2.0f
+        swipePosY = resources.displayMetrics.heightPixels / 2.0f
+
         sensorManager = getSystemService(Context.SENSOR_SERVICE) as SensorManager
         changeListenerState(true)
+
+
 
         val wm : WindowManager =  getSystemService(Context.WINDOW_SERVICE) as WindowManager
 
@@ -50,7 +59,8 @@ class EventService : Service() {
         val btn_img = mView.findViewById<LinearLayout>(R.id.testArea)
         btn_img.setOnTouchListener(object : View.OnTouchListener {
             override fun onTouch(view: View?, motionEvent: MotionEvent): Boolean {
-                generateEvent(keyEvent.key)
+                generateSwipe(0)
+                //generateEvent(keyEvent.key)
                 return false
             }
         })
@@ -107,6 +117,13 @@ class EventService : Service() {
             }
         }
         return true
+    }
+
+    fun generateSwipe(direction : Int) {
+        val path = Path()
+        path.moveTo(swipePosX, swipePosY)
+        path.lineTo(swipePosX, 0.0f)
+        Log.i("Retrun Swipe", TiltAccessibilityService.mouseDraw(path).toString())
     }
 
     fun changeListenerState(state : Boolean){
