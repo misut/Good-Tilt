@@ -27,6 +27,8 @@ class MainActivity : AppCompatActivity() {
     private var serviceRunning = false
 
     private lateinit var sensorManager: SensorManager
+    private lateinit var sensorAccl: Sensor
+    private lateinit var sensorGyro: Sensor
     private val sensorListener = MisutListener(::printResult, ::printAction)
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -34,6 +36,8 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
 
         sensorManager = getSystemService(Context.SENSOR_SERVICE) as SensorManager
+        sensorAccl = sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER)
+        sensorGyro = sensorManager.getDefaultSensor(Sensor.TYPE_GYROSCOPE)
 
         val items = ArrayList<String>()
         for (act in KeyAction.values()) {
@@ -130,11 +134,9 @@ class MainActivity : AppCompatActivity() {
 
     fun changeListenerState(state: Boolean) {
         if (state) {
-            sensorManager.registerListener(
-                sensorListener,
-                sensorManager.getDefaultSensor(Sensor.TYPE_GYROSCOPE),
-                SensorManager.SENSOR_DELAY_NORMAL
-            )
+            //자이로스코프, 가속도계 등록
+            sensorManager.registerListener(sensorListener, sensorAccl, SensorManager.SENSOR_DELAY_NORMAL)
+            sensorManager.registerListener(sensorListener, sensorGyro, SensorManager.SENSOR_DELAY_NORMAL)
         } else {
             sensorManager.unregisterListener(sensorListener)
         }
