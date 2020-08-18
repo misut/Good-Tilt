@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <PreferenceCategory
+        android:title="@string/setting_action"
+        app:iconSpaceReserved="false">
+        <ListPreference
+            android:defaultValue="NONE"
+            android:entries="@array/action_string"
+            android:entryValues="@array/action_key"
+            android:key="tilt_left"
+            android:title="@string/left_tilt_action"
+            app:iconSpaceReserved="false" />
+        <ListPreference
+            android:defaultValue="NONE"
+            android:entries="@array/action_string"
+            android:entryValues="@array/action_key"
+            android:key="tilt_right"
+            android:title="@string/right_tilt_action"
+            app:iconSpaceReserved="false" />
+        <ListPreference
+            android:defaultValue="NONE"
+            android:entries="@array/action_string"
+            android:entryValues="@array/action_key"
+            android:key="tilt_up"
+            android:title="@string/up_tilt_action"
+            app:iconSpaceReserved="false" />
+        <ListPreference
+            android:defaultValue="NONE"
+            android:entries="@array/action_string"
+            android:entryValues="@array/action_key"
+            android:key="tilt_down"
+            android:title="@string/down_tilt_action"
+            app:iconSpaceReserved="false" />
+    </PreferenceCategory>
+
+    <PreferenceCategory
+        android:title="@string/setting_sensitivity"
+        app:iconSpaceReserved="false">
+        <SeekBarPreference
+            android:defaultValue="20"
+            android:key="swipe_speed"
+            android:max="90"
+            android:title="@string/swipe_speed"
+            app:iconSpaceReserved="false"
+            app:showSeekBarValue="false" />
+        <SeekBarPreference
+            android:defaultValue="0"
+            android:key="min_angle"
+            android:max="100"
+            android:title="@string/minimum_angle"
+            app:iconSpaceReserved="false"
+            app:showSeekBarValue="true" />
+        <SeekBarPreference
+            android:defaultValue="15"
+            android:key="min_velocity"
+            android:max="60"
+            android:title="@string/minimum_velocity"
+            app:iconSpaceReserved="false"
+            app:showSeekBarValue="true" />
+    </PreferenceCategory>
+</PreferenceScreen>

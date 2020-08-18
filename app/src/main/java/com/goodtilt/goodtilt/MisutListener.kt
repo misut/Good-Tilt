@@ -1,16 +1,19 @@
 package com.goodtilt.goodtilt
 
+import android.content.Context
+import android.content.SharedPreferences
 import android.hardware.Sensor
 import android.hardware.SensorEvent
 import android.hardware.SensorEventListener
 import android.hardware.SensorManager
+import androidx.preference.PreferenceManager
 import kotlin.math.PI
 import kotlin.math.cos
 import kotlin.math.sin
 import kotlin.math.sqrt
 
 class MisutListener(
-    val result: ((x: String, y: String, z: String) -> Unit)?,
+    val result: ((event : SensorEvent) -> Unit)?,
     val action: (index: Int) -> Unit
 ) : SensorEventListener {
     private val NS2S = 1.0f / 1000000000.0f
@@ -19,6 +22,15 @@ class MisutListener(
     private val rotationVector = FloatArray(4) { 0.0f }
     private val rotationMatrix = FloatArray(9) { 0.0f }
     private var ts: Float = 0f
+    private var min_velocity = 0f
+    private var min_angle = 0f
+
+    fun applyPreference(context : Context){
+        PreferenceManager.getDefaultSharedPreferences(context).apply {
+            min_angle = getInt("min_angle", 0) * 1f
+            min_velocity = getInt("min_velocity", 0) * 1f
+        }
+    }
 
     override fun onAccuracyChanged(p0: Sensor?, p1: Int) {
     }
@@ -34,6 +46,7 @@ class MisutListener(
                     evt.values[1];
                     evt.values[2];
                 }
+                result?.invoke(evt)
             }
 
             Sensor.TYPE_GYROSCOPE -> {
@@ -45,7 +58,7 @@ class MisutListener(
                 for (idx in 0..2)
                     rotationAngle[idx] += axis[idx] * dt
 
-                result?.invoke(axis[0].toString(), axis[1].toString(), axis[2].toString())
+                result?.invoke(evt)
 
                 val omegaMagnitude: Float =
                     sqrt(axis[0] * axis[0] + axis[1] * axis[1] + axis[2] * axis[2])

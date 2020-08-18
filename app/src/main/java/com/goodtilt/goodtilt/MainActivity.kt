@@ -4,14 +4,17 @@ import android.annotation.TargetApi
 import android.content.Context
 import android.content.Intent
 import android.hardware.Sensor
+import android.hardware.SensorEvent
 import android.hardware.SensorManager
 import android.net.Uri
 import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.provider.Settings
-import android.widget.ArrayAdapter
+import android.view.Menu
+import android.view.MenuItem
 import android.widget.Toast
+import com.goodtilt.goodtilt.const.KeyAction
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlin.collections.ArrayList
 
@@ -36,6 +39,8 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
 
         sensorManager = getSystemService(Context.SENSOR_SERVICE) as SensorManager
+        sensorListener.applyPreference(this)
+
         sensorAccl = sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER)
         sensorGyro = sensorManager.getDefaultSensor(Sensor.TYPE_GYROSCOPE)
 
@@ -43,8 +48,6 @@ class MainActivity : AppCompatActivity() {
         for (act in KeyAction.values()) {
             items.add(act.str(this))
         }
-        actionSpinner.adapter = ArrayAdapter(this, android.R.layout.simple_list_item_1, items)
-
         checkOverlayPermission()
         checkAccessibilityPermissions()
 
@@ -78,9 +81,6 @@ class MainActivity : AppCompatActivity() {
                 }
 
                 val intent = Intent(this, EventService::class.java)
-                val pos = actionSpinner.selectedItemPosition
-                val action = KeyAction.values()[pos]
-                intent.putExtra("keyEvent", action.name)
 
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
                     startForegroundService(intent)
@@ -104,17 +104,49 @@ class MainActivity : AppCompatActivity() {
             else
                 textViewMod.text = "Stopped"
         }
+
+        positionButton.setOnClickListener {
+            tiltView.setDefaultPosition()
+        }
+
+        setSupportActionBar(mainToolbar)
     }
 
-    fun printResult(x: String, y: String, z: String) {
-        textViewX.text = x;
-        textViewY.text = y;
-        textViewZ.text = z;
+    fun printResult(evt : SensorEvent) {
+        when(evt.sensor.type) {
+            Sensor.TYPE_ACCELEROMETER -> {
+                tiltView.onSensorEvent(evt)
+                textAccelerX.text = evt.values[0].toString();
+                textAccelerY.text = evt.values[1].toString();
+                textAccelerZ.text = evt.values[2].toString();
+            }
+
+            Sensor.TYPE_GYROSCOPE -> {
+                textGyroX.text = evt.values[0].toString();
+                textGyroY.text = evt.values[1].toString();
+                textGyroZ.text = evt.values[2].toString();
+            }
+        }
     }
 
     fun printAction(action: Int) {
         val log = logList.text.toString()
         logList.text = String.format("%d 액션 발생\n%s", action, log)
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+        menuInflater.inflate(R.menu.main_menu, menu)
+        return super.onCreateOptionsMenu(menu)
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        when(item.itemId){
+            R.id.menuSetting->{
+                startActivity(Intent(this, SettingActivity::class.java))
+                return true
+            }
+        }
+        return super.onOptionsItemSelected(item)
     }
 
     override fun onResume() {
@@ -176,4 +208,5 @@ class MainActivity : AppCompatActivity() {
             }
         }
     }
+
 }

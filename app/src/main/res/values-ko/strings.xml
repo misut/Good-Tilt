@@ -1,8 +1,27 @@
 <resources>
     <string name="app_name">Good-Tilt</string>
+
+    <string name="NONE">없음</string>
     <string name="HOME">홈</string>
     <string name="BACK">뒤로</string>
     <string name="RECENT">최근 앱</string>
     <string name="PLAY_PAUSE">음악 시작 및 정지</string>
     <string name="NEXT">다음 음악</string>
+
+    <string name="SWIPE_UP">위로 슬라이드</string>
+    <string name="SWIPE_DOWN">아래로 슬라이드</string>
+    <string name="SWIPE_LEFT">왼쪽으로 슬라이드</string>
+    <string name="SWIPE_RIGHT">오른쪽으로 슬라이드</string>
+
+    <string name="setting_action">동작 설정</string>
+    <string name="setting_sensitivity">민감도 설정</string>
+
+    <string name="left_tilt_action">왼쪽 기울임 동작</string>
+    <string name="right_tilt_action">오른쪽 기울임 동작</string>
+    <string name="up_tilt_action">아래쪽 기울임 동작</string>
+    <string name="down_tilt_action">위쪽 기울임 동작</string>
+
+    <string name="minimum_angle">최소 기울기</string>
+    <string name="minimum_velocity">최소 속도</string>
+    <string name="swipe_speed">스와이프 속도</string>
 </resources>

@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="action_key">
+        <item>NONE</item>
+        <item>HOME</item>
+        <item>BACK</item>
+        <item>RECENT</item>
+        <item>PLAY_PAUSE</item>
+        <item>NEXT</item>
+        <item>SWIPE_DOWN</item>
+        <item>SWIPE_UP</item>
+        <item>SWIPE_LEFT</item>
+        <item>SWIPE_RIGHT</item>
+    </string-array>
+    <string-array name="action_string">
+        <item>@string/NONE</item>
+        <item>@string/HOME</item>
+        <item>@string/BACK</item>
+        <item>@string/RECENT</item>
+        <item>@string/PLAY_PAUSE</item>
+        <item>@string/NEXT</item>
+        <item>@string/SWIPE_DOWN</item>
+        <item>@string/SWIPE_UP</item>
+        <item>@string/SWIPE_LEFT</item>
+        <item>@string/SWIPE_RIGHT</item>
+    </string-array>
+</resources>
