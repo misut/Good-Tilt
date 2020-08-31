@@ -156,8 +156,12 @@ class EventService : Service() {
     fun changeListenerState(state : Boolean){
         if(state){
             sensorManager.registerListener(sensorListener,
+                sensorManager.getDefaultSensor(Sensor.TYPE_ROTATION_VECTOR),
+                SensorManager.SENSOR_DELAY_GAME
+            )
+            sensorManager.registerListener(sensorListener,
                 sensorManager.getDefaultSensor(Sensor.TYPE_GYROSCOPE),
-                SensorManager.SENSOR_DELAY_NORMAL
+                SensorManager.SENSOR_DELAY_GAME
             )
         } else {
             sensorManager.unregisterListener(sensorListener)

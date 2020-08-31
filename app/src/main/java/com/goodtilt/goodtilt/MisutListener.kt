@@ -28,7 +28,14 @@ class MisutListener(
     private var min_angle = 0f
 
     private var status: ListenerStatus = ListenerStatus.IDLE
-    private var tilt_limit = FloatArray(4) { 1.0f; 4.0f; 1.0f; 4.0f } // Order: Horizontal_Low, Horizontal_High, Vertical_Low, Vertical_High
+    private var base = FloatArray(3) { 0.0f }
+    private var rotation = FloatArray(3) { 0.0f }
+    private var rotation_limit = FloatArray(8) {
+        -1.0f; -4.0f;
+        1.0f;  4.0f;
+        -1.0f; -4.0f;
+        1.0f; 4.0f;
+    } // Order: Horizontal_Low, Horizontal_High, Vertical_Low, Vertical_High
 /*
     private val rotationAngle = FloatArray(3) { 0.0f }
     private val rotationVector = FloatArray(4) { 0.0f }
@@ -42,6 +49,9 @@ class MisutListener(
 
     }
 
+    fun initBase() {
+    }
+
     override fun onAccuracyChanged(p0: Sensor?, p1: Int) {
     }
 
@@ -50,52 +60,24 @@ class MisutListener(
             return
         val dt = (evt.timestamp - ts) * NS2S
         when(evt.sensor.type) {
-            Sensor.TYPE_GRAVITY -> {
-                var tilt = FloatArray(3) {
-                    evt.values[0];
-                    evt.values[1];
-                    evt.values[2];
-                }
+            Sensor.TYPE_ROTATION_VECTOR -> {
+                rotation[0] = evt.values[0]
+                rotation[1] = evt.values[1]
+                rotation[2] = evt.values[2]
                 result?.invoke(evt)
 
                 when(status) {
                     ListenerStatus.IDLE -> {
-                        if(evt.values[0] < -tilt_limit[0])
-                            status = ListenerStatus.TILT_LEFT
-                        else if(evt.values[0] > tilt_limit[0])
-                            status = ListenerStatus.TILT_RIGHT
-                        else if(evt.values[1] < -tilt_limit[2])
-                            status = ListenerStatus.TILT_UP
-                        else if(evt.values[1] > tilt_limit[2])
-                            status = ListenerStatus.TILT_DOWN
                     }
                     ListenerStatus.TILT_LEFT -> {
-                        if(evt.values[0] < -tilt_limit[1]) {
-                            action(0)
-                            status = ListenerStatus.STOPOVER
-                        }
                     }
                     ListenerStatus.TILT_RIGHT -> {
-                        if(evt.values[0] > tilt_limit[1]) {
-                            action(1)
-                            status = ListenerStatus.STOPOVER
-                        }
                     }
                     ListenerStatus.TILT_UP -> {
-                        if(evt.values[1] < -tilt_limit[3]) {
-                            action(2)
-                            status = ListenerStatus.STOPOVER
-                        }
                     }
                     ListenerStatus.TILT_DOWN -> {
-                        if(evt.values[1] > tilt_limit[3]) {
-                            action(3)
-                            status = ListenerStatus.STOPOVER
-                        }
                     }
                     ListenerStatus.STOPOVER -> {
-                        if(evt.values[0] in -tilt_limit[0]..tilt_limit[0] && evt.values[1] in -tilt_limit[2]..tilt_limit[2])
-                            status = ListenerStatus.IDLE
                     }
                 }
             }
