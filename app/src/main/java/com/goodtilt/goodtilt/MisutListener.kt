@@ -40,7 +40,7 @@ class MisutListener(
             return
         val dt = (evt.timestamp - ts) * NS2S
         when(evt.sensor.type) {
-            Sensor.TYPE_ACCELEROMETER -> {
+            Sensor.TYPE_GRAVITY -> {
                 var tilt = FloatArray(3) {
                     evt.values[0];
                     evt.values[1];

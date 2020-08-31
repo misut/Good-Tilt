@@ -30,7 +30,7 @@ class MainActivity : AppCompatActivity() {
     private var serviceRunning = false
 
     private lateinit var sensorManager: SensorManager
-    private lateinit var sensorAccl: Sensor
+    private lateinit var sensorGrav: Sensor
     private lateinit var sensorGyro: Sensor
     private val sensorListener = MisutListener(::printResult, ::printAction)
 
@@ -41,7 +41,7 @@ class MainActivity : AppCompatActivity() {
         sensorManager = getSystemService(Context.SENSOR_SERVICE) as SensorManager
         sensorListener.applyPreference(this)
 
-        sensorAccl = sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER)
+        sensorGrav = sensorManager.getDefaultSensor(Sensor.TYPE_GRAVITY)
         sensorGyro = sensorManager.getDefaultSensor(Sensor.TYPE_GYROSCOPE)
 
         val items = ArrayList<String>()
@@ -114,7 +114,7 @@ class MainActivity : AppCompatActivity() {
 
     fun printResult(evt : SensorEvent) {
         when(evt.sensor.type) {
-            Sensor.TYPE_ACCELEROMETER -> {
+            Sensor.TYPE_GRAVITY -> {
                 tiltView.onSensorEvent(evt)
                 textAccelerX.text = evt.values[0].toString();
                 textAccelerY.text = evt.values[1].toString();
@@ -167,7 +167,7 @@ class MainActivity : AppCompatActivity() {
     fun changeListenerState(state: Boolean) {
         if (state) {
             //자이로스코프, 가속도계 등록
-            sensorManager.registerListener(sensorListener, sensorAccl, SensorManager.SENSOR_DELAY_NORMAL)
+            sensorManager.registerListener(sensorListener, sensorGrav, SensorManager.SENSOR_DELAY_GAME)
             sensorManager.registerListener(sensorListener, sensorGyro, SensorManager.SENSOR_DELAY_NORMAL)
         } else {
             sensorManager.unregisterListener(sensorListener)
