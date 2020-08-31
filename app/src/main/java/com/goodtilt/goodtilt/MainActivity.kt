@@ -167,7 +167,7 @@ class MainActivity : AppCompatActivity() {
     fun changeListenerState(state: Boolean) {
         if (state) {
             //자이로스코프, 가속도계 등록
-            sensorManager.registerListener(sensorListener, sensorAccl, SensorManager.SENSOR_DELAY_NORMAL)
+            sensorManager.registerListener(sensorListener, sensorAccl, SensorManager.SENSOR_DELAY_GAME)
             sensorManager.registerListener(sensorListener, sensorGyro, SensorManager.SENSOR_DELAY_NORMAL)
         } else {
             sensorManager.unregisterListener(sensorListener)
