@@ -6,8 +6,11 @@ import android.hardware.Sensor
 import android.hardware.SensorEvent
 import android.hardware.SensorEventListener
 import android.hardware.SensorManager
+import android.renderscript.Matrix4f
+import android.view.MotionEvent
 import android.widget.Toast
 import androidx.preference.PreferenceManager
+import com.goodtilt.goodtilt.source.Quaternion
 import kotlin.math.PI
 import kotlin.math.cos
 import kotlin.math.sin
@@ -27,9 +30,12 @@ class MisutListener(
     private var min_velocity = 0f
     private var min_angle = 0f
 
+    private var isInitAngle = false
+    private var baseAngle = Quaternion()
+
     private var status: ListenerStatus = ListenerStatus.IDLE
     private var base = FloatArray(3) { 0.0f }
-    private var rotation = FloatArray(3) { 0.0f }
+    private var rotation = FloatArray(4) { 0.0f }
     private var rotation_limit = FloatArray(8) {
         -1.0f; -4.0f;
         1.0f;  4.0f;
@@ -50,6 +56,7 @@ class MisutListener(
     }
 
     fun initBase() {
+        baseAngle = Quaternion()
     }
 
     override fun onAccuracyChanged(p0: Sensor?, p1: Int) {
@@ -61,9 +68,15 @@ class MisutListener(
         val dt = (evt.timestamp - ts) * NS2S
         when(evt.sensor.type) {
             Sensor.TYPE_ROTATION_VECTOR -> {
-                rotation[0] = evt.values[0]
-                rotation[1] = evt.values[1]
-                rotation[2] = evt.values[2]
+                if (baseAngle.isInvalid())
+                    baseAngle = Quaternion(evt.values).conjugate()
+                val q2 = Quaternion(evt.values)
+                val angles = (baseAngle * q2).eulerAngle()
+
+                evt.values[0] = angles[0]
+                evt.values[1] = angles[1]
+                //evt.values[2] = angles[2]
+
                 result?.invoke(evt)
 
                 when(status) {

@@ -71,8 +71,8 @@ class TiltView : View {
     fun onSensorEvent(event: SensorEvent) {
         // 화면을 가로로 돌렸으므로 x축과 y축을 서로 바꿈
         // 값이 너무 작으므로 20을 곱함
-        xCoord = xDefault + event.values[0] * 40
-        yCoord = yDefault + event.values[1] * 40
+        xCoord = xDefault + event.values[0] * 10
+        yCoord = yDefault + event.values[1] * 10
         // 다시 그리기 메소드
         invalidate()
     }

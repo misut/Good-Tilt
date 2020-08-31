@@ -106,7 +106,8 @@ class MainActivity : AppCompatActivity() {
         }
 
         positionButton.setOnClickListener {
-            tiltView.setDefaultPosition()
+            sensorListener.initBase()
+            //tiltView.setDefaultPosition()
         }
 
         setSupportActionBar(mainToolbar)
