@@ -14,10 +14,13 @@ import android.hardware.SensorManager
 import android.media.AudioManager
 import android.os.Build
 import android.os.IBinder
+import android.os.VibrationEffect
+import android.os.Vibrator
 import android.util.Log
 import android.view.*
 import android.widget.LinearLayout
 import android.widget.Toast
+import androidx.annotation.RequiresApi
 import androidx.core.app.NotificationCompat
 import androidx.preference.PreferenceManager
 import com.goodtilt.goodtilt.const.KeyAction
@@ -30,6 +33,7 @@ class EventService : Service() {
     private lateinit var sensorManager: SensorManager
     private var swipePosX = 0.0f
     private var swipePosY = 0.0f
+    private var isVibrate = false
 
     override fun onCreate() {
         super.onCreate()
@@ -46,6 +50,7 @@ class EventService : Service() {
             getString("tilt_right", "NONE")?.let { actionList[1] = KeyAction.valueOf(it) }
             getString("tilt_up", "NONE")?.let { actionList[2] = KeyAction.valueOf(it) }
             getString("tilt_down", "NONE")?.let { actionList[3] = KeyAction.valueOf(it) }
+            getBoolean("vibration", false)?.let {isVibrate = it}
         }
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
@@ -82,11 +87,34 @@ class EventService : Service() {
         params.gravity = Gravity.LEFT or Gravity.CENTER_VERTICAL
         val mView = inflate.inflate(R.layout.view_overlay, null)
 
+        val vibrator = getSystemService(Context.VIBRATOR_SERVICE) as Vibrator
+        var vibrateEffect : VibrationEffect? = null
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            vibrateEffect = VibrationEffect.createOneShot(100, 50)
+        }
+
         val btn_img = mView.findViewById<LinearLayout>(R.id.testArea)
+
         btn_img.setOnTouchListener(object : View.OnTouchListener {
+            fun vibrate() {
+                if (!isVibrate) return
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                    vibrator.vibrate(vibrateEffect)
+                } else {
+                    vibrator.vibrate(100)
+                }
+            }
+
             override fun onTouch(view: View?, motionEvent: MotionEvent): Boolean {
-                generateEvent(actionList[0])
-                return false
+                if( motionEvent.action == MotionEvent.ACTION_DOWN) {
+                    vibrate()
+                    changeListenerState(true)
+                    //generateEvent(actionList[0])
+                } else if( motionEvent.action == MotionEvent.ACTION_UP){
+                    vibrate()
+                    changeListenerState(false)
+                }
+                return true
             }
         })
         wm.addView(mView, params) // 윈도우에 layout 을 추가 한다.

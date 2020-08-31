@@ -16,6 +16,7 @@
 
 
     <string name="setting_action">Action Settings</string>
+    <string name="setting_general">General Settings</string>
     <string name="setting_sensitivity">Sensitivity Settings</string>
 
     <string name="left_tilt_action">Left Side Tilt</string>
@@ -26,4 +27,6 @@
     <string name="minimum_angle">Minimum Angle</string>
     <string name="minimum_velocity">Minimum Velocity</string>
     <string name="swipe_speed">Swipe Speed</string>
+
+    <string name="vibration">Vibration</string>
 </resources>
