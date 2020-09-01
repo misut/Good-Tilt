@@ -16,24 +16,39 @@ import android.os.Build
 import android.os.IBinder
 import android.os.VibrationEffect
 import android.os.Vibrator
+import android.util.DisplayMetrics
 import android.util.Log
 import android.view.*
 import android.widget.LinearLayout
-import android.widget.Toast
-import androidx.annotation.RequiresApi
 import androidx.core.app.NotificationCompat
 import androidx.preference.PreferenceManager
 import com.goodtilt.goodtilt.const.KeyAction
 
+const val DOUBLE_CLICK_DELAY = 300
 
 class EventService : Service() {
-    var overlayView : View? = null
+    lateinit var overlayView : View
     var actionList = arrayOf(KeyAction.NONE, KeyAction.NONE, KeyAction.NONE, KeyAction.NONE)
-    private val sensorListener = MisutListener(null,::onActionOccur)
+    private var btnPressTime = 0L
+    private var placementState = false
+
+    private val sensorListener = MisutListener(null, ::onActionOccur)
     private lateinit var sensorManager: SensorManager
     private var swipePosX = 0.0f
     private var swipePosY = 0.0f
     private var isVibrate = false
+
+    private var dX = 0.0f
+    private var dY = 0.0f
+
+    private lateinit var wm : WindowManager
+    var params = WindowManager.LayoutParams(
+        WindowManager.LayoutParams.WRAP_CONTENT,
+        WindowManager.LayoutParams.WRAP_CONTENT,
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) WindowManager.LayoutParams.TYPE_APPLICATION_OVERLAY else WindowManager.LayoutParams.TYPE_SYSTEM_ALERT,  // Android O 이상인 경우 TYPE_APPLICATION_OVERLAY 로 설정
+        WindowManager.LayoutParams.FLAG_NOT_TOUCH_MODAL or WindowManager.LayoutParams.FLAG_WATCH_OUTSIDE_TOUCH or WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE,
+        PixelFormat.TRANSLUCENT
+    )
 
     override fun onCreate() {
         super.onCreate()
@@ -50,6 +65,8 @@ class EventService : Service() {
             getString("tilt_right", "NONE")?.let { actionList[1] = KeyAction.valueOf(it) }
             getString("tilt_up", "NONE")?.let { actionList[2] = KeyAction.valueOf(it) }
             getString("tilt_down", "NONE")?.let { actionList[3] = KeyAction.valueOf(it) }
+            getInt("overlay_x", swipePosX.toInt())?.let { params.x = it}
+            getInt("overlay_y", swipePosY.toInt())?.let { params.y = it}
             getBoolean("vibration", false)?.let {isVibrate = it}
         }
 
@@ -71,21 +88,11 @@ class EventService : Service() {
             startForeground(1, notification)
         }
 
-        val wm : WindowManager =  getSystemService(Context.WINDOW_SERVICE) as WindowManager
+        wm = getSystemService(Context.WINDOW_SERVICE) as WindowManager
+        val inflate = getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
 
-        val inflate =
-            getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
-
-        val params = WindowManager.LayoutParams(
-            WindowManager.LayoutParams.WRAP_CONTENT,
-            WindowManager.LayoutParams.WRAP_CONTENT,
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) WindowManager.LayoutParams.TYPE_APPLICATION_OVERLAY else WindowManager.LayoutParams.TYPE_SYSTEM_ALERT,  // Android O 이상인 경우 TYPE_APPLICATION_OVERLAY 로 설정
-            WindowManager.LayoutParams.FLAG_NOT_TOUCH_MODAL or WindowManager.LayoutParams.FLAG_WATCH_OUTSIDE_TOUCH or WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE,
-            PixelFormat.TRANSLUCENT
-        )
-
-        params.gravity = Gravity.LEFT or Gravity.CENTER_VERTICAL
-        val mView = inflate.inflate(R.layout.view_overlay, null)
+        params.gravity = Gravity.TOP or Gravity.START
+        overlayView = inflate.inflate(R.layout.view_overlay, null)
 
         val vibrator = getSystemService(Context.VIBRATOR_SERVICE) as Vibrator
         var vibrateEffect : VibrationEffect? = null
@@ -93,7 +100,7 @@ class EventService : Service() {
             vibrateEffect = VibrationEffect.createOneShot(100, 50)
         }
 
-        val btn_img = mView.findViewById<LinearLayout>(R.id.testArea)
+        val btn_img = overlayView.findViewById<LinearLayout>(R.id.testArea)
 
         btn_img.setOnTouchListener(object : View.OnTouchListener {
             fun vibrate() {
@@ -106,19 +113,38 @@ class EventService : Service() {
             }
 
             override fun onTouch(view: View?, motionEvent: MotionEvent): Boolean {
-                if( motionEvent.action == MotionEvent.ACTION_DOWN) {
-                    vibrate()
-                    changeListenerState(true)
+                if (motionEvent.action == MotionEvent.ACTION_DOWN) {
+                    //Double Click Occur
+                    if (System.currentTimeMillis() < btnPressTime + DOUBLE_CLICK_DELAY) {
+                        placementState = true
+                        dX = params.x - motionEvent.rawX
+                        dY = params.y - motionEvent.rawY
+                    } else { //Normal Press
+                        btnPressTime = System.currentTimeMillis()
+                        vibrate()
+                        changeListenerState(true)
+                    }
                     //generateEvent(actionList[0])
-                } else if( motionEvent.action == MotionEvent.ACTION_UP){
+                } else if (motionEvent.action == MotionEvent.ACTION_UP) {
                     vibrate()
-                    changeListenerState(false)
+                    if(placementState) {
+                        placementState = false
+                        val editor = PreferenceManager.getDefaultSharedPreferences(applicationContext).edit()
+                        editor.putInt("overlay_x", params.x)
+                        editor.putInt("overlay_y", params.y)
+                        editor.commit()
+                    } else {
+                        changeListenerState(false)
+                    }
+                } else if (placementState && motionEvent.action == MotionEvent.ACTION_MOVE) {
+                    params.x = (motionEvent.rawX + dX).toInt()
+                    params.y = (motionEvent.rawY + dY).toInt()
+                    wm.updateViewLayout(overlayView, params)
                 }
                 return true
             }
         })
-        wm.addView(mView, params) // 윈도우에 layout 을 추가 한다.
-        overlayView = mView
+        wm.addView(overlayView, params) // 윈도우에 layout 을 추가 한다.
     }
 
     override fun onBind(intent: Intent?): IBinder? {
@@ -126,7 +152,7 @@ class EventService : Service() {
     }
 
 
-    private fun onActionOccur(index : Int) {
+    private fun onActionOccur(index: Int) {
         generateEvent(actionList[index])
     }
 
@@ -135,7 +161,7 @@ class EventService : Service() {
             KeyAction.BACK -> TiltAccessibilityService.doAction(AccessibilityService.GLOBAL_ACTION_BACK)
             KeyAction.HOME -> TiltAccessibilityService.doAction(AccessibilityService.GLOBAL_ACTION_HOME)
             KeyAction.RECENT -> TiltAccessibilityService.doAction(AccessibilityService.GLOBAL_ACTION_RECENTS)
-            KeyAction.SWIPE_DOWN, KeyAction.SWIPE_UP , KeyAction.SWIPE_LEFT , KeyAction.SWIPE_RIGHT -> {
+            KeyAction.SWIPE_DOWN, KeyAction.SWIPE_UP, KeyAction.SWIPE_LEFT, KeyAction.SWIPE_RIGHT -> {
                 //아직 아래방향밖에 안만듦
                 val path = Path()
                 path.moveTo(swipePosX, swipePosY)
@@ -153,16 +179,19 @@ class EventService : Service() {
         return true
     }
 
-    fun changeListenerState(state : Boolean){
+    fun changeListenerState(state: Boolean){
         if(state){
-            sensorManager.registerListener(sensorListener,
+            sensorManager.registerListener(
+                sensorListener,
                 sensorManager.getDefaultSensor(Sensor.TYPE_ROTATION_VECTOR),
                 SensorManager.SENSOR_DELAY_GAME
             )
-            sensorManager.registerListener(sensorListener,
+            sensorManager.registerListener(
+                sensorListener,
                 sensorManager.getDefaultSensor(Sensor.TYPE_GYROSCOPE),
                 SensorManager.SENSOR_DELAY_GAME
             )
+            sensorListener.initBase()
         } else {
             sensorManager.unregisterListener(sensorListener)
         }
