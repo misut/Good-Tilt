@@ -16,8 +16,13 @@ import kotlin.math.cos
 import kotlin.math.sin
 import kotlin.math.sqrt
 
-enum class ListenerStatus {
-    IDLE, TILT_LEFT, TILT_RIGHT, TILT_UP, TILT_DOWN, STOPOVER;
+enum class ListenerStatus(var min: Float, var max: Float) {
+    IDLE(0.0f, 0.0f),
+    TILT_LEFT(10.0f, 40.0f),
+    TILT_RIGHT(10.0f, 40.0f),
+    TILT_UP(10.0f, 40.0f),
+    TILT_DOWN(10.0f, 40.0f),
+    STOPOVER(0.0f, 0.0f);
 }
 
 class MisutListener(
@@ -27,30 +32,23 @@ class MisutListener(
     private val NS2S = 1.0f / 1000000000.0f
     private val RAD2DGR = 180.0f / PI
     private var ts: Float = 0f
-    private var min_velocity = 0f
-    private var min_angle = 0f
 
     private var isInitAngle = false
     private var baseAngle = Quaternion()
 
     private var status: ListenerStatus = ListenerStatus.IDLE
-    private var base = FloatArray(3) { 0.0f }
-    private var rotation = FloatArray(4) { 0.0f }
-    private var rotation_limit = FloatArray(8) {
-        -1.0f; -4.0f;
-        1.0f;  4.0f;
-        -1.0f; -4.0f;
-        1.0f; 4.0f;
-    } // Order: Horizontal_Low, Horizontal_High, Vertical_Low, Vertical_High
-/*
-    private val rotationAngle = FloatArray(3) { 0.0f }
-    private val rotationVector = FloatArray(4) { 0.0f }
-    private val rotationMatrix = FloatArray(9) { 0.0f }
-*/
+
     fun applyPreference(context : Context){
         PreferenceManager.getDefaultSharedPreferences(context).apply {
-            min_angle = getInt("min_angle", 0) * 1f
-            min_velocity = getInt("min_velocity", 0) * 1f
+            ListenerStatus.TILT_LEFT.min = getInt("minimum_angle", 15).toFloat()
+            ListenerStatus.TILT_LEFT.max = getInt("maximum_angle", 30).toFloat()
+            ListenerStatus.TILT_RIGHT.min = -getInt("minimum_angle", 15).toFloat()
+            ListenerStatus.TILT_RIGHT.max = -getInt("maximum_angle", 30).toFloat()
+            ListenerStatus.TILT_UP.min = -getInt("minimum_angle", 15).toFloat()
+            ListenerStatus.TILT_UP.max = -getInt("maximum_angle", 30).toFloat()
+            ListenerStatus.TILT_DOWN.min = getInt("minimum_angle", 15).toFloat()
+            ListenerStatus.TILT_DOWN.max = getInt("maximum_angle", 30).toFloat()
+            ListenerStatus.STOPOVER.min = getInt("minimum_angle", 15).toFloat()
         }
 
     }
@@ -81,16 +79,47 @@ class MisutListener(
 
                 when(status) {
                     ListenerStatus.IDLE -> {
+                        if(angles[0] > ListenerStatus.TILT_LEFT.min) {
+                            status = ListenerStatus.TILT_LEFT
+                        }
+                        else if(angles[0] < ListenerStatus.TILT_RIGHT.min) {
+                            status = ListenerStatus.TILT_RIGHT
+                        }
+                        else if(angles[1] < ListenerStatus.TILT_UP.min) {
+                            status = ListenerStatus.TILT_UP
+                        }
+                        else if(angles[1] > ListenerStatus.TILT_DOWN.min) {
+                            status = ListenerStatus.TILT_DOWN
+                        }
                     }
                     ListenerStatus.TILT_LEFT -> {
+                        if(angles[0] > ListenerStatus.TILT_LEFT.max) {
+                            status = ListenerStatus.STOPOVER
+                            action.invoke(0)
+                        }
                     }
                     ListenerStatus.TILT_RIGHT -> {
+                        if(angles[0] < ListenerStatus.TILT_RIGHT.max) {
+                            status = ListenerStatus.STOPOVER
+                            action.invoke(1)
+                        }
                     }
                     ListenerStatus.TILT_UP -> {
+                        if(angles[1] < ListenerStatus.TILT_UP.max) {
+                            status = ListenerStatus.STOPOVER
+                            action.invoke(2)
+                        }
                     }
                     ListenerStatus.TILT_DOWN -> {
+                        if(angles[1] > ListenerStatus.TILT_DOWN.max) {
+                            status = ListenerStatus.STOPOVER
+                            action.invoke(3)
+                        }
                     }
                     ListenerStatus.STOPOVER -> {
+                        if(angles[0] < status.min && angles[0] > -status.min &&
+                            angles[1] > -status.min && angles[1] < status.min)
+                            status = ListenerStatus.IDLE
                     }
                 }
             }
@@ -102,25 +131,6 @@ class MisutListener(
                     evt.values[2];
                 }
                 result?.invoke(evt)
-
-/*
-                for (idx in 0..2)
-                    rotationAngle[idx] += axis[idx] * dt
-                val omegaMagnitude: Float =
-                    sqrt(axis[0] * axis[0] + axis[1] * axis[1] + axis[2] * axis[2])
-                if (omegaMagnitude > 0.1) {
-                    for (idx in 0..2)
-                        axis[idx] /= omegaMagnitude
-                }
-                val thetaOverTwo: Float = omegaMagnitude * dt / 2.0f
-                val sinThetaOverTwo: Float = sin(thetaOverTwo)
-                val cosThetaOverTwo: Float = cos(thetaOverTwo)
-                rotationVector[0] = sinThetaOverTwo * axis[0]
-                rotationVector[1] = sinThetaOverTwo * axis[1]
-                rotationVector[2] = sinThetaOverTwo * axis[2]
-                rotationVector[3] = cosThetaOverTwo
-                SensorManager.getRotationMatrixFromVector(rotationMatrix, rotationVector);
- */
             }
 
             else -> {

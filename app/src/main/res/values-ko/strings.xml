@@ -22,8 +22,8 @@
     <string name="up_tilt_action">아래쪽 기울임 동작</string>
     <string name="down_tilt_action">위쪽 기울임 동작</string>
 
-    <string name="minimum_angle">최소 기울기</string>
-    <string name="minimum_velocity">최소 속도</string>
+    <string name="minimum_angle">최소 각도</string>
+    <string name="maximum_angle">최대 각도</string>
     <string name="swipe_speed">스와이프 속도</string>
 
     <string name="vibration">진동</string>

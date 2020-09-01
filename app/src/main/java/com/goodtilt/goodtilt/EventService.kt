@@ -110,6 +110,7 @@ class EventService : Service() {
                     vibrate()
                     changeListenerState(true)
                     //generateEvent(actionList[0])
+                    //initBase()
                 } else if( motionEvent.action == MotionEvent.ACTION_UP){
                     vibrate()
                     changeListenerState(false)
