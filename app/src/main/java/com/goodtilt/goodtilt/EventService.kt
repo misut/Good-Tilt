@@ -20,6 +20,8 @@ import android.util.DisplayMetrics
 import android.util.Log
 import android.view.*
 import android.widget.LinearLayout
+import android.widget.Toast
+import androidx.annotation.RequiresApi
 import androidx.core.app.NotificationCompat
 import androidx.preference.PreferenceManager
 import com.goodtilt.goodtilt.const.KeyAction
@@ -152,7 +154,7 @@ class EventService : Service() {
     }
 
 
-    private fun onActionOccur(index: Int) {
+    private fun onActionOccur(index : Int) {
         generateEvent(actionList[index])
     }
 
@@ -161,7 +163,7 @@ class EventService : Service() {
             KeyAction.BACK -> TiltAccessibilityService.doAction(AccessibilityService.GLOBAL_ACTION_BACK)
             KeyAction.HOME -> TiltAccessibilityService.doAction(AccessibilityService.GLOBAL_ACTION_HOME)
             KeyAction.RECENT -> TiltAccessibilityService.doAction(AccessibilityService.GLOBAL_ACTION_RECENTS)
-            KeyAction.SWIPE_DOWN, KeyAction.SWIPE_UP, KeyAction.SWIPE_LEFT, KeyAction.SWIPE_RIGHT -> {
+            KeyAction.SWIPE_DOWN, KeyAction.SWIPE_UP , KeyAction.SWIPE_LEFT , KeyAction.SWIPE_RIGHT -> {
                 //아직 아래방향밖에 안만듦
                 val path = Path()
                 path.moveTo(swipePosX, swipePosY)
@@ -179,7 +181,7 @@ class EventService : Service() {
         return true
     }
 
-    fun changeListenerState(state: Boolean){
+    fun changeListenerState(state : Boolean){
         if(state){
             sensorManager.registerListener(
                 sensorListener,

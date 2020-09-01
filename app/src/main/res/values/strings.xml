@@ -25,7 +25,7 @@
     <string name="down_tilt_action">Down Side Tilt</string>
 
     <string name="minimum_angle">Minimum Angle</string>
-    <string name="minimum_velocity">Minimum Velocity</string>
+    <string name="maximum_angle">Maximum Angle</string>
     <string name="swipe_speed">Swipe Speed</string>
 
     <string name="vibration">Vibration</string>

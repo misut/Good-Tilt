@@ -48,24 +48,17 @@
         android:title="@string/setting_sensitivity"
         app:iconSpaceReserved="false">
         <SeekBarPreference
-            android:defaultValue="20"
-            android:key="swipe_speed"
-            android:max="90"
-            android:title="@string/swipe_speed"
-            app:iconSpaceReserved="false"
-            app:showSeekBarValue="false" />
-        <SeekBarPreference
-            android:defaultValue="0"
+            android:defaultValue="15"
             android:key="min_angle"
-            android:max="100"
+            android:max="90"
             android:title="@string/minimum_angle"
             app:iconSpaceReserved="false"
             app:showSeekBarValue="true" />
         <SeekBarPreference
-            android:defaultValue="15"
-            android:key="min_velocity"
-            android:max="60"
-            android:title="@string/minimum_velocity"
+            android:defaultValue="30"
+            android:key="max_angle"
+            android:max="90"
+            android:title="@string/maximum_angle"
             app:iconSpaceReserved="false"
             app:showSeekBarValue="true" />
     </PreferenceCategory>
