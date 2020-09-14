@@ -18,10 +18,11 @@ class TiltAccessibilityService : AccessibilityService() {
             instance?.performGlobalAction(action)
         }
 
-        fun mouseDraw(path : Path) : Boolean{
-            val description = GestureDescription.StrokeDescription(path, 0, 2)
+        fun mouseDraw(path : Path, path2: Path) : Boolean{
+            val description = GestureDescription.StrokeDescription(path, 0, 10)
+            val description2 = GestureDescription.StrokeDescription(path2, 10, 1)
             val ret = instance?.dispatchGesture(
-                GestureDescription.Builder().addStroke(description).build(),
+                GestureDescription.Builder().addStroke(description).addStroke(description2).build(),
                 object : GestureResultCallback() {
                 },
                 null
