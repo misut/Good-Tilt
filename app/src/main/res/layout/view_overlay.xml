@@ -7,14 +7,26 @@
     android:layout_height="match_parent">
 
     <LinearLayout
-        android:id="@+id/testArea"
-        android:layout_width="50dp"
-        android:layout_height="50dp"
+        android:id="@+id/lefArea"
+        android:layout_width="30dp"
+        android:layout_height="400dp"
         android:background="#FFFF00"
         android:filterTouchesWhenObscured="true"
         android:orientation="horizontal"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.25"></LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/rightArea"
+        android:layout_width="30dp"
+        android:layout_height="400dp"
+        android:background="#FFFF00"
+        android:filterTouchesWhenObscured="true"
+        android:orientation="horizontal"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent"></LinearLayout>
+        app:layout_constraintVertical_bias="0.25"></LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>
