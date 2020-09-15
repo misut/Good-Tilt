@@ -24,6 +24,8 @@
     <string name="up_tilt_action">Up Side Tilt</string>
     <string name="down_tilt_action">Down Side Tilt</string>
 
+    <string name="horizontal_sensitivity">Horizontal Sensitivity</string>
+    <string name="vertical_sensitivity">Vertical Sensitivity</string>
     <string name="minimum_angle">Minimum Angle</string>
     <string name="maximum_angle">Maximum Angle</string>
     <string name="swipe_speed">Swipe Speed</string>

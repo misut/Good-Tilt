@@ -12,7 +12,7 @@ enum class DeviceStatus(val actionIndex: Int) {
 }
 
 class Discriminator(var x: Float, var y: Float, var inner: Float, var outer: Float, var tan: Float) {
-    constructor() : this(0.5f,0.5f,10.0f,20.0f, 1.5f)
+    constructor() : this(0.5f,0.5f,10.0f,20.0f, 1.3f)
 
     private var status = DeviceStatus.IDLE
 
@@ -61,5 +61,13 @@ class Discriminator(var x: Float, var y: Float, var inner: Float, var outer: Flo
                 }
             }
         }
+    }
+
+    fun updateSetting(x: Float, y: Float, inner: Float, outer: Float, tan: Float) {
+        this.x = x
+        this.y = y
+        this.inner = inner
+        this.outer = outer
+        this.tan = tan
     }
 }
