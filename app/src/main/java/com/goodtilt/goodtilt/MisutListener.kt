@@ -37,7 +37,46 @@ class MisutListener(
     private var baseAngle = Quaternion()
 
     private var discriminator = Discriminator()
-    private var trigger = false
+    private var mode = 1
+    private var rightHand = false
+    private var activated = false
+
+    private fun actionNormal(status: DeviceStatus) {
+        when(status) {
+            DeviceStatus.IDLE -> {
+                activated = false
+            }
+            DeviceStatus.TILT_LEFT,
+            DeviceStatus.TILT_RIGHT,
+            DeviceStatus.TILT_UP,
+            DeviceStatus.TILT_DOWN -> {
+                if(!activated) {
+                    activated = true
+                    action?.invoke(status.actionIndex)
+                }
+            }
+            DeviceStatus.STOPOVER -> {
+            }
+        }
+    }
+
+    private fun actionScroll(status: DeviceStatus) {
+        when(status) {
+            DeviceStatus.IDLE -> {
+                activated = false
+            }
+            DeviceStatus.TILT_LEFT,
+            DeviceStatus.TILT_RIGHT,
+            DeviceStatus.TILT_UP,
+            DeviceStatus.TILT_DOWN -> {
+                activated = true
+                action?.invoke(status.actionIndex)
+            }
+            DeviceStatus.STOPOVER -> {
+                activated = false
+            }
+        }
+    }
 
     fun applyPreference(context : Context){
         PreferenceManager.getDefaultSharedPreferences(context).apply {
@@ -56,6 +95,8 @@ class MisutListener(
     //mode 1이면 일반 모드, 2이면 스크롤 모드 (계속 액션 일어나야함)
     fun initBase(mode : Int, rightHand : Boolean) {
         baseAngle = Quaternion()
+        this.mode = mode
+        this.rightHand = rightHand
     }
 
     override fun onAccuracyChanged(p0: Sensor?, p1: Int) {
@@ -79,36 +120,9 @@ class MisutListener(
                 result?.invoke(evt)
                 discriminator.updateStatus(angles)
                 var status = discriminator.getStatus()
-                when(status) {
-                    DeviceStatus.IDLE -> {
-                        trigger = false
-                    }
-                    DeviceStatus.TILT_LEFT -> {
-                        if(!trigger) {
-                            trigger = true
-                            action?.invoke(status.actionIndex)
-                        }
-                    }
-                    DeviceStatus.TILT_RIGHT -> {
-                        if(!trigger) {
-                            trigger = true
-                            action?.invoke(status.actionIndex)
-                        }
-                    }
-                    DeviceStatus.TILT_UP -> {
-                        if(!trigger) {
-                            trigger = true
-                            action?.invoke(status.actionIndex)
-                        }
-                    }
-                    DeviceStatus.TILT_DOWN -> {
-                        if(!trigger) {
-                            trigger = true
-                            action?.invoke(status.actionIndex)
-                        }
-                    }
-                    DeviceStatus.STOPOVER -> {
-                    }
+                when(mode) {
+                    1 -> actionNormal(status)
+                    2 -> actionScroll(status)
                 }
             }
 
