@@ -106,7 +106,7 @@ class MainActivity : AppCompatActivity() {
         }
 
         positionButton.setOnClickListener {
-            sensorListener.initBase()
+            sensorListener.initBase(1, false)
             //tiltView.setDefaultPosition()
         }
 

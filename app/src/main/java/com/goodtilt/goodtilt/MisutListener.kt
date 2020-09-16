@@ -45,7 +45,9 @@ class MisutListener(
 
     }
 
-    fun initBase() {
+    //rightHand : 오른손이면 true
+    //mode 1이면 일반 모드, 2이면 스크롤 모드 (계속 액션 일어나야함)
+    fun initBase(mode : Int, rightHand : Boolean) {
         baseAngle = Quaternion()
     }
 

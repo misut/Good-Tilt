@@ -6,6 +6,9 @@
     <string name="HOME">Home</string>
     <string name="BACK">Back</string>
     <string name="RECENT">Recent Apps</string>
+    <string name="NOTIFY">Notification Bar</string>
+
+
     <string name="PLAY_PAUSE">Start and Pause Music</string>
     <string name="NEXT">Next Music</string>
 
@@ -16,6 +19,7 @@
 
 
     <string name="setting_action">Action Settings</string>
+    <string name="setting_swipe">Swipe Action Setting</string>
     <string name="setting_general">General Settings</string>
     <string name="setting_sensitivity">Sensitivity Settings</string>
 

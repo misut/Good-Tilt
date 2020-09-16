@@ -35,6 +35,39 @@
     </PreferenceCategory>
 
     <PreferenceCategory
+        android:title="@string/setting_swipe"
+        app:iconSpaceReserved="false">
+        <ListPreference
+            android:defaultValue="NONE"
+            android:entries="@array/swipe_string"
+            android:entryValues="@array/swipe_key"
+            android:key="swipe_tilt_left"
+            android:title="@string/left_tilt_action"
+            app:iconSpaceReserved="false" />
+        <ListPreference
+            android:defaultValue="NONE"
+            android:entries="@array/swipe_string"
+            android:entryValues="@array/swipe_key"
+            android:key="swipe_tilt_right"
+            android:title="@string/right_tilt_action"
+            app:iconSpaceReserved="false" />
+        <ListPreference
+            android:defaultValue="NONE"
+            android:entries="@array/swipe_string"
+            android:entryValues="@array/swipe_key"
+            android:key="swipe_tilt_up"
+            android:title="@string/up_tilt_action"
+            app:iconSpaceReserved="false" />
+        <ListPreference
+            android:defaultValue="NONE"
+            android:entries="@array/swipe_string"
+            android:entryValues="@array/swipe_key"
+            android:key="swipe_tilt_down"
+            android:title="@string/down_tilt_action"
+            app:iconSpaceReserved="false" />
+    </PreferenceCategory>
+
+    <PreferenceCategory
         android:title="@string/setting_general"
         app:iconSpaceReserved="false">
         <SwitchPreference
