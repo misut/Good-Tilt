@@ -41,6 +41,13 @@ class MisutListener(
 
     fun applyPreference(context : Context){
         PreferenceManager.getDefaultSharedPreferences(context).apply {
+            discriminator.updateSetting(
+                getInt("hor_sensitivity", 50)/100.0f,
+                getInt("ver_sensitivity", 50)/100.0f,
+                getInt("min_angle", 10).toFloat(),
+                getInt("max_angle", 20).toFloat(),
+                1.3f
+            )
         }
 
     }

@@ -81,14 +81,28 @@
         android:title="@string/setting_sensitivity"
         app:iconSpaceReserved="false">
         <SeekBarPreference
-            android:defaultValue="15"
+            android:defaultValue="50"
+            android:key="hor_sensitivity"
+            android:max="100"
+            android:title="@string/horizontal_sensitivity"
+            app:iconSpaceReserved="false"
+            app:showSeekBarValue="true" />
+        <SeekBarPreference
+            android:defaultValue="50"
+            android:key="ver_sensitivity"
+            android:max="100"
+            android:title="@string/vertical_sensitivity"
+            app:iconSpaceReserved="false"
+            app:showSeekBarValue="true" />
+        <SeekBarPreference
+            android:defaultValue="10"
             android:key="min_angle"
             android:max="90"
             android:title="@string/minimum_angle"
             app:iconSpaceReserved="false"
             app:showSeekBarValue="true" />
         <SeekBarPreference
-            android:defaultValue="30"
+            android:defaultValue="20"
             android:key="max_angle"
             android:max="90"
             android:title="@string/maximum_angle"
