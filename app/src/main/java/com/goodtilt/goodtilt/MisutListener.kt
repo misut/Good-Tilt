@@ -69,11 +69,16 @@ class MisutListener(
             DeviceStatus.TILT_RIGHT,
             DeviceStatus.TILT_UP,
             DeviceStatus.TILT_DOWN -> {
-                activated = true
-                action?.invoke(status.actionIndex)
+                if(!activated) {
+                    activated = true
+                    action?.invoke(status.actionIndex)
+                }
             }
             DeviceStatus.STOPOVER -> {
-                activated = false
+                if(activated) {
+                    activated = false
+                    action?.invoke(status.actionIndex)
+                }
             }
         }
     }
