@@ -1,6 +1,7 @@
 package com.goodtilt.goodtilt
 
 import android.accessibilityservice.AccessibilityService
+import android.animation.TimeAnimator
 import android.annotation.SuppressLint
 import android.app.Notification
 import android.app.NotificationChannel
@@ -17,6 +18,7 @@ import android.media.AudioManager
 import android.os.IBinder
 import android.os.VibrationEffect
 import android.os.Vibrator
+import android.renderscript.ScriptGroup
 import android.util.Log
 import android.util.TypedValue
 import android.view.*
@@ -26,7 +28,7 @@ import com.goodtilt.goodtilt.const.*
 
 class EventService : Service() {
     private var overlayView = arrayOfNulls<View>(2)
-    var actionList = arrayOf(KeyAction.NONE, KeyAction.NONE, KeyAction.NONE, KeyAction.NONE, KeyAction.NONE, KeyAction.NONE, KeyAction.NONE, KeyAction.NONE)
+    var actionList = arrayOf(KeyAction.NONE, KeyAction.NONE, KeyAction.NONE, KeyAction.NONE, KeyAction.NONE, KeyAction.NONE, KeyAction.NONE, KeyAction.NONE, KeyAction.SWIPE_HALT)
     private var btnPressTime = 0L
     private var placementState = false
 
@@ -66,7 +68,7 @@ class EventService : Service() {
                 getResources().getDisplayMetrics()
             ).toInt(),
             WindowManager.LayoutParams.TYPE_APPLICATION_OVERLAY,
-            WindowManager.LayoutParams.FLAG_NOT_TOUCH_MODAL or WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE or WindowManager.LayoutParams.FLAG_WATCH_OUTSIDE_TOUCH,
+            WindowManager.LayoutParams.FLAG_NOT_TOUCH_MODAL or WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE,
             PixelFormat.TRANSLUCENT
         )
 
@@ -120,9 +122,15 @@ class EventService : Service() {
                     changeListenerState(LISTENER_SINGLE, view == overlayView[1])
                     view.setBackgroundColor(Color.RED);
                 }
-            } else if (motionEvent.action == MotionEvent.ACTION_UP) {
+            } else if (motionEvent.action == MotionEvent.ACTION_UP || motionEvent.action == MotionEvent.ACTION_CANCEL) { //||
                 changeListenerState(LISTENER_IDLE)
                 view.setBackgroundColor(Color.YELLOW);
+            } else if (motionEvent.action == MotionEvent.ACTION_OUTSIDE && TiltAccessibilityService.isGesturing()) {
+                if (TiltAccessibilityService.touchOutside()){
+                    vibrate()
+                    changeListenerState(LISTENER_IDLE)
+                    view.setBackgroundColor(Color.YELLOW);
+                }
             }
             true
         }
@@ -137,6 +145,7 @@ class EventService : Service() {
         params.gravity = Gravity.START or Gravity.TOP
         wm.addView(overlayView[0], params) // 윈도우에 layout 을 추가 한다.
         params.gravity = Gravity.END or Gravity.TOP
+        params.flags = params.flags or WindowManager.LayoutParams.FLAG_WATCH_OUTSIDE_TOUCH
         wm.addView(overlayView[1], params)
     }
 
@@ -168,14 +177,9 @@ class EventService : Service() {
                 mAudioManager.dispatchMediaKeyEvent(keyEvent2)
             }
             ACTION_TYPE_SWIPE -> {
-                val path = Path()
-                path.moveTo(swipePosX, swipePosY)
-                path.lineTo(swipePosX, swipePosY - 40.0f)
-                //path2.lineTo(swipePosX, swipePosY + 40.0f)
-                //path2.lineTo(swipePosX, swipePosY)
                 Log.i(
                     "Retrun Swipe",
-                    TiltAccessibilityService.mouseDraw(0).toString()
+                    TiltAccessibilityService.mouseDraw(keyAction.action).toString() + " " + keyAction.action
                 )
             }
         }
@@ -185,6 +189,8 @@ class EventService : Service() {
     fun changeListenerState(state : Int, rightHand : Boolean = false){
         if(listenerState == state)
             return
+        if (TiltAccessibilityService.isGesturing())
+            TiltAccessibilityService.halt()
         val sensorManager: SensorManager = getSystemService(Context.SENSOR_SERVICE) as SensorManager
         if (state == LISTENER_IDLE) {
             sensorManager.unregisterListener(sensorListener)
