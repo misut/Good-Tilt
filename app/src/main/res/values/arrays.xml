@@ -5,21 +5,27 @@
         <item>HOME</item>
         <item>BACK</item>
         <item>RECENT</item>
+        <item>NOTIFY</item>
         <item>PLAY_PAUSE</item>
         <item>NEXT</item>
-        <item>NOTIFY</item>
+        <item>PREV</item>
+        <item>REWIND</item>
         <item>SWIPE_DOWN</item>
         <item>SWIPE_UP</item>
+        <item>SHOT</item>
     </string-array>
     <string-array name="action_string">
         <item>@string/NONE</item>
         <item>@string/HOME</item>
         <item>@string/BACK</item>
         <item>@string/RECENT</item>
+        <item>@string/NOTIFY</item>
         <item>@string/PLAY_PAUSE</item>
         <item>@string/NEXT</item>
-        <item>@string/NOTIFY</item>
+        <item>@string/PREV</item>
+        <item>@string/REWIND</item>
         <item>@string/SWIPE_DOWN</item>
         <item>@string/SWIPE_UP</item>
+        <item>@string/SHOT</item>
     </string-array>
 </resources>

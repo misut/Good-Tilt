@@ -3,10 +3,7 @@ package com.goodtilt.goodtilt
 import android.accessibilityservice.AccessibilityService
 import android.animation.TimeAnimator
 import android.annotation.SuppressLint
-import android.app.Notification
-import android.app.NotificationChannel
-import android.app.NotificationManager
-import android.app.Service
+import android.app.*
 import android.content.Context
 import android.content.Intent
 import android.graphics.Color
@@ -15,6 +12,7 @@ import android.graphics.PixelFormat
 import android.hardware.Sensor
 import android.hardware.SensorManager
 import android.media.AudioManager
+import android.media.Image
 import android.os.IBinder
 import android.os.VibrationEffect
 import android.os.Vibrator
@@ -22,13 +20,25 @@ import android.renderscript.ScriptGroup
 import android.util.Log
 import android.util.TypedValue
 import android.view.*
+import android.widget.ImageView
 import androidx.core.app.NotificationCompat
 import androidx.preference.PreferenceManager
 import com.goodtilt.goodtilt.const.*
 
 class EventService : Service() {
     private var overlayView = arrayOfNulls<View>(2)
-    var actionList = arrayOf(KeyAction.NONE, KeyAction.NONE, KeyAction.NONE, KeyAction.NONE, KeyAction.NONE, KeyAction.NONE, KeyAction.NONE, KeyAction.NONE, KeyAction.SWIPE_HALT)
+    private lateinit var floatingView: ImageView
+    var actionList = arrayOf(
+        KeyAction.NONE,
+        KeyAction.NONE,
+        KeyAction.NONE,
+        KeyAction.NONE,
+        KeyAction.NONE,
+        KeyAction.NONE,
+        KeyAction.NONE,
+        KeyAction.NONE,
+        KeyAction.SWIPE_HALT
+    )
     private var btnPressTime = 0L
     private var placementState = false
 
@@ -39,8 +49,8 @@ class EventService : Service() {
     private var dX = 0.0f
     private var dY = 0.0f
 
-    private var vibrateEffect : VibrationEffect? = null
-    private lateinit var wm : WindowManager
+    private var vibrateEffect: VibrationEffect? = null
+    private lateinit var wm: WindowManager
 
     private var listenerState = LISTENER_IDLE
 
@@ -51,27 +61,13 @@ class EventService : Service() {
         const val DOUBLE_CLICK_DELAY = 300
     }
 
+    private lateinit var floatingParams: WindowManager.LayoutParams
+
     @SuppressLint("ClickableViewAccessibility")
     override fun onCreate() {
         super.onCreate()
         var isVibrate = false;
         var isTransparent = false;
-        var params = WindowManager.LayoutParams(
-            TypedValue.applyDimension(
-                TypedValue.COMPLEX_UNIT_DIP,
-                30F,
-                getResources().getDisplayMetrics()
-            ).toInt(),
-            TypedValue.applyDimension(
-                TypedValue.COMPLEX_UNIT_DIP,
-                400F,
-                getResources().getDisplayMetrics()
-            ).toInt(),
-            WindowManager.LayoutParams.TYPE_APPLICATION_OVERLAY,
-            WindowManager.LayoutParams.FLAG_NOT_TOUCH_MODAL or WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE,
-            PixelFormat.TRANSLUCENT
-        )
-
         swipePosX = resources.displayMetrics.widthPixels / 2.0f
         swipePosY = resources.displayMetrics.heightPixels / 2.0f
         sensorListener.applyPreference(this)
@@ -87,8 +83,8 @@ class EventService : Service() {
             getString("swipe_tilt_down", "NONE")?.let { actionList[7] = KeyAction.valueOf(it) }
             //getInt("overlay_x", swipePosX.toInt())?.let { params.x = it}
             //getInt("overlay_y", swipePosY.toInt())?.let { params.y = it}
-            getBoolean("transparent", false)?.let {isTransparent = it}
-            getBoolean("vibration", false)?.let {isVibrate = it}
+            getBoolean("transparent", false)?.let { isTransparent = it }
+            getBoolean("vibration", false)?.let { isVibrate = it }
         }
 
         val strId = getString(R.string.channel_id)
@@ -107,7 +103,7 @@ class EventService : Service() {
             .setPriority(NotificationCompat.PRIORITY_DEFAULT).build()
         startForeground(1, notification)
 
-        if(isVibrate) {
+        if (isVibrate) {
             vibrateEffect = VibrationEffect.createOneShot(100, 50)
         }
 
@@ -117,44 +113,92 @@ class EventService : Service() {
                 if (System.currentTimeMillis() < btnPressTime + DOUBLE_CLICK_DELAY) {
                     btnPressTime = System.currentTimeMillis()
                     changeListenerState(LISTENER_DOUBLE, view == overlayView[1])
-                    if(!isTransparent)
+                    if (!isTransparent)
                         view.setBackgroundColor(Color.GREEN);
+                    floatingView.setImageResource(R.drawable.ic_baseline_done_all_24)
+                    floatingParams.x = motionEvent.rawX.toInt()
+                    floatingParams.y = motionEvent.rawY.toInt() - 250
+                    wm.updateViewLayout(floatingView, floatingParams)
                 } else { //Normal Press
                     btnPressTime = System.currentTimeMillis()
                     changeListenerState(LISTENER_SINGLE, view == overlayView[1])
-                    if(!isTransparent)
+                    if (!isTransparent)
                         view.setBackgroundColor(Color.RED);
+                    floatingView.setImageResource(R.drawable.ic_baseline_done_24)
+                    floatingParams.x = motionEvent.rawX.toInt()
+                    floatingParams.y = motionEvent.rawY.toInt() - 250
+                    wm.updateViewLayout(floatingView, floatingParams)
                 }
             } else if (motionEvent.action == MotionEvent.ACTION_UP || motionEvent.action == MotionEvent.ACTION_CANCEL) { //||
                 changeListenerState(LISTENER_IDLE)
-                if(!isTransparent)
+                floatingView.setImageResource(0)
+                if (!isTransparent)
                     view.setBackgroundColor(Color.YELLOW);
             } else if (motionEvent.action == MotionEvent.ACTION_OUTSIDE && TiltAccessibilityService.isGesturing()) {
-                if (TiltAccessibilityService.touchOutside()){
+                if (TiltAccessibilityService.touchOutside()) {
                     vibrate()
                     changeListenerState(LISTENER_IDLE)
-                    if(!isTransparent)
+                    if (!isTransparent)
                         view.setBackgroundColor(Color.YELLOW);
+                    floatingView.setImageResource(0)
                 }
+            } else if (motionEvent.action == MotionEvent.ACTION_MOVE) {
+                floatingParams.x = motionEvent.rawX.toInt()
+                floatingParams.y = motionEvent.rawY.toInt() - 250
+                wm.updateViewLayout(floatingView, floatingParams)
             }
             true
         }
+
+        var params = WindowManager.LayoutParams(
+            TypedValue.applyDimension(
+                TypedValue.COMPLEX_UNIT_DIP,
+                30F,
+                getResources().getDisplayMetrics()
+            ).toInt(),
+            TypedValue.applyDimension(
+                TypedValue.COMPLEX_UNIT_DIP,
+                400F,
+                getResources().getDisplayMetrics()
+            ).toInt(),
+            WindowManager.LayoutParams.TYPE_APPLICATION_OVERLAY,
+            WindowManager.LayoutParams.FLAG_NOT_TOUCH_MODAL or WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE,
+            PixelFormat.TRANSLUCENT
+        )
+        floatingParams = WindowManager.LayoutParams(
+            TypedValue.applyDimension(
+                TypedValue.COMPLEX_UNIT_DIP,
+                30F,
+                getResources().getDisplayMetrics()
+            ).toInt(),
+            TypedValue.applyDimension(
+                TypedValue.COMPLEX_UNIT_DIP,
+                30F,
+                getResources().getDisplayMetrics()
+            ).toInt(),
+            WindowManager.LayoutParams.TYPE_APPLICATION_OVERLAY,
+            WindowManager.LayoutParams.FLAG_NOT_TOUCH_MODAL or WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE or WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE,
+            PixelFormat.TRANSLUCENT
+        )
 
         wm = getSystemService(Context.WINDOW_SERVICE) as WindowManager
         val inflate = getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
         for (i in 0..1) {
             overlayView[i] = inflate.inflate(R.layout.view_overlay, null)
             overlayView[i]?.setOnTouchListener(touchListener);
-            if(!isTransparent){
+            if (!isTransparent) {
                 overlayView[i]?.setBackgroundColor(Color.YELLOW)
             }
         }
+        floatingView = inflate.inflate(R.layout.singie_image, null) as ImageView
 
         params.gravity = Gravity.START or Gravity.TOP
         wm.addView(overlayView[0], params) // 윈도우에 layout 을 추가 한다.
         params.gravity = Gravity.END or Gravity.TOP
         params.flags = params.flags or WindowManager.LayoutParams.FLAG_WATCH_OUTSIDE_TOUCH
+        floatingParams.gravity =  Gravity.START or Gravity.TOP
         wm.addView(overlayView[1], params)
+        wm.addView(floatingView, floatingParams)
     }
 
     override fun onBind(intent: Intent?): IBinder? {
@@ -173,7 +217,7 @@ class EventService : Service() {
         vibrator.vibrate(vibrateEffect)
     }
 
-    fun generateEvent(keyAction: KeyAction) : Boolean{
+    fun generateEvent(keyAction: KeyAction): Boolean {
         when (keyAction.type) {
             ACTION_TYPE_NONE -> return false
             ACTION_TYPE_BUTTON -> TiltAccessibilityService.doAction(keyAction.action)
@@ -187,15 +231,16 @@ class EventService : Service() {
             ACTION_TYPE_SWIPE -> {
                 Log.i(
                     "Retrun Swipe",
-                    TiltAccessibilityService.mouseDraw(keyAction.action).toString() + " " + keyAction.action
+                    TiltAccessibilityService.mouseDraw(keyAction.action)
+                        .toString() + " " + keyAction.action
                 )
             }
         }
         return true
     }
 
-    fun changeListenerState(state : Int, rightHand : Boolean = false){
-        if(listenerState == state)
+    fun changeListenerState(state: Int, rightHand: Boolean = false) {
+        if (listenerState == state)
             return
         if (TiltAccessibilityService.isGesturing())
             TiltAccessibilityService.halt()
@@ -228,9 +273,9 @@ class EventService : Service() {
         changeListenerState(LISTENER_IDLE)
         stopForeground(true); // Foreground service 종료
 
-        val wm : WindowManager =  getSystemService(Context.WINDOW_SERVICE) as WindowManager
+        val wm: WindowManager = getSystemService(Context.WINDOW_SERVICE) as WindowManager
         for (i in 0..1)
-            if(overlayView[i] != null)
+            if (overlayView[i] != null)
                 wm.removeView(overlayView[i]); // View 초기화
     }
 

@@ -5,16 +5,22 @@
     <string name="HOME">홈</string>
     <string name="BACK">뒤로</string>
     <string name="RECENT">최근 앱</string>
+    <string name="NOTIFY">상단바 내리기</string>
+    <string name="SHOT">스크린샷 촬영</string>
+    <string name="SPLIT">화면 분할</string>
+
     <string name="PLAY_PAUSE">음악 시작 및 정지</string>
     <string name="NEXT">다음 음악</string>
-    <string name="NOTIFY">상단바 내리기</string>
+    <string name="PREV">이전 음악</string>
+    <string name="CLOSE">음악 종료</string>
+    <string name="REWIND">다시감기</string>
 
     <string name="SWIPE_UP">위로 슬라이드</string>
     <string name="SWIPE_DOWN">아래로 슬라이드</string>
     <string name="SWIPE_HALT">스와이프 중지</string>
 
-    <string name="setting_action">동작 설정</string>
-    <string name="setting_swipe">스와이프 동작 설정</string>
+    <string name="setting_action">탭 동작 설정</string>
+    <string name="setting_swipe">더블 탭 동작 설정</string>
     <string name="setting_general">일반 설정</string>
     <string name="setting_sensitivity">민감도 설정</string>
 

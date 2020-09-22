@@ -24,6 +24,10 @@ class SettingFragment : PreferenceFragmentCompat(){
             findPreference<ListPreference>("tilt_right")?.summaryProvider = provider
             findPreference<ListPreference>("tilt_up")?.summaryProvider = provider
             findPreference<ListPreference>("tilt_down")?.summaryProvider = provider
+            findPreference<ListPreference>("swipe_tilt_left")?.summaryProvider = provider
+            findPreference<ListPreference>("swipe_tilt_right")?.summaryProvider = provider
+            findPreference<ListPreference>("swipe_tilt_up")?.summaryProvider = provider
+            findPreference<ListPreference>("swipe_tilt_down")?.summaryProvider = provider
         }
         return super.onCreateView(inflater, container, savedInstanceState)
     }
