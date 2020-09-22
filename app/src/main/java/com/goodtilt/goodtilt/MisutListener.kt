@@ -59,8 +59,6 @@ class MisutListener(
                 }
             }
             DeviceStatus.STOPOVER -> {
-                if(currentTime - startTime > delay)
-                    activated = false
             }
         }
     }
@@ -81,8 +79,6 @@ class MisutListener(
                 }
             }
             DeviceStatus.STOPOVER -> {
-                if(currentTime - startTime > delay)
-                    activated = false
             }
         }
     }
@@ -135,6 +131,8 @@ class MisutListener(
                     1 -> actionSingle(status)
                     2 -> actionDouble(status)
                 }
+                if(activated && currentTime-startTime > delay)
+                    activated = false
             }
 
             Sensor.TYPE_GYROSCOPE -> {
