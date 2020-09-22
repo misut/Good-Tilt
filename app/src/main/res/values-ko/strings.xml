@@ -18,6 +18,8 @@
     <string name="setting_general">일반 설정</string>
     <string name="setting_sensitivity">민감도 설정</string>
 
+    <string name="area_transparent">터치 영역 투명</string>
+
     <string name="left_tilt_action">왼쪽 기울임 동작</string>
     <string name="right_tilt_action">오른쪽 기울임 동작</string>
     <string name="up_tilt_action">위쪽 기울임 동작</string>

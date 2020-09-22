@@ -48,7 +48,6 @@ class EventService : Service() {
         const val LISTENER_IDLE = 0
         const val LISTENER_SINGLE = 1
         const val LISTENER_DOUBLE = 2
-
         const val DOUBLE_CLICK_DELAY = 300
     }
 
@@ -56,6 +55,7 @@ class EventService : Service() {
     override fun onCreate() {
         super.onCreate()
         var isVibrate = false;
+        var isTransparent = false;
         var params = WindowManager.LayoutParams(
             TypedValue.applyDimension(
                 TypedValue.COMPLEX_UNIT_DIP,
@@ -87,6 +87,7 @@ class EventService : Service() {
             getString("swipe_tilt_down", "NONE")?.let { actionList[7] = KeyAction.valueOf(it) }
             //getInt("overlay_x", swipePosX.toInt())?.let { params.x = it}
             //getInt("overlay_y", swipePosY.toInt())?.let { params.y = it}
+            getBoolean("transparent", false)?.let {isTransparent = it}
             getBoolean("vibration", false)?.let {isVibrate = it}
         }
 
@@ -116,20 +117,24 @@ class EventService : Service() {
                 if (System.currentTimeMillis() < btnPressTime + DOUBLE_CLICK_DELAY) {
                     btnPressTime = System.currentTimeMillis()
                     changeListenerState(LISTENER_DOUBLE, view == overlayView[1])
-                    view.setBackgroundColor(Color.GREEN);
+                    if(!isTransparent)
+                        view.setBackgroundColor(Color.GREEN);
                 } else { //Normal Press
                     btnPressTime = System.currentTimeMillis()
                     changeListenerState(LISTENER_SINGLE, view == overlayView[1])
-                    view.setBackgroundColor(Color.RED);
+                    if(!isTransparent)
+                        view.setBackgroundColor(Color.RED);
                 }
             } else if (motionEvent.action == MotionEvent.ACTION_UP || motionEvent.action == MotionEvent.ACTION_CANCEL) { //||
                 changeListenerState(LISTENER_IDLE)
-                view.setBackgroundColor(Color.YELLOW);
+                if(!isTransparent)
+                    view.setBackgroundColor(Color.YELLOW);
             } else if (motionEvent.action == MotionEvent.ACTION_OUTSIDE && TiltAccessibilityService.isGesturing()) {
                 if (TiltAccessibilityService.touchOutside()){
                     vibrate()
                     changeListenerState(LISTENER_IDLE)
-                    view.setBackgroundColor(Color.YELLOW);
+                    if(!isTransparent)
+                        view.setBackgroundColor(Color.YELLOW);
                 }
             }
             true
@@ -140,6 +145,9 @@ class EventService : Service() {
         for (i in 0..1) {
             overlayView[i] = inflate.inflate(R.layout.view_overlay, null)
             overlayView[i]?.setOnTouchListener(touchListener);
+            if(!isTransparent){
+                overlayView[i]?.setBackgroundColor(Color.YELLOW)
+            }
         }
 
         params.gravity = Gravity.START or Gravity.TOP

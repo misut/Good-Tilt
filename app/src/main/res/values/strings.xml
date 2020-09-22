@@ -22,6 +22,8 @@
     <string name="setting_general">General Settings</string>
     <string name="setting_sensitivity">Sensitivity Settings</string>
 
+    <string name="area_transparent">Transparent Touch Area</string>
+
     <string name="left_tilt_action">Left Side Tilt</string>
     <string name="right_tilt_action">Right Side Tilt</string>
     <string name="up_tilt_action">Up Side Tilt</string>
