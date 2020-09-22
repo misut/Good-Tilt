@@ -3,11 +3,18 @@ package com.goodtilt.goodtilt.const
 import android.accessibilityservice.AccessibilityService
 import android.content.Context
 import android.view.KeyEvent
+import android.view.accessibility.AccessibilityNodeInfo
 
 const val ACTION_TYPE_NONE = 0
 const val ACTION_TYPE_BUTTON = 1
 const val ACTION_TYPE_MEDIA = 2
 const val ACTION_TYPE_SWIPE = 3
+
+const val ACTION_LEFT = 0
+const val ACTION_RIGHT = 1
+const val ACTION_UP = 2
+const val ACTION_DOWN = 3
+const val ACTION_HALT = 4
 
 
 enum class KeyAction(val type : Int, val action: Int) {
@@ -20,10 +27,9 @@ enum class KeyAction(val type : Int, val action: Int) {
     NEXT(ACTION_TYPE_MEDIA, KeyEvent.KEYCODE_MEDIA_NEXT),
     PLAY_PAUSE(ACTION_TYPE_MEDIA, KeyEvent.KEYCODE_MEDIA_PLAY_PAUSE),
 
-    SWIPE_UP(ACTION_TYPE_SWIPE, 1000),
-    SWIPE_DOWN(ACTION_TYPE_SWIPE, 1001),
-    SWIPE_LEFT(ACTION_TYPE_SWIPE, 1002),
-    SWIPE_RIGHT(ACTION_TYPE_SWIPE, 1003);
+    SWIPE_UP(ACTION_TYPE_SWIPE, AccessibilityNodeInfo.ACTION_SCROLL_BACKWARD),
+    SWIPE_DOWN(ACTION_TYPE_SWIPE, AccessibilityNodeInfo.ACTION_SCROLL_FORWARD),
+    SWIPE_HALT(ACTION_TYPE_SWIPE, ACTION_HALT);
 
     fun str(context: Context): String {
         val id = context.resources.getIdentifier(this.name, "string", context.packageName)

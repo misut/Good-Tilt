@@ -11,8 +11,7 @@
 
     <string name="SWIPE_UP">위로 슬라이드</string>
     <string name="SWIPE_DOWN">아래로 슬라이드</string>
-    <string name="SWIPE_LEFT">왼쪽으로 슬라이드</string>
-    <string name="SWIPE_RIGHT">오른쪽으로 슬라이드</string>
+    <string name="SWIPE_HALT">스와이프 중지</string>
 
     <string name="setting_action">동작 설정</string>
     <string name="setting_swipe">스와이프 동작 설정</string>

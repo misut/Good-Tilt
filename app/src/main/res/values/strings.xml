@@ -14,8 +14,7 @@
 
     <string name="SWIPE_UP">Swipe Up</string>
     <string name="SWIPE_DOWN">Swipe Down</string>
-    <string name="SWIPE_LEFT">Swipe Left</string>
-    <string name="SWIPE_RIGHT">Swipe Right</string>
+    <string name="SWIPE_HALT">Stop Swipe</string>
 
 
     <string name="setting_action">Action Settings</string>

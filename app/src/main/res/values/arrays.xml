@@ -8,6 +8,8 @@
         <item>PLAY_PAUSE</item>
         <item>NEXT</item>
         <item>NOTIFY</item>
+        <item>SWIPE_DOWN</item>
+        <item>SWIPE_UP</item>
     </string-array>
     <string-array name="action_string">
         <item>@string/NONE</item>
@@ -17,20 +19,7 @@
         <item>@string/PLAY_PAUSE</item>
         <item>@string/NEXT</item>
         <item>@string/NOTIFY</item>
-    </string-array>
-    <string-array name="swipe_key">
-        <item>NONE</item>
-        <item>SWIPE_DOWN</item>
-        <item>SWIPE_UP</item>
-        <item>SWIPE_LEFT</item>
-        <item>SWIPE_RIGHT</item>
-    </string-array>
-    <string-array name="swipe_string">
-        <item>@string/NONE</item>
         <item>@string/SWIPE_DOWN</item>
         <item>@string/SWIPE_UP</item>
-        <item>@string/SWIPE_LEFT</item>
-        <item>@string/SWIPE_RIGHT</item>
     </string-array>
-
 </resources>
