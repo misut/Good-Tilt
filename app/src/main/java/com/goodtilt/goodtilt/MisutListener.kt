@@ -31,8 +31,7 @@ class MisutListener(
     val result: ((event : SensorEvent) -> Unit)?,
     val action: (index: Int) -> Unit
 ) : SensorEventListener {
-    private val NS2S = 1.0f / 1000000000.0f
-    private var ts: Float = 0f
+    private val MS2NS = 1000000
 
     private var baseAngle = Quaternion()
 
@@ -40,8 +39,11 @@ class MisutListener(
     private var mode = 1
     private var rightHand = false
     private var activated = false
+    private var delay: Long = 500000000
+    private var startTime: Long = 0
+    private var currentTime: Long = 0
 
-    private fun actionNormal(status: DeviceStatus) {
+    private fun actionSingle(status: DeviceStatus) {
         when(status) {
             DeviceStatus.IDLE -> {
                 activated = false
@@ -52,15 +54,18 @@ class MisutListener(
             DeviceStatus.TILT_DOWN -> {
                 if(!activated) {
                     activated = true
+                    startTime = currentTime
                     action?.invoke(status.actionIndex)
                 }
             }
             DeviceStatus.STOPOVER -> {
+                if(currentTime - startTime > delay)
+                    activated = false
             }
         }
     }
 
-    private fun actionScroll(status: DeviceStatus) {
+    private fun actionDouble(status: DeviceStatus) {
         when(status) {
             DeviceStatus.IDLE -> {
                 activated = false
@@ -71,14 +76,13 @@ class MisutListener(
             DeviceStatus.TILT_DOWN -> {
                 if(!activated) {
                     activated = true
-                    action?.invoke(status.actionIndex)
+                    startTime = currentTime
+                    action?.invoke(status.actionIndex+4)
                 }
             }
             DeviceStatus.STOPOVER -> {
-                if(activated) {
+                if(currentTime - startTime > delay)
                     activated = false
-                    action?.invoke(status.actionIndex)
-                }
             }
         }
     }
@@ -92,6 +96,7 @@ class MisutListener(
                 getInt("max_angle", 20).toFloat(),
                 1.3f
             )
+            delay = getInt("delay", 500).toLong() * MS2NS
         }
 
     }
@@ -110,7 +115,8 @@ class MisutListener(
     override fun onSensorChanged(evt: SensorEvent?) {
         if(evt == null)
             return
-        val dt = (evt.timestamp - ts) * NS2S
+        currentTime = evt.timestamp
+
         when(evt.sensor.type) {
             Sensor.TYPE_ROTATION_VECTOR -> {
                 if (baseAngle.isInvalid())
@@ -126,8 +132,8 @@ class MisutListener(
                 discriminator.updateStatus(angles)
                 var status = discriminator.getStatus()
                 when(mode) {
-                    1 -> actionNormal(status)
-                    2 -> actionScroll(status)
+                    1 -> actionSingle(status)
+                    2 -> actionDouble(status)
                 }
             }
 
@@ -144,6 +150,5 @@ class MisutListener(
                 action(-1)
             }
         }
-        ts = evt?.timestamp?.toFloat() ?: 0f
     }
 }
