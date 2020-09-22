@@ -35,4 +35,5 @@
     <string name="swipe_speed">Swipe Speed</string>
 
     <string name="vibration">Vibration</string>
+    <string name="delay">Delay</string>
 </resources>

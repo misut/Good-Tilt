@@ -8,7 +8,7 @@ enum class DeviceStatus(val actionIndex: Int) {
     TILT_RIGHT(1),
     TILT_UP(2),
     TILT_DOWN(3),
-    STOPOVER(4);
+    STOPOVER(8);
 }
 
 class Discriminator(var x: Float, var y: Float, var inner: Float, var outer: Float, var tan: Float) {

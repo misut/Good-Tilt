@@ -31,4 +31,5 @@
     <string name="swipe_speed">스와이프 속도</string>
 
     <string name="vibration">진동</string>
+    <string name="delay">지연시간</string>
 </resources>

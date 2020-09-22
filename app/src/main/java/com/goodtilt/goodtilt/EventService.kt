@@ -147,7 +147,7 @@ class EventService : Service() {
 
     private fun onActionOccur(index: Int) {
         vibrate();
-        generateEvent(actionList[index + if (listenerState == LISTENER_DOUBLE) 4 else 0])
+        generateEvent(actionList[index])
     }
 
     fun vibrate() {

@@ -75,6 +75,13 @@
             android:key="vibration"
             android:title="@string/vibration"
             app:iconSpaceReserved="false"/>
+        <SeekBarPreference
+            android:defaultValue="500"
+            android:key="delay"
+            android:max="2000"
+            android:title="@string/delay"
+            app:iconSpaceReserved="false"
+            app:showSeekBarValue="true" />
     </PreferenceCategory>
 
     <PreferenceCategory
