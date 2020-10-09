@@ -23,8 +23,12 @@
     <string name="setting_swipe">더블 탭 동작 설정</string>
     <string name="setting_general">일반 설정</string>
     <string name="setting_sensitivity">민감도 설정</string>
+    <string name="setting_area">터치 영역 설정</string>
 
     <string name="area_transparent">터치 영역 투명</string>
+    <string name="area_width">터치 영역 너비</string>
+    <string name="area_height">터치 영역 높이</string>
+    <string name="area_vertical_position">터치 영역 위치</string>
 
     <string name="left_tilt_action">왼쪽 기울임 동작</string>
     <string name="right_tilt_action">오른쪽 기울임 동작</string>

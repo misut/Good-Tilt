@@ -25,8 +25,12 @@
     <string name="setting_swipe">Double Tap Action Setting</string>
     <string name="setting_general">General Settings</string>
     <string name="setting_sensitivity">Sensitivity Settings</string>
+    <string name="setting_area">Touch Area Setting</string>
 
     <string name="area_transparent">Transparent Touch Area</string>
+    <string name="area_width">Touch Area Width</string>
+    <string name="area_height">Touch Area Height</string>
+    <string name="area_vertical_position">Touch Area Position</string>
 
     <string name="left_tilt_action">Left Side Tilt</string>
     <string name="right_tilt_action">Right Side Tilt</string>

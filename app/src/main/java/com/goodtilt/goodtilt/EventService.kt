@@ -72,6 +72,10 @@ class EventService : Service() {
         swipePosY = resources.displayMetrics.heightPixels / 2.0f
         sensorListener.applyPreference(this)
 
+        var area_width = 0
+        var area_height = 0
+        var area_vertical_pos = 0
+
         PreferenceManager.getDefaultSharedPreferences(this).apply {
             getString("tilt_left", "NONE")?.let { actionList[0] = KeyAction.valueOf(it) }
             getString("tilt_right", "NONE")?.let { actionList[1] = KeyAction.valueOf(it) }
@@ -85,6 +89,10 @@ class EventService : Service() {
             //getInt("overlay_y", swipePosY.toInt())?.let { params.y = it}
             getBoolean("transparent", false)?.let { isTransparent = it }
             getBoolean("vibration", false)?.let { isVibrate = it }
+
+            getInt("area_width", 50)?.let {area_width = it}
+            getInt("area_height", 500)?.let {area_height = it}
+            getInt("area_vertical_position", 500)?.let {area_vertical_pos = it}
         }
 
         val strId = getString(R.string.channel_id)
@@ -151,31 +159,18 @@ class EventService : Service() {
         }
 
         var params = WindowManager.LayoutParams(
-            TypedValue.applyDimension(
-                TypedValue.COMPLEX_UNIT_DIP,
-                30F,
-                getResources().getDisplayMetrics()
-            ).toInt(),
-            TypedValue.applyDimension(
-                TypedValue.COMPLEX_UNIT_DIP,
-                400F,
-                getResources().getDisplayMetrics()
-            ).toInt(),
+            (resources.displayMetrics.xdpi / 1000F * area_width).toInt(),
+            (resources.displayMetrics.ydpi / 1000F * area_height).toInt(),
             WindowManager.LayoutParams.TYPE_APPLICATION_OVERLAY,
             WindowManager.LayoutParams.FLAG_NOT_TOUCH_MODAL or WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE,
             PixelFormat.TRANSLUCENT
         )
+        //HERE
+        params.y = (resources.displayMetrics.ydpi / 1000F * area_vertical_pos).toInt()
+
+
         floatingParams = WindowManager.LayoutParams(
-            TypedValue.applyDimension(
-                TypedValue.COMPLEX_UNIT_DIP,
-                30F,
-                getResources().getDisplayMetrics()
-            ).toInt(),
-            TypedValue.applyDimension(
-                TypedValue.COMPLEX_UNIT_DIP,
-                30F,
-                getResources().getDisplayMetrics()
-            ).toInt(),
+            0, 0,
             WindowManager.LayoutParams.TYPE_APPLICATION_OVERLAY,
             WindowManager.LayoutParams.FLAG_NOT_TOUCH_MODAL or WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE or WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE,
             PixelFormat.TRANSLUCENT
