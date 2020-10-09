@@ -24,6 +24,7 @@ import android.widget.ImageView
 import androidx.core.app.NotificationCompat
 import androidx.preference.PreferenceManager
 import com.goodtilt.goodtilt.const.*
+import kotlinx.android.synthetic.main.activity_setting.*
 
 class EventService : Service() {
     private var overlayView = arrayOfNulls<View>(2)
@@ -159,14 +160,14 @@ class EventService : Service() {
         }
 
         var params = WindowManager.LayoutParams(
-            (resources.displayMetrics.xdpi / 1000F * area_width).toInt(),
-            (resources.displayMetrics.ydpi / 1000F * area_height).toInt(),
+            (resources.displayMetrics.widthPixels / 1000F * area_width).toInt(),
+            (resources.displayMetrics.heightPixels / 1000F * area_height).toInt(),
             WindowManager.LayoutParams.TYPE_APPLICATION_OVERLAY,
             WindowManager.LayoutParams.FLAG_NOT_TOUCH_MODAL or WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE,
             PixelFormat.TRANSLUCENT
         )
         //HERE
-        params.y = (resources.displayMetrics.ydpi / 1000F * area_vertical_pos).toInt()
+        params.y = ((resources.displayMetrics.heightPixels - params.height)/ 1000F * area_vertical_pos).toInt()
 
 
         floatingParams = WindowManager.LayoutParams(
@@ -175,6 +176,7 @@ class EventService : Service() {
             WindowManager.LayoutParams.FLAG_NOT_TOUCH_MODAL or WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE or WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE,
             PixelFormat.TRANSLUCENT
         )
+
 
         wm = getSystemService(Context.WINDOW_SERVICE) as WindowManager
         val inflate = getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
