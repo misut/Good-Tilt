@@ -94,7 +94,6 @@ class MisutListener(
             )
             delay = getInt("delay", 500).toLong() * MS2NS
         }
-
     }
 
     //rightHand : 오른손이면 true
