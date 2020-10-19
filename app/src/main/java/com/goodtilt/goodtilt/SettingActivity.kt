@@ -40,14 +40,8 @@ class SettingActivity : AppCompatActivity() {
 
     //TiltFragment에 동일한 코드
     fun updateOverlay(pref : SharedPreferences) {
-        overlayLeft.layoutParams.width = (resources.displayMetrics.widthPixels / 1000F * pref.getInt("area_width", 50)).toInt()
-        overlayLeft.layoutParams.height = (resources.displayMetrics.heightPixels / 1000F * pref.getInt("area_height", 500)).toInt()
-        overlayLeft.y = (resources.displayMetrics.heightPixels - overlayLeft.layoutParams.height) / 1000F * pref.getInt("area_vertical_position", 500)
-        overlayRight.layoutParams.width = overlayLeft.layoutParams.width
-        overlayRight.layoutParams.height = overlayLeft.layoutParams.height
-        overlayRight.y = overlayLeft.y
-        overlayLeft.requestLayout()
-        overlayRight.requestLayout()
+        overlayLeft.updateFromPreference(pref)
+        overlayRight.updateFromPreference(pref)
     }
 
 

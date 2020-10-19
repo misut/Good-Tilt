@@ -43,4 +43,8 @@
 
     <string name="vibration">진동</string>
     <string name="delay">지연시간</string>
+
+    <string name="btn_next">다음</string>
+    <string name="btn_prev">이전</string>
+    <string name="btn_request">요청하기</string>
 </resources>

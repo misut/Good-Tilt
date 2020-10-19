@@ -73,7 +73,7 @@
         <SeekBarPreference
             android:defaultValue="50"
             android:key="area_width"
-            android:max="500"
+            android:max="333"
             android:title="@string/area_width"
             app:updatesContinuously="true"
             app:iconSpaceReserved="false" />

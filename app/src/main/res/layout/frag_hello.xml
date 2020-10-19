@@ -8,23 +8,38 @@
 
     <TextView
         android:id="@+id/textView3"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="96dp"
-        android:text="TextView"
-        android:textSize="30sp"
+        android:text="Welcome to Good Tilt"
+        android:textSize="@dimen/text_big"
+        android:layout_marginTop="@dimen/margin_top"
+        android:layout_marginStart="@dimen/margin_side"
+        android:layout_marginEnd="@dimen/margin_side"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        tools:text="Welcome to Good Tilt" />
+        app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:layout_marginTop="30dp"
         android:text="Good Tilt는 휴대폰을 기울여 원하는 제스처를 수행하게 해주는 제스처 앱입니다. 화면 가장자리를 누르고 휴대폰을 기울이면 각도에 따라 원하는 동작을 실행할 수 있습니다."
+        android:textSize="@dimen/text_small"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="@+id/textView3"
         app:layout_constraintStart_toStartOf="@+id/textView3"
         app:layout_constraintTop_toBottomOf="@+id/textView3" />
+
+    <TextView
+        android:id="@+id/next"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/btn_next"
+        android:textSize="@dimen/text_btn"
+        android:layout_marginBottom="@dimen/margin_side"
+        android:layout_marginEnd="@dimen/margin_bottom"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
+
+
 </androidx.constraintlayout.widget.ConstraintLayout>

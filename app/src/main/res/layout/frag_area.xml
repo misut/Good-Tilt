@@ -4,23 +4,139 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
-    <LinearLayout
+    <TextView
+        android:id="@+id/textView1"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="터치 영역 설정"
+        android:textSize="@dimen/text_big"
+        android:layout_marginTop="@dimen/margin_top"
+        android:layout_marginStart="@dimen/margin_side"
+        android:layout_marginEnd="@dimen/margin_side"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/textView2"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/margin_items"
+        android:textSize="@dimen/text_small"
+        android:text="기능을 사용하기 위해서는 휴대폰 가장자리를 엄지손가락 등으로 터치하면서 휴대폰을 기울여야 합니다. 터치 영역이 너무 넓으면 다른 앱 사용에 방해가 되며, 너무 좁을 경우 터치 인식을 제대로 받지 못할 수 있습니다."
+        app:layout_constraintEnd_toEndOf="@+id/textView1"
+        app:layout_constraintStart_toStartOf="@+id/textView1"
+        app:layout_constraintTop_toBottomOf="@+id/textView1" />
+
+    <TextView
+        android:id="@+id/textWidth"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/margin_items"
+        android:textSize="@dimen/text_small"
+        android:text="@string/area_width"
+        app:layout_constraintEnd_toEndOf="@+id/textView1"
+        app:layout_constraintStart_toStartOf="@+id/textView1"
+        app:layout_constraintTop_toBottomOf="@+id/textView2" />
+
+    <SeekBar
+        android:id="@+id/seekBarWidth"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/margin_label"
+        android:max="300"
+        android:min="0"
+        android:progress="50"
+        app:layout_constraintStart_toStartOf="@id/textView1"
+        app:layout_constraintEnd_toEndOf="@id/textView1"
+        app:layout_constraintTop_toBottomOf="@id/textWidth" />
+
+    <TextView
+        android:id="@+id/textHeight"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/margin_items"
+        android:textSize="@dimen/text_small"
+        android:text="@string/area_height"
+        app:layout_constraintEnd_toEndOf="@+id/textView1"
+        app:layout_constraintStart_toStartOf="@+id/textView1"
+        app:layout_constraintTop_toBottomOf="@+id/seekBarWidth" />
+
+    <SeekBar
+        android:id="@+id/seekBarHeight"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/margin_label"
+        android:max="1000"
+        android:min="0"
+        android:progress="500"
+        app:layout_constraintStart_toStartOf="@id/textView1"
+        app:layout_constraintEnd_toEndOf="@id/textView1"
+        app:layout_constraintTop_toBottomOf="@id/textHeight" />
+
+    <TextView
+        android:id="@+id/textPosition"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/margin_items"
+        android:textSize="@dimen/text_small"
+        android:text="@string/area_vertical_position"
+        app:layout_constraintEnd_toEndOf="@+id/textView1"
+        app:layout_constraintStart_toStartOf="@+id/textView1"
+        app:layout_constraintTop_toBottomOf="@+id/seekBarHeight" />
+
+    <SeekBar
+        android:id="@+id/seekBarPosition"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/margin_label"
+        android:max="1000"
+        android:min="0"
+        android:progress="500"
+        app:layout_constraintStart_toStartOf="@id/textView1"
+        app:layout_constraintEnd_toEndOf="@id/textView1"
+        app:layout_constraintTop_toBottomOf="@id/textPosition" />
+
+
+    <com.goodtilt.goodtilt.source.OverlaySideView
         android:id="@+id/overlayLeft"
         android:layout_width="50dp"
         android:layout_height="400dp"
-        android:background="#4DFF0000"
+        android:background="@color/OverlayDefault"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         android:orientation="horizontal">
-    </LinearLayout>
+    </com.goodtilt.goodtilt.source.OverlaySideView>
 
-    <LinearLayout
+    <com.goodtilt.goodtilt.source.OverlaySideView
         android:id="@+id/overlayRight"
         android:layout_width="50dp"
         android:layout_height="400dp"
-        android:background="#4DFF0000"
+        android:background="@color/OverlayDefault"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         android:orientation="horizontal">
-    </LinearLayout>
+    </com.goodtilt.goodtilt.source.OverlaySideView>
+
+    <TextView
+        android:id="@+id/next"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/btn_next"
+        android:textSize="@dimen/text_btn"
+        android:layout_marginBottom="@dimen/margin_side"
+        android:layout_marginEnd="@dimen/margin_bottom"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
+
+    <TextView
+        android:id="@+id/prev"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/btn_prev"
+        android:textSize="@dimen/text_btn"
+        android:layout_marginBottom="@dimen/margin_side"
+        android:layout_marginStart="@dimen/margin_bottom"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
 </androidx.constraintlayout.widget.ConstraintLayout>

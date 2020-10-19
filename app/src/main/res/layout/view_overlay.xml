@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<com.goodtilt.goodtilt.source.OverlaySideView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="50dp"
     android:layout_height="400dp"
-    android:background="@android:color/transparent"
+    android:background="@color/OverlayDefault"
     android:clickable="true"
     android:filterTouchesWhenObscured="true"
     app:layout_constraintBottom_toBottomOf="parent"
     app:layout_constraintEnd_toEndOf="parent"
     app:layout_constraintTop_toTopOf="parent">
-</LinearLayout>
+</com.goodtilt.goodtilt.source.OverlaySideView>

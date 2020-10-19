@@ -16,28 +16,28 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <LinearLayout
+    <com.goodtilt.goodtilt.source.OverlaySideView
         android:id="@+id/overlayLeft"
         android:layout_width="50dp"
         android:layout_height="400dp"
-        android:background="#4DFF0000"
+        android:background="@color/OverlayDefault"
         android:clickable="false"
         android:focusable="false"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         android:orientation="horizontal">
-    </LinearLayout>
+    </com.goodtilt.goodtilt.source.OverlaySideView>
 
-    <LinearLayout
+    <com.goodtilt.goodtilt.source.OverlaySideView
         android:id="@+id/overlayRight"
         android:layout_width="50dp"
         android:layout_height="400dp"
-        android:background="#4DFF0000"
+        android:background="@color/OverlayDefault"
         android:clickable="false"
         android:focusable="false"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         android:orientation="horizontal">
-    </LinearLayout>
+    </com.goodtilt.goodtilt.source.OverlaySideView>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

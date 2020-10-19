@@ -2,7 +2,6 @@ package com.goodtilt.goodtilt.source
 
 import android.content.Context
 import android.content.Intent
-import android.content.SharedPreferences
 import android.hardware.Sensor
 import android.hardware.SensorEvent
 import android.hardware.SensorManager
@@ -11,23 +10,17 @@ import android.view.LayoutInflater
 import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
-import androidx.core.content.ContextCompat.getSystemService
 import androidx.fragment.app.Fragment
-import androidx.preference.ListPreference
-import androidx.preference.PreferenceFragmentCompat
 import androidx.preference.PreferenceManager
 import com.goodtilt.goodtilt.MainActivity
 import com.goodtilt.goodtilt.ManualActivity
 import com.goodtilt.goodtilt.MisutListener
 import com.goodtilt.goodtilt.R
-import kotlinx.android.synthetic.main.activity_main.*
-import kotlinx.android.synthetic.main.activity_main.view.*
-import kotlinx.android.synthetic.main.activity_main.view.tiltView
-import kotlinx.android.synthetic.main.activity_setting.*
+import kotlinx.android.synthetic.main.frag_permission.view.*
 import kotlinx.android.synthetic.main.frag_tilt.*
-import kotlinx.android.synthetic.main.frag_tilt.overlayLeft
-import kotlinx.android.synthetic.main.frag_tilt.overlayRight
 import kotlinx.android.synthetic.main.frag_tilt.view.*
+import kotlinx.android.synthetic.main.frag_tilt.view.next
+import kotlinx.android.synthetic.main.frag_tilt.view.prev
 
 class TiltFragment : Fragment(){
 
@@ -78,9 +71,9 @@ class TiltFragment : Fragment(){
             overlayLeft.setOnTouchListener(touchListener)
             overlayRight.setOnTouchListener(touchListener)
 
-            tilt_next.setOnClickListener {
-                startActivity(Intent(activity, MainActivity::class.java))
-            }
+            val manualActivity = activity as ManualActivity
+            next.setOnClickListener(manualActivity.nextListener)
+            prev.setOnClickListener(manualActivity.prevListener)
         }
         return rootView
     }
@@ -94,7 +87,7 @@ class TiltFragment : Fragment(){
     }
 
     fun printAction(action: Int) {
-        this.view?.tilt_info?.setText(action.toString())
+        this.view?.tiltInfo?.setText(action.toString())
     }
 
     override fun onPause() {

@@ -45,4 +45,9 @@
 
     <string name="vibration">Vibration</string>
     <string name="delay">Delay</string>
+
+    <string name="btn_next">Next</string>
+    <string name="btn_prev">Previous</string>
+    <string name="btn_request">Request</string>
+
 </resources>
