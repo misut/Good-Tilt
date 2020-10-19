@@ -28,9 +28,11 @@ import kotlinx.android.synthetic.main.frag_tilt.*
 import kotlinx.android.synthetic.main.frag_tilt.overlayLeft
 import kotlinx.android.synthetic.main.frag_tilt.overlayRight
 import kotlinx.android.synthetic.main.frag_tilt.view.*
+import kotlin.math.PI
+import kotlin.math.tan
 
 class TiltFragment : Fragment(){
-
+    private val D2R: Float = PI.toFloat()/180.0f
     private val sensorListener = MisutListener(::printResult, ::printAction)
     private lateinit var sensorManager: SensorManager
     private val listening = false
@@ -56,7 +58,10 @@ class TiltFragment : Fragment(){
                 getInt("right_sensitivity", 50)/100.0f,
                 getInt("min_angle", 10).toFloat(),
                 getInt("max_angle", 20).toFloat(),
-                1.3f
+                (0.0f + getInt("tan_quad_1", 45)) * D2R,
+                (90.0f + getInt("tan_quad_2", 45)) * D2R,
+                (180.0f + getInt("tan_quad_3", 45)) * D2R,
+                (270.0f + getInt("tan_quad_4", 45)) * D2R
             )
         }
         rootView.apply {

@@ -13,10 +13,7 @@ import androidx.preference.PreferenceManager
 import com.goodtilt.goodtilt.source.DeviceStatus
 import com.goodtilt.goodtilt.source.Discriminator
 import com.goodtilt.goodtilt.source.Quaternion
-import kotlin.math.PI
-import kotlin.math.cos
-import kotlin.math.sin
-import kotlin.math.sqrt
+import kotlin.math.*
 
 enum class ListenerStatus(var min: Float, var max: Float) {
     IDLE(0.0f, 0.0f),
@@ -32,6 +29,7 @@ class MisutListener(
     val action: (index: Int) -> Unit
 ) : SensorEventListener {
     private val MS2NS = 1000000
+    private val D2R = PI/180.0f
 
     private var baseAngle = Quaternion()
 
@@ -92,7 +90,10 @@ class MisutListener(
                 getInt("right_sensitivity", 50)/100.0f,
                 getInt("min_angle", 10).toFloat(),
                 getInt("max_angle", 20).toFloat(),
-                1.3f
+                tan((0.0f + getInt("tan_quad_1", 45)) * D2R).toFloat(),
+                tan((90.0f + getInt("tan_quad_2", 45)) * D2R).toFloat(),
+                tan((180.0f + getInt("tan_quad_3", 45)) * D2R).toFloat(),
+                tan((270.0f + getInt("tan_quad_4", 45)) * D2R).toFloat()
             )
             delay = getInt("delay", 500).toLong() * MS2NS
         }

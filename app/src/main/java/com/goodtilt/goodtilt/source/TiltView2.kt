@@ -9,6 +9,8 @@ import android.hardware.SensorEvent
 import android.util.AttributeSet
 import android.view.View
 import kotlin.math.abs
+import kotlin.math.cos
+import kotlin.math.sin
 import kotlin.math.sqrt
 
 class TiltView2 : View {
@@ -35,7 +37,10 @@ class TiltView2 : View {
     private var dCoeff = 0F
     private var lCoeff = 0F
     private var rCoeff = 0F
-    private var tan = 0F
+    private var rad1 = 0F
+    private var rad2 = 0F
+    private var rad3 = 0F
+    private var rad4 = 0F
     private var inner = 0F
     private var outer = 0F
 
@@ -76,25 +81,33 @@ class TiltView2 : View {
     }
 
     fun updatePath() {
+        val baselen = if(centerX<centerY) centerX else centerY
         innerPath = graphPath(inner)
         outerPath = graphPath(outer)
         tanPath = Path()
-        tanPath.moveTo(- centerX * 0.5F, - centerY * 0.5F)
-        tanPath.lineTo(centerX * 0.5F, centerY * 0.5F)
-        tanPath.moveTo(- centerX * 0.5F, centerY * 0.5F)
-        tanPath.lineTo(centerX * 0.5F, - centerY * 0.5F)
+        tanPath.moveTo(baselen * cos(rad1), baselen * sin(rad1))
+        tanPath.lineTo(0F, 0F)
+        tanPath.moveTo(baselen * cos(rad2), baselen * sin(rad2))
+        tanPath.lineTo(0F, 0F)
+        tanPath.moveTo(baselen * cos(rad3), baselen * sin(rad3))
+        tanPath.lineTo(0F, 0F)
+        tanPath.moveTo(baselen * cos(rad4), baselen * sin(rad4))
+        tanPath.lineTo(0F, 0F)
         tanPath.offset(centerX, centerY)
     }
 
 
-    fun updateSetting(u: Float, d: Float, l:Float, r: Float, i: Float, o: Float, t: Float) {
+    fun updateSetting(u: Float, d: Float, l:Float, r: Float, i: Float, o: Float, r1: Float, r2: Float, r3: Float, r4: Float) {
         uCoeff = u
         dCoeff = d
         lCoeff = l
         rCoeff = r
         inner = i
         outer = o
-        tan = t
+        rad1 = r1
+        rad2 = r2
+        rad3 = r3
+        rad4 = r4
         updatePath()
         invalidate()
     }

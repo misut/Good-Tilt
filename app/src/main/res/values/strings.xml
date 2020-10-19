@@ -44,6 +44,10 @@
     <string name="minimum_angle">Minimum Angle</string>
     <string name="maximum_angle">Maximum Angle</string>
     <string name="swipe_speed">Swipe Speed</string>
+    <string name="tangent_quad_1">First Quadrant Tangent</string>
+    <string name="tangent_quad_2">Second Quadrant Tangent</string>
+    <string name="tangent_quad_3">Third Quadrant Tangent</string>
+    <string name="tangent_quad_4">Fourth Quadrant Tangent</string>
 
     <string name="vibration">Vibration</string>
     <string name="delay">Delay</string>
