@@ -2,6 +2,7 @@ package com.goodtilt.goodtilt.source
 
 import android.content.Context
 import android.content.Intent
+import android.content.SharedPreferences
 import android.hardware.Sensor
 import android.hardware.SensorEvent
 import android.hardware.SensorManager
@@ -10,20 +11,28 @@ import android.view.LayoutInflater
 import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.content.ContextCompat.getSystemService
 import androidx.fragment.app.Fragment
+import androidx.preference.ListPreference
+import androidx.preference.PreferenceFragmentCompat
 import androidx.preference.PreferenceManager
 import com.goodtilt.goodtilt.MainActivity
 import com.goodtilt.goodtilt.ManualActivity
 import com.goodtilt.goodtilt.MisutListener
 import com.goodtilt.goodtilt.R
-import kotlinx.android.synthetic.main.frag_permission.view.*
+import kotlinx.android.synthetic.main.activity_main.*
+import kotlinx.android.synthetic.main.activity_main.view.*
+import kotlinx.android.synthetic.main.activity_main.view.tiltView
+import kotlinx.android.synthetic.main.activity_setting.*
 import kotlinx.android.synthetic.main.frag_tilt.*
+import kotlinx.android.synthetic.main.frag_tilt.overlayLeft
+import kotlinx.android.synthetic.main.frag_tilt.overlayRight
 import kotlinx.android.synthetic.main.frag_tilt.view.*
-import kotlinx.android.synthetic.main.frag_tilt.view.next
-import kotlinx.android.synthetic.main.frag_tilt.view.prev
+import kotlin.math.PI
+import kotlin.math.tan
 
 class TiltFragment : Fragment(){
-
+    private val D2R: Float = PI.toFloat()/180.0f
     private val sensorListener = MisutListener(::printResult, ::printAction)
     private lateinit var sensorManager: SensorManager
     private val listening = false
@@ -43,11 +52,16 @@ class TiltFragment : Fragment(){
         val pref = PreferenceManager.getDefaultSharedPreferences(context)
         PreferenceManager.getDefaultSharedPreferences(context).apply {
             rootView.tiltView2.updateSetting(
-                getInt("hor_sensitivity", 50)/100.0f,
-                getInt("ver_sensitivity", 50)/100.0f,
+                getInt("upside_sensitivity", 50)/100.0f,
+                getInt("downside_sensitivity", 50)/100.0f,
+                getInt("left_sensitivity", 50)/100.0f,
+                getInt("right_sensitivity", 50)/100.0f,
                 getInt("min_angle", 10).toFloat(),
                 getInt("max_angle", 20).toFloat(),
-                1.3f
+                (0.0f + getInt("tan_quad_1", 45)) * D2R,
+                (90.0f + getInt("tan_quad_2", 45)) * D2R,
+                (180.0f + getInt("tan_quad_3", 45)) * D2R,
+                (270.0f + getInt("tan_quad_4", 45)) * D2R
             )
         }
         rootView.apply {

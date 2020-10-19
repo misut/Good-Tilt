@@ -121,16 +121,30 @@
         app:iconSpaceReserved="false">
         <SeekBarPreference
             android:defaultValue="50"
-            android:key="hor_sensitivity"
+            android:key="upside_sensitivity"
             android:max="100"
-            android:title="@string/horizontal_sensitivity"
+            android:title="@string/upside_sensitivity"
             app:iconSpaceReserved="false"
             app:showSeekBarValue="true" />
         <SeekBarPreference
             android:defaultValue="50"
-            android:key="ver_sensitivity"
+            android:key="downside_sensitivity"
             android:max="100"
-            android:title="@string/vertical_sensitivity"
+            android:title="@string/downside_sensitivity"
+            app:iconSpaceReserved="false"
+            app:showSeekBarValue="true" />
+        <SeekBarPreference
+            android:defaultValue="50"
+            android:key="left_sensitivity"
+            android:max="100"
+            android:title="@string/left_sensitivity"
+            app:iconSpaceReserved="false"
+            app:showSeekBarValue="true" />
+        <SeekBarPreference
+            android:defaultValue="50"
+            android:key="right_sensitivity"
+            android:max="100"
+            android:title="@string/right_sensitivity"
             app:iconSpaceReserved="false"
             app:showSeekBarValue="true" />
         <SeekBarPreference
@@ -145,6 +159,34 @@
             android:key="max_angle"
             android:max="90"
             android:title="@string/maximum_angle"
+            app:iconSpaceReserved="false"
+            app:showSeekBarValue="true" />
+        <SeekBarPreference
+            android:defaultValue="45"
+            android:key="tan_quad_1"
+            android:max="90"
+            android:title="@string/tangent_quad_1"
+            app:iconSpaceReserved="false"
+            app:showSeekBarValue="true" />
+        <SeekBarPreference
+            android:defaultValue="45"
+            android:key="tan_quad_2"
+            android:max="90"
+            android:title="@string/tangent_quad_2"
+            app:iconSpaceReserved="false"
+            app:showSeekBarValue="true" />
+        <SeekBarPreference
+            android:defaultValue="45"
+            android:key="tan_quad_3"
+            android:max="90"
+            android:title="@string/tangent_quad_3"
+            app:iconSpaceReserved="false"
+            app:showSeekBarValue="true" />
+        <SeekBarPreference
+            android:defaultValue="45"
+            android:key="tan_quad_4"
+            android:max="90"
+            android:title="@string/tangent_quad_4"
             app:iconSpaceReserved="false"
             app:showSeekBarValue="true" />
     </PreferenceCategory>

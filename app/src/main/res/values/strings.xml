@@ -37,11 +37,17 @@
     <string name="up_tilt_action">Up Side Tilt</string>
     <string name="down_tilt_action">Down Side Tilt</string>
 
-    <string name="horizontal_sensitivity">Horizontal Sensitivity</string>
-    <string name="vertical_sensitivity">Vertical Sensitivity</string>
+    <string name="upside_sensitivity">Upside Sensitivity</string>
+    <string name="downside_sensitivity">Downside Sensitivity</string>
+    <string name="left_sensitivity">Left Sensitivity</string>
+    <string name="right_sensitivity">Right Sensitivity</string>
     <string name="minimum_angle">Minimum Angle</string>
     <string name="maximum_angle">Maximum Angle</string>
     <string name="swipe_speed">Swipe Speed</string>
+    <string name="tangent_quad_1">First Quadrant Tangent</string>
+    <string name="tangent_quad_2">Second Quadrant Tangent</string>
+    <string name="tangent_quad_3">Third Quadrant Tangent</string>
+    <string name="tangent_quad_4">Fourth Quadrant Tangent</string>
 
     <string name="vibration">Vibration</string>
     <string name="delay">Delay</string>

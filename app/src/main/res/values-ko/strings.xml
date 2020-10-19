@@ -35,11 +35,17 @@
     <string name="up_tilt_action">위쪽 기울임 동작</string>
     <string name="down_tilt_action">아래쪽 기울임 동작</string>
 
-    <string name="horizontal_sensitivity">가로방향 민감도</string>
-    <string name="vertical_sensitivity">세로방향 민감도</string>
+    <string name="upside_sensitivity">위쪽 민감도</string>
+    <string name="downside_sensitivity">아래쪽 민감도</string>
+    <string name="left_sensitivity">왼쪽 민감도</string>
+    <string name="right_sensitivity">오른쪽 민감도</string>
     <string name="minimum_angle">최소 각도</string>
     <string name="maximum_angle">최대 각도</string>
     <string name="swipe_speed">스와이프 속도</string>
+    <string name="tangent_quad_1">제 1사분면 탄젠트</string>
+    <string name="tangent_quad_2">제 2사분면 탄젠트</string>
+    <string name="tangent_quad_3">제 3사분면 탄젠트</string>
+    <string name="tangent_quad_4">제 4사분면 탄젠트</string>
 
     <string name="vibration">진동</string>
     <string name="delay">지연시간</string>
