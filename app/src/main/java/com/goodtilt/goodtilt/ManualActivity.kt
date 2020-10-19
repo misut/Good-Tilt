@@ -8,42 +8,61 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentStatePagerAdapter
 import androidx.preference.PreferenceManager
-import com.goodtilt.goodtilt.source.HelloWorldFragment
-import com.goodtilt.goodtilt.source.PermissionFragment
-import com.goodtilt.goodtilt.source.TiltFragment
+import com.goodtilt.goodtilt.fragment.*
 import kotlinx.android.synthetic.main.activity_manual.*
-import kotlinx.android.synthetic.main.frag_tilt.view.*
 
 class ManualActivity : AppCompatActivity() {
-
+    var skipGuide = false
     val prevListener = View.OnClickListener {
-        val prev = manualPager.currentItem - 1
-        if (prev >= 0)
-            manualPager.setCurrentItem(prev, true)
+        onBackPressed()
     }
+
+    val skipListener = View.OnClickListener {
+        skipGuide = true
+        manualPager.setCurrentItem(4, true)
+    }
+
+    val noneSkipListener = View.OnClickListener {
+        skipGuide = false
+        manualPager.setCurrentItem(3, true)
+    }
+
 
     val nextListener = View.OnClickListener {
         val next = manualPager.currentItem + 1
         if (next < manualPager.adapter?.count!!)
             manualPager.setCurrentItem(next, true)
         else
-            startActivity(Intent(this, MainActivity::class.java))
+            startActivity(Intent(this, MainActivity::class.java).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK))
     }
 
-    class ManualAdapter(fragmentManger: FragmentManager) : FragmentStatePagerAdapter(fragmentManger, BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT) {
+    inner class ManualAdapter(fragmentManger: FragmentManager) : FragmentStatePagerAdapter(fragmentManger, BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT) {
         override fun getCount(): Int {
-            return 3
+            return 6
         }
 
         override fun getItem(position: Int): Fragment {
             when(position) {
                 0 -> return HelloWorldFragment()
                 1 -> return PermissionFragment()
-                2 -> return TiltFragment()
+                2 -> return NeedGuideFragment()
+                3 -> return GuideFragment()
+                4 -> return AreaFragment()
+                5 -> return TiltFragment()
             }
             return Fragment()
         }
+    }
 
+
+    override fun onBackPressed() {
+        val prev = manualPager.currentItem - 1
+        if (prev == 3 && skipGuide)
+            manualPager.setCurrentItem(prev - 1, true)
+        else if (prev >= 0)
+            manualPager.setCurrentItem(prev, true)
+        else
+            super.onBackPressed()
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {

@@ -1,4 +1,4 @@
-package com.goodtilt.goodtilt.source
+package com.goodtilt.goodtilt.fragment
 
 import android.annotation.TargetApi
 import android.content.Intent

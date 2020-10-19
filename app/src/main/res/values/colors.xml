@@ -5,4 +5,5 @@
     <color name="colorAccent">#03DAC5</color>
 
     <color name="OverlayDefault">#4DFF0000</color>
+    <color name="OverlayClicked">#4D00FF00</color>
 </resources>

@@ -10,7 +10,7 @@
         android:id="@+id/textView3"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:text="@string/manual_hello"
+        android:text="@string/manual_guide"
         android:textSize="@dimen/text_big"
         android:layout_marginTop="@dimen/margin_top"
         android:layout_marginStart="@dimen/margin_side"
@@ -23,7 +23,7 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/margin_items"
-        android:text="@string/manual_hello_info"
+        android:text="@string/manual_guide_need"
         android:textSize="@dimen/text_small"
         app:layout_constraintEnd_toEndOf="@+id/textView3"
         app:layout_constraintStart_toStartOf="@+id/textView3"
@@ -39,6 +39,28 @@
         android:layout_marginEnd="@dimen/margin_bottom"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
+
+    <TextView
+        android:id="@+id/skip"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/btn_skip"
+        android:textSize="@dimen/text_btn"
+        android:layout_marginBottom="@dimen/margin_side"
+        android:layout_marginEnd="@dimen/margin_bottom"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@id/next" />
+
+    <TextView
+        android:id="@+id/prev"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/btn_prev"
+        android:textSize="@dimen/text_btn"
+        android:layout_marginBottom="@dimen/margin_side"
+        android:layout_marginStart="@dimen/margin_bottom"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

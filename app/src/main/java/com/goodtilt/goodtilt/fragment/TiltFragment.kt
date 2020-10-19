@@ -1,8 +1,6 @@
-package com.goodtilt.goodtilt.source
+package com.goodtilt.goodtilt.fragment
 
 import android.content.Context
-import android.content.Intent
-import android.content.SharedPreferences
 import android.hardware.Sensor
 import android.hardware.SensorEvent
 import android.hardware.SensorManager
@@ -11,31 +9,26 @@ import android.view.LayoutInflater
 import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
-import androidx.core.content.ContextCompat.getSystemService
 import androidx.fragment.app.Fragment
-import androidx.preference.ListPreference
-import androidx.preference.PreferenceFragmentCompat
 import androidx.preference.PreferenceManager
-import com.goodtilt.goodtilt.MainActivity
 import com.goodtilt.goodtilt.ManualActivity
 import com.goodtilt.goodtilt.MisutListener
 import com.goodtilt.goodtilt.R
-import kotlinx.android.synthetic.main.activity_main.*
-import kotlinx.android.synthetic.main.activity_main.view.*
-import kotlinx.android.synthetic.main.activity_main.view.tiltView
-import kotlinx.android.synthetic.main.activity_setting.*
+import kotlinx.android.synthetic.main.frag_guide.view.*
 import kotlinx.android.synthetic.main.frag_tilt.*
 import kotlinx.android.synthetic.main.frag_tilt.overlayLeft
 import kotlinx.android.synthetic.main.frag_tilt.overlayRight
 import kotlinx.android.synthetic.main.frag_tilt.view.*
+import kotlinx.android.synthetic.main.frag_tilt.view.next
+import kotlinx.android.synthetic.main.frag_tilt.view.overlayLeft
+import kotlinx.android.synthetic.main.frag_tilt.view.overlayRight
+import kotlinx.android.synthetic.main.frag_tilt.view.prev
+import kotlinx.android.synthetic.main.frag_tilt.view.tiltView2
 import kotlin.math.PI
-import kotlin.math.tan
 
 class TiltFragment : Fragment(){
-    private val D2R: Float = PI.toFloat()/180.0f
     private val sensorListener = MisutListener(::printResult, ::printAction)
     private lateinit var sensorManager: SensorManager
-    private val listening = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -51,6 +44,7 @@ class TiltFragment : Fragment(){
         sensorListener.applyPreference(inflater.context)
         val pref = PreferenceManager.getDefaultSharedPreferences(context)
         PreferenceManager.getDefaultSharedPreferences(context).apply {
+            val D2R = PI.toFloat()/180.0f
             rootView.tiltView2.updateSetting(
                 getInt("upside_sensitivity", 50)/100.0f,
                 getInt("downside_sensitivity", 50)/100.0f,
@@ -65,21 +59,18 @@ class TiltFragment : Fragment(){
             )
         }
         rootView.apply {
-            overlayLeft.layoutParams.width = (resources.displayMetrics.widthPixels / 1000F * pref.getInt("area_width", 50)).toInt()
-            overlayLeft.layoutParams.height = (resources.displayMetrics.heightPixels / 1000F * pref.getInt("area_height", 500)).toInt()
-            overlayLeft.y = (resources.displayMetrics.heightPixels - overlayLeft.layoutParams.height) / 1000F * pref.getInt("area_vertical_position", 500)
-            overlayRight.layoutParams.width = overlayLeft.layoutParams.width
-            overlayRight.layoutParams.height = overlayLeft.layoutParams.height
-            overlayRight.y = overlayLeft.y
-            overlayLeft.requestLayout()
-            overlayRight.requestLayout()
+            overlayLeft.updateFromPreference(pref)
+            overlayRight.updateFromPreference(pref)
 
             val touchListener =   View.OnTouchListener{ view , motionEvent ->
                 if(motionEvent.action == MotionEvent.ACTION_DOWN) {
                     sensorListener.initBase(1, view == overlayRight)
                     changeListenerState(true)
-                }else if (motionEvent.action == MotionEvent.ACTION_UP)
+                    view.setBackgroundResource(R.color.OverlayClicked)
+                }else if (motionEvent.action == MotionEvent.ACTION_UP || motionEvent.action == MotionEvent.ACTION_CANCEL) {
                     changeListenerState(false)
+                    view.setBackgroundResource(R.color.OverlayDefault)
+                }
                 true
             }
             overlayLeft.setOnTouchListener(touchListener)
@@ -107,6 +98,13 @@ class TiltFragment : Fragment(){
     override fun onPause() {
         changeListenerState(false)
         super.onPause()
+    }
+
+    override fun onResume() {
+        val preference = PreferenceManager.getDefaultSharedPreferences(context)
+        overlayLeft.updateFromPreference(preference)
+        overlayRight.updateFromPreference(preference)
+        super.onResume()
     }
 
     fun changeListenerState(state: Boolean) {

@@ -1,4 +1,4 @@
-package com.goodtilt.goodtilt.source
+package com.goodtilt.goodtilt.fragment
 
 import android.os.Bundle
 import android.view.LayoutInflater
