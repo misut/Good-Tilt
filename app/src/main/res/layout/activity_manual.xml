@@ -6,9 +6,8 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <fragment
-        android:id="@+id/fragment2"
-        android:name="com.goodtilt.goodtilt.source.TiltFragment"
+    <androidx.viewpager.widget.ViewPager
+        android:id="@+id/manual_pager"
         android:layout_width="0dp"
         android:layout_height="0dp"
         app:layout_constraintBottom_toBottomOf="parent"
