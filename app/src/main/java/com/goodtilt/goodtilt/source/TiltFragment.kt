@@ -50,8 +50,10 @@ class TiltFragment : Fragment(){
         val pref = PreferenceManager.getDefaultSharedPreferences(context)
         PreferenceManager.getDefaultSharedPreferences(context).apply {
             rootView.tiltView2.updateSetting(
-                getInt("hor_sensitivity", 50)/100.0f,
-                getInt("ver_sensitivity", 50)/100.0f,
+                getInt("upside_sensitivity", 50)/100.0f,
+                getInt("downside_sensitivity", 50)/100.0f,
+                getInt("left_sensitivity", 50)/100.0f,
+                getInt("right_sensitivity", 50)/100.0f,
                 getInt("min_angle", 10).toFloat(),
                 getInt("max_angle", 20).toFloat(),
                 1.3f

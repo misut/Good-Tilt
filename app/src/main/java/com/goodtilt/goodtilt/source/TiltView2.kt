@@ -31,8 +31,10 @@ class TiltView2 : View {
     private var centerX = 0F
     private var centerY = 0F
 
-    private var xCoeff = 0F
-    private var yCoeff = 0F
+    private var uCoeff = 0F
+    private var dCoeff = 0F
+    private var lCoeff = 0F
+    private var rCoeff = 0F
     private var tan = 0F
     private var inner = 0F
     private var outer = 0F
@@ -48,23 +50,24 @@ class TiltView2 : View {
     }
 
     // x*pos[0]*pos[0]+y*pos[1]*pos[1] = r * r
-    private fun graphPath(xCoeff : Float, yCoeff : Float, r : Float) : Path {
+    private fun graphPath(r : Float) : Path {
         val path = Path()
 
-        val maxX = sqrt(r * r / xCoeff)
-        val minX = -maxX
-        val Fx : (Float) -> Float = {x -> sqrt(abs((r * r - x * x * xCoeff)) / yCoeff)}
+        val maxX = sqrt(r * r / rCoeff)
+        val minX = -sqrt(r * r / lCoeff)
+        val maxFx : (Float) -> Float = {x -> if (x<0) sqrt(abs((r * r - x * x * lCoeff)) / uCoeff) else sqrt(abs((r * r - x * x * rCoeff)) / uCoeff) }
+        val minFx : (Float) -> Float = {x -> if (x<0) -sqrt(abs((r * r - x * x * lCoeff)) / dCoeff) else -sqrt(abs((r * r - x * x * rCoeff)) / dCoeff) }
 
         val sample = (maxX - minX) / sampling.toFloat()
         path.moveTo(  minX * coeff, 0F)
         for (i in 1..sampling) {
             val newX = minX + i * sample
-            path.lineTo( newX * coeff,Fx(newX) * coeff)
+            path.lineTo( newX * coeff,maxFx(newX) * coeff)
         }
         path.lineTo( maxX * coeff, 0F)
         for (i in 1..sampling) {
             val newX = maxX - i * sample
-            path.lineTo( newX * coeff,-Fx(newX) * coeff)
+            path.lineTo( newX * coeff,minFx(newX) * coeff)
         }
         path.lineTo( minX * coeff, 0F)
         //path.close()
@@ -73,8 +76,8 @@ class TiltView2 : View {
     }
 
     fun updatePath() {
-        innerPath = graphPath(xCoeff, yCoeff, inner)
-        outerPath = graphPath(xCoeff, yCoeff, outer)
+        innerPath = graphPath(inner)
+        outerPath = graphPath(outer)
         tanPath = Path()
         tanPath.moveTo(- centerX * 0.5F, - centerY * 0.5F)
         tanPath.lineTo(centerX * 0.5F, centerY * 0.5F)
@@ -84,9 +87,11 @@ class TiltView2 : View {
     }
 
 
-    fun updateSetting(x: Float, y: Float, i: Float, o: Float, t: Float) {
-        xCoeff = x
-        yCoeff = y
+    fun updateSetting(u: Float, d: Float, l:Float, r: Float, i: Float, o: Float, t: Float) {
+        uCoeff = u
+        dCoeff = d
+        lCoeff = l
+        rCoeff = r
         inner = i
         outer = o
         tan = t
