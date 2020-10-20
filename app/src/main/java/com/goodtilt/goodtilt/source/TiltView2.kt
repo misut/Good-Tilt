@@ -83,6 +83,10 @@ class TiltView2 : View {
         return path
     }
 
+    fun getCoord() : FloatArray {
+        return floatArrayOf(xCoord / coeff, yCoord / coeff)
+    }
+
     fun updatePath() {
         val baselen = if(centerX<centerY) centerX else centerY
         innerPath = graphPath(inner)

@@ -1,5 +1,6 @@
 package com.goodtilt.goodtilt.source
 
+import android.util.Log
 import kotlin.math.PI
 import kotlin.math.ln
 import kotlin.math.sqrt
@@ -27,7 +28,7 @@ class Discriminator(var u: Float, var d: Float, var i: Float, var o: Float, var 
     private var t3 = 1.0f
     private var t4 = -1.0f
     private var status = DeviceStatus.IDLE
-    private var gradient = 0.1f
+    private var gradient = 0.01f
 
     private fun ellipsify(pos: FloatArray, rightHand: Boolean): Float {
         if(rightHand) {
@@ -128,31 +129,32 @@ class Discriminator(var u: Float, var d: Float, var i: Float, var o: Float, var 
     fun feed(pos: FloatArray, status: DeviceStatus, rightHand: Boolean) {
         var res = ellipsify(pos, rightHand)
         var cur = pos[1]/pos[0]
-        var safezone = (outer-inner)*0.1f
+        var safezone = (outer-inner)*0.5f
         when(status) {
             DeviceStatus.TILT_IN -> {
                 if(res < outer)
-                    i -= ln(outer-res)*gradient
+                    this.i += ln(outer-res)*gradient
                 else if(res > outer+safezone)
-                    i += ln(res-outer-safezone)*gradient
+                    this.i -= ln(res-outer-safezone)*gradient
+                Log.i("Feed", "$i $res $outer")
             }
             DeviceStatus.TILT_OUT -> {
                 if(res < outer)
-                    o -= ln(outer-res)*gradient
+                    this.o += ln(outer-res)*gradient
                 else if(res > outer+safezone)
-                    o += ln(res-outer-safezone)*gradient
+                    this.o -= ln(res-outer-safezone)*gradient
             }
             DeviceStatus.TILT_UP -> {
                 if(res < outer)
-                    u -= ln(outer-res)*gradient
+                    this.u += ln(outer-res)*gradient
                 else if(res > outer+safezone)
-                    u += ln(res-outer-safezone)*gradient
+                    this.u -= ln(res-outer-safezone)*gradient
             }
             DeviceStatus.TILT_DOWN -> {
                 if(res < outer)
-                    d -= ln(outer-res)*gradient
+                    this.d += ln(outer-res)*gradient
                 else if(res > outer+safezone)
-                    d += ln(res-outer-safezone)*gradient
+                    this.d -= ln(res-outer-safezone)*gradient
             }
         }
     }

@@ -58,7 +58,8 @@ class TiltFragment(private val isManual: Boolean = true) : Fragment() {
                     view.setBackgroundResource(R.color.OverlayClicked)
                 } else if (motionEvent.action == MotionEvent.ACTION_UP || motionEvent.action == MotionEvent.ACTION_CANCEL) {
                     view.setBackgroundResource(R.color.OverlayDefault)
-                    sensorListener.updatePreference(context, floatArrayOf(tiltView2.xCoord, tiltView2.yCoord), DeviceStatus.TILT_IN)
+                    sensorListener.updatePreference(context, tiltView2.getCoord(), DeviceStatus.TILT_IN)
+                    tiltView2.updatePath()
                     changeListenerState(false)
                 }
                 true
