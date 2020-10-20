@@ -63,8 +63,8 @@ class TiltView2 : View {
 
         val maxX = sqrt(r * r / rCoeff)
         val minX = -sqrt(r * r / lCoeff)
-        val maxFx : (Float) -> Float = {x -> if (x<0) sqrt(abs((r * r - x * x * lCoeff)) / uCoeff) else sqrt(abs((r * r - x * x * rCoeff)) / uCoeff) }
-        val minFx : (Float) -> Float = {x -> if (x<0) -sqrt(abs((r * r - x * x * lCoeff)) / dCoeff) else -sqrt(abs((r * r - x * x * rCoeff)) / dCoeff) }
+        val maxFx : (Float) -> Float = {x -> if (x<0) sqrt(abs((r * r - x * x * lCoeff)) / dCoeff) else sqrt(abs((r * r - x * x * rCoeff)) / dCoeff) }
+        val minFx : (Float) -> Float = {x -> if (x<0) -sqrt(abs((r * r - x * x * lCoeff)) / uCoeff) else -sqrt(abs((r * r - x * x * rCoeff)) / uCoeff) }
 
         val sample = (maxX - minX) / sampling.toFloat()
         path.moveTo(  minX * coeff, 0F)

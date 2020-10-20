@@ -1,6 +1,7 @@
 package com.goodtilt.goodtilt.source
 
 import kotlin.math.PI
+import kotlin.math.ln
 import kotlin.math.sqrt
 import kotlin.math.tan
 
@@ -26,27 +27,28 @@ class Discriminator(var u: Float, var d: Float, var i: Float, var o: Float, var 
     private var t3 = 1.0f
     private var t4 = -1.0f
     private var status = DeviceStatus.IDLE
+    private var gradient = 0.1f
 
     private fun ellipsify(pos: FloatArray, rightHand: Boolean): Float {
         if(rightHand) {
             if(pos[0]>=0 && pos[1]>=0)
-                return sqrt(i*pos[0]*pos[0]+u*pos[1]*pos[1]).toFloat()
-            else if(pos[0]<0 && pos[1]>=0)
-                return sqrt(o*pos[0]*pos[0]+u*pos[1]*pos[1]).toFloat()
-            else if(pos[0]<0 && pos[1]<0)
-                return sqrt(o*pos[0]*pos[0]+d*pos[1]*pos[1]).toFloat()
-            else
                 return sqrt(i*pos[0]*pos[0]+d*pos[1]*pos[1]).toFloat()
+            else if(pos[0]<0 && pos[1]>=0)
+                return sqrt(o*pos[0]*pos[0]+d*pos[1]*pos[1]).toFloat()
+            else if(pos[0]<0 && pos[1]<0)
+                return sqrt(o*pos[0]*pos[0]+u*pos[1]*pos[1]).toFloat()
+            else
+                return sqrt(i*pos[0]*pos[0]+u*pos[1]*pos[1]).toFloat()
         }
         else {
             if(pos[0]>=0 && pos[1]>=0)
-                return sqrt(o*pos[0]*pos[0]+u*pos[1]*pos[1]).toFloat()
-            else if(pos[0]<0 && pos[1]>=0)
-                return sqrt(i*pos[0]*pos[0]+u*pos[1]*pos[1]).toFloat()
-            else if(pos[0]<0 && pos[1]<0)
-                return sqrt(i*pos[0]*pos[0]+d*pos[1]*pos[1]).toFloat()
-            else
                 return sqrt(o*pos[0]*pos[0]+d*pos[1]*pos[1]).toFloat()
+            else if(pos[0]<0 && pos[1]>=0)
+                return sqrt(i*pos[0]*pos[0]+d*pos[1]*pos[1]).toFloat()
+            else if(pos[0]<0 && pos[1]<0)
+                return sqrt(i*pos[0]*pos[0]+u*pos[1]*pos[1]).toFloat()
+            else
+                return sqrt(o*pos[0]*pos[0]+u*pos[1]*pos[1]).toFloat()
         }
 
     }
@@ -124,18 +126,33 @@ class Discriminator(var u: Float, var d: Float, var i: Float, var o: Float, var 
     }
 
     fun feed(pos: FloatArray, status: DeviceStatus, rightHand: Boolean) {
+        var res = ellipsify(pos, rightHand)
+        var cur = pos[1]/pos[0]
+        var safezone = (outer-inner)*0.1f
         when(status) {
             DeviceStatus.TILT_IN -> {
-
+                if(res < outer)
+                    i -= ln(outer-res)*gradient
+                else if(res > outer+safezone)
+                    i += ln(res-outer-safezone)*gradient
             }
             DeviceStatus.TILT_OUT -> {
-
+                if(res < outer)
+                    o -= ln(outer-res)*gradient
+                else if(res > outer+safezone)
+                    o += ln(res-outer-safezone)*gradient
             }
             DeviceStatus.TILT_UP -> {
-
+                if(res < outer)
+                    u -= ln(outer-res)*gradient
+                else if(res > outer+safezone)
+                    u += ln(res-outer-safezone)*gradient
             }
             DeviceStatus.TILT_DOWN -> {
-
+                if(res < outer)
+                    d -= ln(outer-res)*gradient
+                else if(res > outer+safezone)
+                    d += ln(res-outer-safezone)*gradient
             }
         }
     }
