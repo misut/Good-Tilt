@@ -15,6 +15,7 @@ import androidx.preference.PreferenceManager
 import com.goodtilt.goodtilt.ManualActivity
 import com.goodtilt.goodtilt.MisutListener
 import com.goodtilt.goodtilt.R
+import com.goodtilt.goodtilt.source.DeviceStatus
 import kotlinx.android.synthetic.main.frag_tilt.*
 import kotlinx.android.synthetic.main.frag_tilt.overlayLeft
 import kotlinx.android.synthetic.main.frag_tilt.overlayRight
@@ -39,7 +40,7 @@ class TiltFragment(private val isManual: Boolean = true) : Fragment() {
     ): View? {
         val rootView = inflater.inflate(R.layout.frag_tilt, container, false)
         sensorManager = inflater.context.getSystemService(Context.SENSOR_SERVICE) as SensorManager
-        sensorListener.applyPreference(inflater.context)
+        //sensorListener.applyPreference(inflater.context)
         listener = SharedPreferences.OnSharedPreferenceChangeListener { pref, string ->
             updateTiltView()
         }
@@ -56,8 +57,9 @@ class TiltFragment(private val isManual: Boolean = true) : Fragment() {
                     changeListenerState(true)
                     view.setBackgroundResource(R.color.OverlayClicked)
                 } else if (motionEvent.action == MotionEvent.ACTION_UP || motionEvent.action == MotionEvent.ACTION_CANCEL) {
-                    changeListenerState(false)
                     view.setBackgroundResource(R.color.OverlayDefault)
+                    sensorListener.updatePreference(context, floatArrayOf(tiltView2.xCoord, tiltView2.yCoord), DeviceStatus.TILT_IN)
+                    changeListenerState(false)
                 }
                 true
             }
@@ -103,6 +105,7 @@ class TiltFragment(private val isManual: Boolean = true) : Fragment() {
             overlayLeft.updateFromPreference(this)
             overlayRight.updateFromPreference(this)
         }
+        context?.let { sensorListener.applyPreference(it) }
     }
 
     fun printAction(action: Int) {

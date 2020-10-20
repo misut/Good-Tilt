@@ -1,16 +1,9 @@
 package com.goodtilt.goodtilt
 
 import android.content.Context
-import android.content.SharedPreferences
 import android.hardware.Sensor
 import android.hardware.SensorEvent
 import android.hardware.SensorEventListener
-import android.hardware.SensorManager
-import android.provider.Settings.Global.putInt
-import android.renderscript.Matrix4f
-import android.view.MotionEvent
-import android.widget.Toast
-import androidx.core.content.edit
 import androidx.preference.PreferenceManager
 import com.goodtilt.goodtilt.source.DeviceStatus
 import com.goodtilt.goodtilt.source.Discriminator
@@ -92,7 +85,7 @@ class MisutListener(
         }
     }
 
-    fun updatePreference(context : Context, pos : FloatArray, status : DeviceStatus) {
+    fun updatePreference(context: Context, pos: FloatArray, status: DeviceStatus) {
         discriminator.feed(pos, status, rightHand)
         PreferenceManager.getDefaultSharedPreferences(context).edit().apply () {
             putInt("upside_sensitivity", (discriminator.u*100.0f).toInt())

@@ -13,7 +13,6 @@ import kotlinx.android.synthetic.main.frag_area.*
 import kotlinx.android.synthetic.main.frag_area.view.*
 import kotlinx.android.synthetic.main.frag_area.view.next
 import kotlinx.android.synthetic.main.frag_area.view.prev
-import kotlinx.android.synthetic.main.frag_area.view.textView1
 
 class AreaFragment(private val isManual : Boolean = true) : Fragment(){
     lateinit var preference : SharedPreferences

@@ -46,8 +46,8 @@ class TiltView2 : View {
 
     private var coeff = 0F
 
-    private var xCoord = 0F
-    private var yCoord = 0F
+    var xCoord = 0F
+    var yCoord = 0F
     var rightHand = false
 
     init {

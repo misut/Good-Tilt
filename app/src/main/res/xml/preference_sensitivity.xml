@@ -28,13 +28,13 @@
     <SeekBarPreference
         android:defaultValue="10"
         android:key="min_angle"
-        android:max="90"
+        android:max="45"
         android:title="@string/minimum_angle"
         app:iconSpaceReserved="false" />
     <SeekBarPreference
-        android:defaultValue="20"
+        android:defaultValue="15"
         android:key="max_angle"
-        android:max="90"
+        android:max="45"
         android:title="@string/maximum_angle"
         app:iconSpaceReserved="false" />
     <SeekBarPreference
