@@ -2,14 +2,18 @@ package com.goodtilt.goodtilt
 
 import android.accessibilityservice.AccessibilityService
 import android.accessibilityservice.AccessibilityServiceInfo
+import android.app.ActivityManager
 import android.content.Context
 import android.content.Intent
+import android.content.res.Resources
 import android.net.Uri
 import android.os.Bundle
 import android.provider.Settings
 import android.view.Menu
 import android.view.accessibility.AccessibilityManager
+import android.widget.Switch
 import android.widget.Toast
+import android.widget.Toolbar
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
@@ -17,9 +21,9 @@ import androidx.viewpager2.adapter.FragmentStateAdapter
 import com.goodtilt.goodtilt.fragment.AreaFragment
 import com.goodtilt.goodtilt.fragment.HomeFragment
 import com.goodtilt.goodtilt.fragment.TiltFragment
-import com.goodtilt.goodtilt.R
 import com.google.android.material.tabs.TabLayoutMediator
 import kotlinx.android.synthetic.main.activity_main.*
+import kotlinx.android.synthetic.main.menu_switch.*
 import kotlinx.android.synthetic.main.menu_switch.view.*
 
 
@@ -32,6 +36,7 @@ const val MODE_SERVICE = 1
 class MainActivity : AppCompatActivity() {
     private var listening = true
     private var serviceRunning = false
+    lateinit var serviceSwitch : Switch
 
     inner class MainAdapter(fa: FragmentActivity) : FragmentStateAdapter(fa) {
         override fun getItemCount(): Int {
@@ -72,7 +77,9 @@ class MainActivity : AppCompatActivity() {
 
         for(enabledService in enabledServices) {
             var serviceInfo = enabledService.resolveInfo.serviceInfo
-            if(serviceInfo.packageName.equals(applicationContext.packageName) && serviceInfo.name.equals(service.name))
+            if(serviceInfo.packageName.equals(applicationContext.packageName) && serviceInfo.name.equals(
+                    service.name
+                ))
                 return true
         }
         return false
@@ -82,12 +89,23 @@ class MainActivity : AppCompatActivity() {
         return Settings.canDrawOverlays(this)
     }
 
+    private fun isServiceRunning(): Boolean {
+        val manager = getSystemService(ACTIVITY_SERVICE) as ActivityManager
+        for (service in manager.getRunningServices(Int.MAX_VALUE)) {
+            if (EventService::class.java.name.equals(service.service.className)) {
+                return true
+            }
+        }
+        return false
+    }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
         menuInflater.inflate(R.menu.main_menu, menu)
         val item = menu?.findItem(R.id.menu_switch_item)!!
         item.setActionView(R.layout.menu_switch)
-        item.actionView.serviceSwitch.setOnCheckedChangeListener { compoundButton, checked ->
+        serviceSwitch = item.actionView.serviceSwitch
+        serviceSwitch.isChecked = isServiceRunning()
+        serviceSwitch.setOnCheckedChangeListener { compoundButton, checked ->
             if (checked) {
                 if (!checkOverlayPermission()) {
                     Toast.makeText(this, "오버레이 권한을 허용해주세요", Toast.LENGTH_SHORT).show()
@@ -108,15 +126,32 @@ class MainActivity : AppCompatActivity() {
                     )
                     return@setOnCheckedChangeListener
                 }
-                compoundButton.setText("사용 중")
                 startForegroundService(Intent(this, EventService::class.java))
             } else {
                 val intent = Intent(this, EventService::class.java)
-                compoundButton.setText("사용 중지")
                 stopService(intent)
             }
+            updateToolbar(checked)
         }
+        updateToolbar(serviceSwitch.isChecked)
         return super.onCreateOptionsMenu(menu)
+    }
+
+    fun updateToolbar(checked : Boolean){
+        if(checked) {
+            mainToolbar.setBackgroundResource(R.color.colorPrimary)
+            val textColor = resources.getColor(android.R.color.background_light, this.theme)
+            mainToolbar.setTitleTextColor(textColor)
+            serviceSwitch.setTextColor(textColor)
+            serviceSwitch.setText("사용 중")
+
+        } else {
+            mainToolbar.setBackgroundResource(android.R.color.background_light)
+            val textColor = resources.getColor(android.R.color.black, this.theme)
+            mainToolbar.setTitleTextColor(textColor)
+            serviceSwitch.setText("사용 중지")
+            serviceSwitch.setTextColor(textColor)
+        }
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
