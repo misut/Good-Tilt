@@ -103,16 +103,16 @@
             app:showSeekBarValue="true" />
         <SeekBarPreference
             android:defaultValue="50"
-            android:key="left_sensitivity"
+            android:key="inside_sensitivity"
             android:max="100"
-            android:title="@string/left_sensitivity"
+            android:title="@string/inside_sensitivity"
             app:iconSpaceReserved="false"
             app:showSeekBarValue="true" />
         <SeekBarPreference
             android:defaultValue="50"
-            android:key="right_sensitivity"
+            android:key="outside_sensitivity"
             android:max="100"
-            android:title="@string/right_sensitivity"
+            android:title="@string/outside_sensitivity"
             app:iconSpaceReserved="false"
             app:showSeekBarValue="true" />
         <SeekBarPreference

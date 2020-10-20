@@ -13,10 +13,6 @@ import kotlinx.android.synthetic.main.frag_hello.view.*
 
 class HelloWorldFragment : Fragment(){
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-    }
-
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,

@@ -35,8 +35,8 @@ class TiltView2 : View {
 
     private var uCoeff = 0F
     private var dCoeff = 0F
-    private var lCoeff = 0F
-    private var rCoeff = 0F
+    private var iCoeff = 0F
+    private var oCoeff = 0F
     private var rad1 = 0F
     private var rad2 = 0F
     private var rad3 = 0F
@@ -48,6 +48,7 @@ class TiltView2 : View {
 
     private var xCoord = 0F
     private var yCoord = 0F
+    var rightHand = false
 
     init {
         greenPaint.color = Color.GREEN
@@ -57,6 +58,8 @@ class TiltView2 : View {
     // x*pos[0]*pos[0]+y*pos[1]*pos[1] = r * r
     private fun graphPath(r : Float) : Path {
         val path = Path()
+        val lCoeff = if(rightHand) oCoeff else iCoeff
+        val rCoeff = if(rightHand) iCoeff else oCoeff
 
         val maxX = sqrt(r * r / rCoeff)
         val minX = -sqrt(r * r / lCoeff)
@@ -97,13 +100,13 @@ class TiltView2 : View {
     }
 
 
-    fun updateSetting(u: Float, d: Float, l:Float, r: Float, i: Float, o: Float, r1: Float, r2: Float, r3: Float, r4: Float) {
+    fun updateSetting(u: Float, d: Float, i:Float, o: Float, inn: Float, out: Float, r1: Float, r2: Float, r3: Float, r4: Float) {
         uCoeff = u
         dCoeff = d
-        lCoeff = l
-        rCoeff = r
-        inner = i
-        outer = o
+        iCoeff = i
+        oCoeff = o
+        inner = inn
+        outer = out
         rad1 = r1
         rad2 = r2
         rad3 = r3

@@ -1,6 +1,5 @@
 package com.goodtilt.goodtilt.fragment
 
-import android.app.Activity
 import android.content.Context
 import android.hardware.Sensor
 import android.hardware.SensorEvent
@@ -50,6 +49,8 @@ class TiltFragment(private val isManual : Boolean = true) : Fragment(){
             val touchListener =   View.OnTouchListener{ view , motionEvent ->
                 if(motionEvent.action == MotionEvent.ACTION_DOWN) {
                     sensorListener.initBase(1, view == overlayRight)
+                    tiltView2.rightHand = (view == overlayRight)
+                    tiltView2.updatePath()
                     changeListenerState(true)
                     view.setBackgroundResource(R.color.OverlayClicked)
                 }else if (motionEvent.action == MotionEvent.ACTION_UP || motionEvent.action == MotionEvent.ACTION_CANCEL) {

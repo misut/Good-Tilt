@@ -39,8 +39,8 @@
 
     <string name="upside_sensitivity">Upside Sensitivity</string>
     <string name="downside_sensitivity">Downside Sensitivity</string>
-    <string name="left_sensitivity">Left Sensitivity</string>
-    <string name="right_sensitivity">Right Sensitivity</string>
+    <string name="inside_sensitivity">Inside Sensitivity</string>
+    <string name="outside_sensitivity">Outside Sensitivity</string>
     <string name="minimum_angle">Minimum Angle</string>
     <string name="maximum_angle">Maximum Angle</string>
     <string name="swipe_speed">Swipe Speed</string>
