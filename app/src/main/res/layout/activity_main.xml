@@ -5,6 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".MainActivity">
+
     <androidx.appcompat.widget.Toolbar
         android:id="@+id/mainToolbar"
         android:layout_width="0dp"
@@ -16,179 +17,34 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"/>
-    <Button
-        android:id="@+id/serviceButton"
-        android:layout_width="wrap_content"
-        android:layout_height="50dp"
-        android:text="서비스 시작"
-        app:layout_constraintBottom_toBottomOf="@id/accessButton"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toEndOf="@id/overlayButton"
-        app:layout_constraintTop_toTopOf="@id/accessButton"
-        app:layout_constraintVertical_bias="1.0" />
 
-    <TextView
-        android:id="@+id/textViewMod"
-        android:layout_width="wrap_content"
+    <com.google.android.material.tabs.TabLayout
+        android:id="@+id/bottomTap"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:text="인 앱 모드"
-        android:layout_marginTop="20dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintEnd_toStartOf="@id/modeButton"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/accessButton" />
-
-    <Button
-        android:id="@+id/modeButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="모드 전환"
-        app:layout_constraintBottom_toBottomOf="@+id/textViewMod"
-        app:layout_constraintEnd_toStartOf="@+id/positionButton"
-        app:layout_constraintStart_toEndOf="@+id/textViewMod"
-        app:layout_constraintTop_toTopOf="@+id/textViewMod" />
-
-    <Button
-        android:id="@+id/positionButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="위치 초기화"
-        app:layout_constraintBottom_toBottomOf="@+id/textViewMod"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/modeButton"
-        app:layout_constraintTop_toTopOf="@+id/textViewMod" />
-
-    <Button
-        android:id="@+id/overlayButton"
-        android:layout_width="wrap_content"
-        android:layout_height="50dp"
-        android:text="오버레이 허용"
-        app:layout_constraintBottom_toBottomOf="@+id/accessButton"
-        app:layout_constraintEnd_toStartOf="@+id/serviceButton"
-        app:layout_constraintHorizontal_bias="0.939"
-        app:layout_constraintStart_toEndOf="@+id/accessButton"
-        app:layout_constraintTop_toTopOf="@+id/accessButton"
-        app:layout_constraintVertical_bias="0.178" />
-
-    <Button
-        android:id="@+id/accessButton"
-        android:layout_width="wrap_content"
-        android:layout_height="50dp"
-        android:layout_marginStart="16dp"
-        android:text="접근성 허용"
-        android:layout_marginTop="10dp"
-        app:layout_constraintEnd_toStartOf="@+id/overlayButton"
-        app:layout_constraintHorizontal_bias="0.121"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textGyroZ" />
+        app:layout_constraintBottom_toBottomOf="parent" />
 
 
-
-    <TextView
-        android:id="@+id/textGyroX"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"
-        android:text="Hello World!"
-        app:layout_constraintEnd_toEndOf="@+id/textGyroLabel"
-        app:layout_constraintStart_toStartOf="@+id/textGyroLabel"
-        app:layout_constraintTop_toBottomOf="@+id/textGyroLabel" />
-
-    <TextView
-        android:id="@+id/textGyroY"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:text="TextView"
-        app:layout_constraintStart_toStartOf="@+id/textGyroLabel"
-        app:layout_constraintTop_toBottomOf="@id/textGyroX"
-        app:layout_constraintEnd_toEndOf="@id/textGyroLabel"/>
-
-    <TextView
-        android:id="@+id/textGyroZ"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:text="TextView"
-        app:layout_constraintStart_toStartOf="@+id/textGyroLabel"
-        app:layout_constraintTop_toBottomOf="@id/textGyroY"
-        app:layout_constraintEnd_toEndOf="@id/textGyroLabel"/>
-
-    <TextView
-        android:id="@+id/textGyroLabel"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="32dp"
-        android:layout_marginStart="15dp"
-        android:text="자이로 센서 값"
-        app:layout_constraintEnd_toStartOf="@id/textAccelerLabel"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/mainToolbar" />
-
-    <TextView
-        android:id="@+id/textAccelerX"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"
-        android:text="Hello World!"
-        app:layout_constraintEnd_toEndOf="@+id/textAccelerLabel"
-        app:layout_constraintStart_toStartOf="@+id/textAccelerLabel"
-        app:layout_constraintTop_toBottomOf="@+id/textAccelerLabel" />
-
-    <TextView
-        android:id="@+id/textAccelerY"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:text="TextView"
-        app:layout_constraintStart_toStartOf="@+id/textAccelerLabel"
-        app:layout_constraintTop_toBottomOf="@id/textAccelerX"
-        app:layout_constraintEnd_toEndOf="@id/textAccelerLabel" />
-
-    <TextView
-        android:id="@+id/textAccelerZ"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:text="TextView"
-        app:layout_constraintStart_toStartOf="@+id/textAccelerLabel"
-        app:layout_constraintTop_toBottomOf="@id/textAccelerY"
-        app:layout_constraintEnd_toEndOf="@id/textAccelerLabel"/>
-
-    <TextView
-        android:id="@+id/textAccelerLabel"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="32dp"
-        android:layout_marginEnd="15dp"
-        android:text="가속도 센서 값"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/textGyroLabel"
-        app:layout_constraintTop_toBottomOf="@+id/mainToolbar" />
-
-
-    <ScrollView
-        android:id="@+id/scrollView2"
+    <androidx.viewpager2.widget.ViewPager2
+        android:id="@+id/viewPager"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        android:layout_marginTop="20dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="@+id/textGyroZ"
-        app:layout_constraintStart_toStartOf="@+id/textGyroX"
-        app:layout_constraintTop_toBottomOf="@+id/textViewMod">
-
-        <TextView
-            android:id="@+id/logList"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:text="로그" />
-    </ScrollView>
-
-    <com.goodtilt.goodtilt.source.TiltView
-        android:id="@+id/tiltView"
-        android:layout_width="wrap_content"
-        android:layout_height="400dp"
-        app:layout_constraintBottom_toBottomOf="@+id/scrollView2"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/scrollView2" />
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/bottomTap"
+        app:layout_constraintTop_toBottomOf="@id/mainToolbar"/>
+
+
+    <Switch
+        android:id="@+id/serviceSwitch"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="서비스 작동 중"
+        android:showText="true"
+        app:layout_constraintBottom_toBottomOf="@+id/mainToolbar"
+        app:layout_constraintEnd_toEndOf="@+id/mainToolbar"
+        app:layout_constraintTop_toTopOf="@+id/mainToolbar" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

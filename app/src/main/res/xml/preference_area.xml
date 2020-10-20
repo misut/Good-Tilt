@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <SeekBarPreference
+        android:defaultValue="50"
+        android:key="area_width"
+        android:max="333"
+        android:title="@string/area_width"
+        app:iconSpaceReserved="false"
+        app:updatesContinuously="true" />
+    <SeekBarPreference
+        android:defaultValue="500"
+        android:key="area_height"
+        android:max="1000"
+        android:title="@string/area_height"
+        app:iconSpaceReserved="false"
+        app:updatesContinuously="true" />
+    <SeekBarPreference
+        android:defaultValue="500"
+        android:key="area_vertical_position"
+        android:max="1000"
+        android:title="@string/area_vertical_position"
+        app:iconSpaceReserved="false"
+        app:updatesContinuously="true" />
+    <SwitchPreference
+        android:defaultValue="true"
+        android:key="transparent"
+        android:title="@string/area_transparent"
+        app:iconSpaceReserved="false" />
+</PreferenceScreen>

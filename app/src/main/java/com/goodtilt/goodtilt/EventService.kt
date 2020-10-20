@@ -24,7 +24,6 @@ import android.widget.ImageView
 import androidx.core.app.NotificationCompat
 import androidx.preference.PreferenceManager
 import com.goodtilt.goodtilt.const.*
-import kotlinx.android.synthetic.main.activity_setting.*
 
 class EventService : Service() {
     private var overlayView = arrayOfNulls<View>(2)

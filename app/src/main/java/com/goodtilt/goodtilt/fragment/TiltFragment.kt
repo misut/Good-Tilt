@@ -1,5 +1,6 @@
 package com.goodtilt.goodtilt.fragment
 
+import android.app.Activity
 import android.content.Context
 import android.hardware.Sensor
 import android.hardware.SensorEvent
@@ -14,7 +15,6 @@ import androidx.preference.PreferenceManager
 import com.goodtilt.goodtilt.ManualActivity
 import com.goodtilt.goodtilt.MisutListener
 import com.goodtilt.goodtilt.R
-import kotlinx.android.synthetic.main.frag_guide.view.*
 import kotlinx.android.synthetic.main.frag_tilt.*
 import kotlinx.android.synthetic.main.frag_tilt.overlayLeft
 import kotlinx.android.synthetic.main.frag_tilt.overlayRight
@@ -26,7 +26,7 @@ import kotlinx.android.synthetic.main.frag_tilt.view.prev
 import kotlinx.android.synthetic.main.frag_tilt.view.tiltView2
 import kotlin.math.PI
 
-class TiltFragment : Fragment(){
+class TiltFragment(private val isManual : Boolean = true) : Fragment(){
     private val sensorListener = MisutListener(::printResult, ::printAction)
     private lateinit var sensorManager: SensorManager
 
@@ -43,21 +43,6 @@ class TiltFragment : Fragment(){
         sensorManager = inflater.context.getSystemService(Context.SENSOR_SERVICE) as SensorManager
         sensorListener.applyPreference(inflater.context)
         val pref = PreferenceManager.getDefaultSharedPreferences(context)
-        PreferenceManager.getDefaultSharedPreferences(context).apply {
-            val D2R = PI.toFloat()/180.0f
-            rootView.tiltView2.updateSetting(
-                getInt("upside_sensitivity", 50)/100.0f,
-                getInt("downside_sensitivity", 50)/100.0f,
-                getInt("left_sensitivity", 50)/100.0f,
-                getInt("right_sensitivity", 50)/100.0f,
-                getInt("min_angle", 10).toFloat(),
-                getInt("max_angle", 20).toFloat(),
-                (0.0f + getInt("tan_quad_1", 45)) * D2R,
-                (90.0f + getInt("tan_quad_2", 45)) * D2R,
-                (180.0f + getInt("tan_quad_3", 45)) * D2R,
-                (270.0f + getInt("tan_quad_4", 45)) * D2R
-            )
-        }
         rootView.apply {
             overlayLeft.updateFromPreference(pref)
             overlayRight.updateFromPreference(pref)
@@ -76,9 +61,16 @@ class TiltFragment : Fragment(){
             overlayLeft.setOnTouchListener(touchListener)
             overlayRight.setOnTouchListener(touchListener)
 
-            val manualActivity = activity as ManualActivity
-            next.setOnClickListener(manualActivity.nextListener)
-            prev.setOnClickListener(manualActivity.prevListener)
+            if (isManual) {
+                val manualActivity = activity as ManualActivity
+                next.setOnClickListener(manualActivity.nextListener)
+                prev.setOnClickListener(manualActivity.prevListener)
+             } else {
+                textView1.visibility = View.GONE
+                next.visibility = View.GONE
+                prev.visibility = View.GONE
+                prefSensFrag.visibility = View.VISIBLE
+            }
         }
         return rootView
     }
@@ -101,9 +93,24 @@ class TiltFragment : Fragment(){
     }
 
     override fun onResume() {
-        val preference = PreferenceManager.getDefaultSharedPreferences(context)
-        overlayLeft.updateFromPreference(preference)
-        overlayRight.updateFromPreference(preference)
+        PreferenceManager.getDefaultSharedPreferences(context).apply {
+            val D2R = PI.toFloat()/180.0f
+            tiltView2.updateSetting(
+                getInt("upside_sensitivity", 50)/100.0f,
+                getInt("downside_sensitivity", 50)/100.0f,
+                getInt("left_sensitivity", 50)/100.0f,
+                getInt("right_sensitivity", 50)/100.0f,
+                getInt("min_angle", 10).toFloat(),
+                getInt("max_angle", 20).toFloat(),
+                (0.0f + getInt("tan_quad_1", 45)) * D2R,
+                (90.0f + getInt("tan_quad_2", 45)) * D2R,
+                (180.0f + getInt("tan_quad_3", 45)) * D2R,
+                (270.0f + getInt("tan_quad_4", 45)) * D2R
+            )
+            overlayLeft.updateFromPreference(this)
+            overlayRight.updateFromPreference(this)
+        }
+
         super.onResume()
     }
 

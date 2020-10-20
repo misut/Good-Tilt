@@ -23,4 +23,6 @@ class NeedGuideFragment : Fragment(){
         rootView.prev.setOnClickListener(manualActivity.prevListener)
         return rootView
     }
+
+
 }

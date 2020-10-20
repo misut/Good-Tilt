@@ -4,7 +4,6 @@ import android.content.Context
 import android.content.SharedPreferences
 import android.util.AttributeSet
 import android.widget.LinearLayout
-import kotlinx.android.synthetic.main.activity_setting.*
 
 class OverlaySideView: LinearLayout {
     constructor(context: Context) : super(context)

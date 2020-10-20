@@ -8,10 +8,10 @@ import androidx.preference.ListPreference
 import androidx.preference.PreferenceFragmentCompat
 import com.goodtilt.goodtilt.R
 
-class SettingFragment() : PreferenceFragmentCompat() {
+class PrefSensitivityFragment() : PreferenceFragmentCompat() {
 
     override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {
-        setPreferencesFromResource(R.xml.preference_action, rootKey)
+        setPreferencesFromResource(R.xml.preference_sensitivity, rootKey)
     }
 
 

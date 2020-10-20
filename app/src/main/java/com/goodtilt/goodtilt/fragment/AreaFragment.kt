@@ -9,31 +9,15 @@ import androidx.fragment.app.Fragment
 import androidx.preference.PreferenceManager
 import com.goodtilt.goodtilt.ManualActivity
 import com.goodtilt.goodtilt.R
-import kotlinx.android.synthetic.main.activity_setting.*
+import kotlinx.android.synthetic.main.frag_area.*
 import kotlinx.android.synthetic.main.frag_area.view.*
+import kotlinx.android.synthetic.main.frag_area.view.next
+import kotlinx.android.synthetic.main.frag_area.view.prev
+import kotlinx.android.synthetic.main.frag_area.view.textView1
 
-class AreaFragment : Fragment(){
+class AreaFragment(private val isManual : Boolean = true) : Fragment(){
     lateinit var preference : SharedPreferences
-    inner class SeekBarListener(val pref : String) : SeekBar.OnSeekBarChangeListener{
-        override fun onProgressChanged(p0: SeekBar?, p1: Int, p2: Boolean) {
-            with(preference.edit()) {
-                putInt(pref, p1)
-                commit()
-            }
-            updateOverlay()
-        }
-
-        override fun onStartTrackingTouch(p0: SeekBar?) {
-        }
-
-        override fun onStopTrackingTouch(p0: SeekBar?) {
-        }
-    }
-
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-    }
+    lateinit var listener : SharedPreferences.OnSharedPreferenceChangeListener
 
     fun updateOverlay() {
         overlayLeft.updateFromPreference(preference)
@@ -51,15 +35,31 @@ class AreaFragment : Fragment(){
         savedInstanceState: Bundle?
     ): View? {
         val rootView = inflater.inflate(R.layout.frag_area, container, false)
-        val manualActivity = activity as ManualActivity
         rootView.apply {
-            next.setOnClickListener(manualActivity.nextListener)
-            prev.setOnClickListener(manualActivity.prevListener)
-            seekBarWidth.setOnSeekBarChangeListener(SeekBarListener("area_width"))
-            seekBarHeight.setOnSeekBarChangeListener(SeekBarListener("area_height"))
-            seekBarPosition.setOnSeekBarChangeListener(SeekBarListener("area_vertical_position"))
+            if(isManual) {
+                val manualActivity = activity as ManualActivity
+                next.setOnClickListener(manualActivity.nextListener)
+                prev.setOnClickListener(manualActivity.prevListener)
+            } else {
+                textView1.visibility = View.GONE
+                next.visibility = View.GONE
+                prev.visibility = View.GONE
+            }
         }
         preference = PreferenceManager.getDefaultSharedPreferences(inflater.context)
+        listener = SharedPreferences.OnSharedPreferenceChangeListener{pref, string ->
+            updateOverlay()
+        }
         return rootView
+    }
+
+    override fun onPause() {
+        preference.unregisterOnSharedPreferenceChangeListener(listener)
+        super.onPause()
+    }
+
+    override fun onResume() {
+        preference.registerOnSharedPreferenceChangeListener(listener)
+        super.onResume()
     }
 }
