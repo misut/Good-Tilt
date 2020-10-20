@@ -1,6 +1,9 @@
 package com.goodtilt.goodtilt.fragment
 
+import android.accessibilityservice.AccessibilityService
+import android.accessibilityservice.AccessibilityServiceInfo
 import android.annotation.TargetApi
+import android.content.Context
 import android.content.Intent
 import android.net.Uri
 import android.os.Build
@@ -9,12 +12,10 @@ import android.provider.Settings
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.accessibility.AccessibilityManager
 import android.widget.Toast
 import androidx.fragment.app.Fragment
-import com.goodtilt.goodtilt.ACTION_MANAGE_ACCESSIBILITY_PERMISSION_REQUEST_CODE
-import com.goodtilt.goodtilt.ACTION_MANAGE_OVERLAY_PERMISSION_REQUEST_CODE
-import com.goodtilt.goodtilt.ManualActivity
-import com.goodtilt.goodtilt.R
+import com.goodtilt.goodtilt.*
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.frag_hello.view.*
 import kotlinx.android.synthetic.main.frag_permission.*
@@ -43,7 +44,7 @@ class PermissionFragment : Fragment(){
         }
 
         rootView.requestAccess.setOnClickListener {
-            if (!checkAccessibilityPermissions()) {
+            if (!checkAccessibilityPermissions(TiltAccessibilityService::class.java)) {
                 val intent = Intent(Settings.ACTION_ACCESSIBILITY_SETTINGS)
                 startActivityForResult(intent, ACTION_MANAGE_ACCESSIBILITY_PERMISSION_REQUEST_CODE)
             }
@@ -57,21 +58,29 @@ class PermissionFragment : Fragment(){
 
     override fun onStart() {
         var check = checkOverlayPermission()
-        check = check &&  checkAccessibilityPermissions()
+        check = checkAccessibilityPermissions(TiltAccessibilityService::class.java) && check
         next.isEnabled = check
         super.onStart()
     }
 
-    fun checkAccessibilityPermissions(): Boolean {
-        var result = (Settings.Secure.getInt(
-                activity?.contentResolver,
-                Settings.Secure.ACCESSIBILITY_ENABLED
-            ) == 1)
-        imageView.isEnabled = !result
+    fun checkAccessibilityPermissions(service: Class<out AccessibilityService>): Boolean {
+        var am: AccessibilityManager = context?.getSystemService(Context.ACCESSIBILITY_SERVICE) as AccessibilityManager
+        var enabledServices = am.getEnabledAccessibilityServiceList(AccessibilityServiceInfo.FEEDBACK_ALL_MASK)
+        var result = false
+
+        for(enabledService in enabledServices) {
+            var serviceInfo = enabledService.resolveInfo.serviceInfo
+            if(serviceInfo.packageName.equals(context?.packageName) && serviceInfo.name.equals(service.name)) {
+                result = true
+                break
+            }
+        }
+
         if(result) {
             imageView2.setImageResource(R.drawable.ic_baseline_check_24)
             requestAccess.visibility = View.GONE
-        } else {
+        }
+        else {
             imageView2.setImageResource(R.drawable.ic_baseline_close_24)
             requestAccess.visibility = View.VISIBLE
         }
@@ -96,10 +105,10 @@ class PermissionFragment : Fragment(){
                 if (!checkOverlayPermission())
                     Toast.makeText(activity, "오버레이 권한을 허용해주세요", Toast.LENGTH_SHORT).show()
                 else
-                    next.isEnabled = checkAccessibilityPermissions()
+                    next.isEnabled = checkAccessibilityPermissions(TiltAccessibilityService::class.java)
             }
             ACTION_MANAGE_ACCESSIBILITY_PERMISSION_REQUEST_CODE -> {
-                if (!checkAccessibilityPermissions())
+                if (!checkAccessibilityPermissions(TiltAccessibilityService::class.java))
                     Toast.makeText(activity, "접근성 권한을 허용해주세요", Toast.LENGTH_SHORT).show()
                 else
                     next.isEnabled = checkOverlayPermission()

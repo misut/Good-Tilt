@@ -1,10 +1,14 @@
 package com.goodtilt.goodtilt
 
+import android.accessibilityservice.AccessibilityService
+import android.accessibilityservice.AccessibilityServiceInfo
+import android.content.Context
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
 import android.provider.Settings
 import android.view.Menu
+import android.view.accessibility.AccessibilityManager
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
@@ -62,11 +66,16 @@ class MainActivity : AppCompatActivity() {
     }
 
 
-    private fun checkAccessibilityPermissions(): Boolean {
-        return (Settings.Secure.getInt(
-            contentResolver,
-            Settings.Secure.ACCESSIBILITY_ENABLED
-        ) == 1)
+    private fun checkAccessibilityPermissions(service: Class<out AccessibilityService>): Boolean {
+        var am: AccessibilityManager = applicationContext.getSystemService(Context.ACCESSIBILITY_SERVICE) as AccessibilityManager
+        var enabledServices = am.getEnabledAccessibilityServiceList(AccessibilityServiceInfo.FEEDBACK_ALL_MASK)
+
+        for(enabledService in enabledServices) {
+            var serviceInfo = enabledService.resolveInfo.serviceInfo
+            if(serviceInfo.packageName.equals(applicationContext.packageName) && serviceInfo.name.equals(service.name))
+                return true
+        }
+        return false
     }
 
     private fun checkOverlayPermission(): Boolean {
@@ -89,7 +98,7 @@ class MainActivity : AppCompatActivity() {
                     return@setOnCheckedChangeListener
                 }
 
-                if (!checkAccessibilityPermissions()) {
+                if (!checkAccessibilityPermissions(TiltAccessibilityService::class.java)) {
                     Toast.makeText(this, "접근성 권한을 허용해주세요", Toast.LENGTH_SHORT).show()
                     compoundButton.isChecked = false
                     val intent = Intent(Settings.ACTION_ACCESSIBILITY_SETTINGS)
@@ -118,7 +127,7 @@ class MainActivity : AppCompatActivity() {
                     Toast.makeText(this, "오버레이 권한을 허용해주세요", Toast.LENGTH_SHORT).show()
             }
             ACTION_MANAGE_ACCESSIBILITY_PERMISSION_REQUEST_CODE -> {
-                if (!checkAccessibilityPermissions()) {
+                if (!checkAccessibilityPermissions(TiltAccessibilityService::class.java)) {
                     Toast.makeText(this, "접근성 권한을 허용해주세요", Toast.LENGTH_SHORT).show()
                 }
             }
