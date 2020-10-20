@@ -6,23 +6,16 @@ import android.hardware.Sensor
 import android.hardware.SensorEvent
 import android.hardware.SensorEventListener
 import android.hardware.SensorManager
+import android.provider.Settings.Global.putInt
 import android.renderscript.Matrix4f
 import android.view.MotionEvent
 import android.widget.Toast
+import androidx.core.content.edit
 import androidx.preference.PreferenceManager
 import com.goodtilt.goodtilt.source.DeviceStatus
 import com.goodtilt.goodtilt.source.Discriminator
 import com.goodtilt.goodtilt.source.Quaternion
 import kotlin.math.*
-
-enum class ListenerStatus(var min: Float, var max: Float) {
-    IDLE(0.0f, 0.0f),
-    TILT_LEFT(10.0f, 40.0f),
-    TILT_RIGHT(10.0f, 40.0f),
-    TILT_UP(10.0f, 40.0f),
-    TILT_DOWN(10.0f, 40.0f),
-    STOPOVER(0.0f, 0.0f);
-}
 
 class MisutListener(
     val result: ((event : SensorEvent) -> Unit)?,
@@ -46,8 +39,8 @@ class MisutListener(
             DeviceStatus.IDLE -> {
                 activated = false
             }
-            DeviceStatus.TILT_LEFT,
-            DeviceStatus.TILT_RIGHT,
+            DeviceStatus.TILT_IN,
+            DeviceStatus.TILT_OUT,
             DeviceStatus.TILT_UP,
             DeviceStatus.TILT_DOWN -> {
                 if(!activated) {
@@ -66,8 +59,8 @@ class MisutListener(
             DeviceStatus.IDLE -> {
                 activated = false
             }
-            DeviceStatus.TILT_LEFT,
-            DeviceStatus.TILT_RIGHT,
+            DeviceStatus.TILT_IN,
+            DeviceStatus.TILT_OUT,
             DeviceStatus.TILT_UP,
             DeviceStatus.TILT_DOWN -> {
                 if(!activated) {
@@ -86,16 +79,32 @@ class MisutListener(
             discriminator.updateSetting(
                 getInt("upside_sensitivity", 50)/100.0f,
                 getInt("downside_sensitivity", 50)/100.0f,
-                getInt("left_sensitivity", 50)/100.0f,
-                getInt("right_sensitivity", 50)/100.0f,
+                getInt("inside_sensitivity", 50)/100.0f,
+                getInt("outside_sensitivity", 50)/100.0f,
                 getInt("min_angle", 10).toFloat(),
                 getInt("max_angle", 20).toFloat(),
-                tan((0.0f + getInt("tan_quad_1", 45)) * D2R).toFloat(),
-                tan((90.0f + getInt("tan_quad_2", 45)) * D2R).toFloat(),
-                tan((180.0f + getInt("tan_quad_3", 45)) * D2R).toFloat(),
-                tan((270.0f + getInt("tan_quad_4", 45)) * D2R).toFloat()
+                ((0.0f + getInt("tan_quad_1", 45)) * D2R).toFloat(),
+                ((90.0f + getInt("tan_quad_2", 45)) * D2R).toFloat(),
+                ((180.0f + getInt("tan_quad_3", 45)) * D2R).toFloat(),
+                ((270.0f + getInt("tan_quad_4", 45)) * D2R).toFloat()
             )
             delay = getInt("delay", 500).toLong() * MS2NS
+        }
+    }
+
+    fun updatePreference(context : Context, pos : FloatArray, status : DeviceStatus) {
+        discriminator.feed(pos, status, rightHand)
+        PreferenceManager.getDefaultSharedPreferences(context).edit().apply () {
+            putInt("upside_sensitivity", (discriminator.u*100.0f).toInt())
+            putInt("downside_sensitivity", (discriminator.d*100.0f).toInt())
+            putInt("inside_sensitivity", (discriminator.i*100.0f).toInt())
+            putInt("outside_sensitivity", (discriminator.o*100.0f).toInt())
+            putInt("min_angle", discriminator.inner.toInt())
+            putInt("max_angle", discriminator.outer.toInt())
+            putInt("tan_quad_1", (discriminator.r1/D2R).toInt())
+            putInt("tan_quad_2", (discriminator.r2/D2R).toInt())
+            putInt("tan_quad_3", (discriminator.r3/D2R).toInt())
+            putInt("tan_quad_4", (discriminator.r4/D2R).toInt())
         }
     }
 
@@ -127,7 +136,7 @@ class MisutListener(
                 //evt.values[2] = angles[2]
 
                 result?.invoke(evt)
-                discriminator.updateStatus(angles)
+                discriminator.updateStatus(angles, rightHand)
                 var status = discriminator.getStatus()
                 when(mode) {
                     1 -> actionSingle(status)

@@ -52,8 +52,8 @@ class GuideFragment : Fragment(){
             rootView.tiltView2.updateSetting(
                 getInt("upside_sensitivity", 50)/100.0f,
                 getInt("downside_sensitivity", 50)/100.0f,
-                getInt("left_sensitivity", 50)/100.0f,
-                getInt("right_sensitivity", 50)/100.0f,
+                getInt("inside_sensitivity", 50)/100.0f,
+                getInt("outside_sensitivity", 50)/100.0f,
                 getInt("min_angle", 10).toFloat(),
                 getInt("max_angle", 20).toFloat(),
                 (0.0f + getInt("tan_quad_1", 45)) * D2R,
@@ -77,6 +77,8 @@ class GuideFragment : Fragment(){
                     }
                     view.setBackgroundResource(R.color.OverlayClicked)
                     sensorListener.initBase(1, view == overlayRight)
+                    tiltView2.rightHand = (view == overlayRight)
+                    tiltView2.updatePath()
                     changeListenerState(true)
                 }else if (motionEvent.action == MotionEvent.ACTION_UP || motionEvent.action == MotionEvent.ACTION_CANCEL) {
                     if (guideStep == 1) {

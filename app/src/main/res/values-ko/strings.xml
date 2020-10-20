@@ -37,8 +37,8 @@
 
     <string name="upside_sensitivity">위쪽 민감도</string>
     <string name="downside_sensitivity">아래쪽 민감도</string>
-    <string name="left_sensitivity">왼쪽 민감도</string>
-    <string name="right_sensitivity">오른쪽 민감도</string>
+    <string name="inside_sensitivity">안쪽 민감도</string>
+    <string name="outside_sensitivity">바깥쪽 민감도</string>
     <string name="minimum_angle">최소 각도</string>
     <string name="maximum_angle">최대 각도</string>
     <string name="swipe_speed">스와이프 속도</string>
