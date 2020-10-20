@@ -92,13 +92,9 @@ class MisutListener(
             putInt("downside_sensitivity", (discriminator.d*100.0f).toInt())
             putInt("inside_sensitivity", (discriminator.i*100.0f).toInt())
             putInt("outside_sensitivity", (discriminator.o*100.0f).toInt())
-            putInt("min_angle", discriminator.inner.toInt())
-            putInt("max_angle", discriminator.outer.toInt())
-            putInt("tan_quad_1", (discriminator.r1/D2R).toInt())
-            putInt("tan_quad_2", (discriminator.r2/D2R).toInt())
-            putInt("tan_quad_3", (discriminator.r3/D2R).toInt())
-            putInt("tan_quad_4", (discriminator.r4/D2R).toInt())
+            commit()
         }
+
     }
 
     //rightHand : 오른손이면 true
