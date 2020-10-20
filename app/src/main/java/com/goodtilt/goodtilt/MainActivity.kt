@@ -1,31 +1,22 @@
 package com.goodtilt.goodtilt
 
-import android.annotation.TargetApi
-import android.content.Context
 import android.content.Intent
-import android.hardware.Sensor
-import android.hardware.SensorEvent
-import android.hardware.SensorManager
 import android.net.Uri
-import android.os.Build
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.provider.Settings
 import android.view.Menu
-import android.view.MenuItem
 import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
-import androidx.fragment.app.FragmentManager
-import androidx.fragment.app.FragmentStatePagerAdapter
 import androidx.viewpager2.adapter.FragmentStateAdapter
-import com.goodtilt.goodtilt.const.KeyAction
-import com.goodtilt.goodtilt.fragment.*
-import com.google.android.material.tabs.TabLayout
+import com.goodtilt.goodtilt.fragment.AreaFragment
+import com.goodtilt.goodtilt.fragment.HomeFragment
+import com.goodtilt.goodtilt.fragment.TiltFragment
+import com.goodtilt.goodtilt.R
 import com.google.android.material.tabs.TabLayoutMediator
 import kotlinx.android.synthetic.main.activity_main.*
-import kotlinx.android.synthetic.main.activity_manual.*
-import kotlin.collections.ArrayList
+import kotlinx.android.synthetic.main.menu_switch.view.*
 
 
 const val ACTION_MANAGE_OVERLAY_PERMISSION_REQUEST_CODE = 100
@@ -68,8 +59,26 @@ class MainActivity : AppCompatActivity() {
         }.attach()
 
         setSupportActionBar(mainToolbar)
+    }
 
-        serviceSwitch.setOnCheckedChangeListener { compoundButton, checked ->
+
+    private fun checkAccessibilityPermissions(): Boolean {
+        return (Settings.Secure.getInt(
+            contentResolver,
+            Settings.Secure.ACCESSIBILITY_ENABLED
+        ) == 1)
+    }
+
+    private fun checkOverlayPermission(): Boolean {
+        return Settings.canDrawOverlays(this)
+    }
+
+
+    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+        menuInflater.inflate(R.menu.main_menu, menu)
+        val item = menu?.findItem(R.id.menu_switch_item)!!
+        item.setActionView(R.layout.menu_switch)
+        item.actionView.serviceSwitch.setOnCheckedChangeListener { compoundButton, checked ->
             if (checked) {
                 if (!checkOverlayPermission()) {
                     Toast.makeText(this, "오버레이 권한을 허용해주세요", Toast.LENGTH_SHORT).show()
@@ -84,27 +93,21 @@ class MainActivity : AppCompatActivity() {
                     Toast.makeText(this, "접근성 권한을 허용해주세요", Toast.LENGTH_SHORT).show()
                     compoundButton.isChecked = false
                     val intent = Intent(Settings.ACTION_ACCESSIBILITY_SETTINGS)
-                    startActivityForResult(intent, ACTION_MANAGE_ACCESSIBILITY_PERMISSION_REQUEST_CODE)
+                    startActivityForResult(
+                        intent,
+                        ACTION_MANAGE_ACCESSIBILITY_PERMISSION_REQUEST_CODE
+                    )
                     return@setOnCheckedChangeListener
                 }
-                startForegroundService(intent)
+                compoundButton.setText("사용 중")
+                startForegroundService(Intent(this, EventService::class.java))
             } else {
                 val intent = Intent(this, EventService::class.java)
+                compoundButton.setText("사용 중지")
                 stopService(intent)
             }
         }
-    }
-
-
-    private fun checkAccessibilityPermissions(): Boolean {
-        return (Settings.Secure.getInt(
-                contentResolver,
-                Settings.Secure.ACCESSIBILITY_ENABLED
-            ) == 1)
-    }
-
-    private fun checkOverlayPermission(): Boolean {
-        return Settings.canDrawOverlays(this)
+        return super.onCreateOptionsMenu(menu)
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {

@@ -41,7 +41,6 @@ class AreaFragment(private val isManual : Boolean = true) : Fragment(){
                 next.setOnClickListener(manualActivity.nextListener)
                 prev.setOnClickListener(manualActivity.prevListener)
             } else {
-                textView1.visibility = View.GONE
                 next.visibility = View.GONE
                 prev.visibility = View.GONE
             }
