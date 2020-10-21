@@ -9,6 +9,7 @@ const val ACTION_TYPE_NONE = 0
 const val ACTION_TYPE_BUTTON = 1
 const val ACTION_TYPE_MEDIA = 2
 const val ACTION_TYPE_SWIPE = 3
+const val ACTION_TYPE_APP = 4
 
 const val ACTION_LEFT = 0
 const val ACTION_RIGHT = 1
@@ -35,7 +36,8 @@ enum class KeyAction(val type : Int, val action: Int) {
 
     SWIPE_UP(ACTION_TYPE_SWIPE, AccessibilityNodeInfo.ACTION_SCROLL_BACKWARD),
     SWIPE_DOWN(ACTION_TYPE_SWIPE, AccessibilityNodeInfo.ACTION_SCROLL_FORWARD),
-    SWIPE_HALT(ACTION_TYPE_SWIPE, ACTION_HALT);
+    SWIPE_HALT(ACTION_TYPE_SWIPE, ACTION_HALT),
+    LAUNCH_APP(ACTION_TYPE_APP, 0);
 
     fun str(context: Context): String {
         val id = context.resources.getIdentifier(this.name, "string", context.packageName)

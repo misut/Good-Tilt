@@ -1,24 +1,22 @@
 package com.goodtilt.goodtilt
 
-import android.accessibilityservice.AccessibilityService
-import android.animation.TimeAnimator
 import android.annotation.SuppressLint
-import android.app.*
+import android.app.Notification
+import android.app.NotificationChannel
+import android.app.NotificationManager
+import android.app.Service
 import android.content.Context
 import android.content.Intent
+import android.content.pm.PackageManager
 import android.graphics.Color
-import android.graphics.Path
 import android.graphics.PixelFormat
 import android.hardware.Sensor
 import android.hardware.SensorManager
 import android.media.AudioManager
-import android.media.Image
 import android.os.IBinder
 import android.os.VibrationEffect
 import android.os.Vibrator
-import android.renderscript.ScriptGroup
 import android.util.Log
-import android.util.TypedValue
 import android.view.*
 import android.widget.ImageView
 import androidx.core.app.NotificationCompat
@@ -39,6 +37,7 @@ class EventService : Service() {
         KeyAction.NONE,
         KeyAction.SWIPE_HALT
     )
+    var appList = arrayOfNulls<String>(8)
     private var btnPressTime = 0L
     private var placementState = false
 
@@ -85,6 +84,15 @@ class EventService : Service() {
             getString("swipe_tilt_right", "NONE")?.let { actionList[5] = KeyAction.valueOf(it) }
             getString("swipe_tilt_up", "NONE")?.let { actionList[6] = KeyAction.valueOf(it) }
             getString("swipe_tilt_down", "NONE")?.let { actionList[7] = KeyAction.valueOf(it) }
+
+            getString("app_tilt_left", "")?.let { appList[0] = it }
+            getString("app_tilt_right", "")?.let { appList[1] = it }
+            getString("app_tilt_up", "")?.let { appList[2] = it }
+            getString("app_tilt_down", "")?.let { appList[3] = it }
+            getString("app_swipe_tilt_left", "")?.let { appList[4] = it }
+            getString("app_swipe_tilt_right", "")?.let { appList[5] = it }
+            getString("app_swipe_tilt_up", "")?.let { appList[6] = it }
+            getString("app_swipe_tilt_down", "")?.let { appList[7] = it }
             //getInt("overlay_x", swipePosX.toInt())?.let { params.x = it}
             //getInt("overlay_y", swipePosY.toInt())?.let { params.y = it}
             getBoolean("transparent", false)?.let { isTransparent = it }
@@ -204,18 +212,9 @@ class EventService : Service() {
 
     private fun onActionOccur(index: Int) {
         vibrate();
-        generateEvent(actionList[index])
-    }
-
-    fun vibrate() {
-        val vibrator = getSystemService(Context.VIBRATOR_SERVICE) as Vibrator
-        if (vibrateEffect == null) return
-        vibrator.vibrate(vibrateEffect)
-    }
-
-    fun generateEvent(keyAction: KeyAction): Boolean {
+        val keyAction = actionList[index]
         when (keyAction.type) {
-            ACTION_TYPE_NONE -> return false
+            ACTION_TYPE_NONE -> return
             ACTION_TYPE_BUTTON -> TiltAccessibilityService.doAction(keyAction.action)
             ACTION_TYPE_MEDIA -> {
                 val mAudioManager = getSystemService(AUDIO_SERVICE) as AudioManager
@@ -231,8 +230,19 @@ class EventService : Service() {
                         .toString() + " " + keyAction.action
                 )
             }
+            ACTION_TYPE_APP -> {
+                val intent = packageManager.getLaunchIntentForPackage(appList[index]!!)
+                if (intent != null) {
+                    startActivity(intent)
+                }
+            }
         }
-        return true
+    }
+
+    fun vibrate() {
+        val vibrator = getSystemService(Context.VIBRATOR_SERVICE) as Vibrator
+        if (vibrateEffect == null) return
+        vibrator.vibrate(vibrateEffect)
     }
 
     fun changeListenerState(state: Int, rightHand: Boolean = false) {

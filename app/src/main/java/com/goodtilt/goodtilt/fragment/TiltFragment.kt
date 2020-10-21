@@ -212,7 +212,6 @@ class TiltFragment(private val isManual: Boolean = true) : Fragment() {
                 DeviceStatus.TILT_UP.actionIndex-> tiltCount?.setText(resources.getString(R.string.up_tilt_action))
                 DeviceStatus.TILT_DOWN.actionIndex-> tiltCount?.setText(resources.getString(R.string.down_tilt_action))
             }
-            val fadeOut = AnimationUtils.loadAnimation(context, R.anim.fade_out)
             tiltCount.apply {
                 alpha = 1F
                 animate().alpha(0f).setDuration(1500L).start()

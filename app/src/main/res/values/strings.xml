@@ -20,6 +20,7 @@
     <string name="SWIPE_DOWN">Swipe Down</string>
     <string name="SWIPE_HALT">Stop Swipe</string>
 
+    <string name="LAUNCH_APP">Launch Application</string>
 
     <string name="setting_action">Tap Action Settings</string>
     <string name="setting_swipe">Double Tap Action Setting</string>

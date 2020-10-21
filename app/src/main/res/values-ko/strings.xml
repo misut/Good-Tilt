@@ -19,6 +19,8 @@
     <string name="SWIPE_DOWN">아래로 슬라이드</string>
     <string name="SWIPE_HALT">스와이프 중지</string>
 
+    <string name="LAUNCH_APP">앱 실행하기</string>
+
     <string name="setting_action">탭 동작 설정</string>
     <string name="setting_swipe">더블 탭 동작 설정</string>
     <string name="setting_general">일반 설정</string>
