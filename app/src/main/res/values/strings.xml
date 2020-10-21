@@ -56,6 +56,12 @@
     <string name="btn_prev">Previous</string>
     <string name="btn_skip">Skip</string>
     <string name="btn_request">Request</string>
+    <string name="btn_start">Automatic Configuration</string>
+
+    <string name="tilt_config_in">몸 쪽으로 편한 만큼 기울인 뒤 화면 가장자리에서 손을 떼 주세요.</string>
+    <string name="tilt_config_out">몸 바깥 쪽으로 편한 만큼 기울인 뒤 화면 가장자리에서 손을 떼 주세요</string>
+    <string name="tilt_config_up">위쪽으로 편한 만큼 기울인 뒤 화면 가장자리에서 손을 떼 주세요</string>
+    <string name="tilt_config_down">아래쪽으로 편한 만큼 기울인 뒤 화면 가장자리에서 손을 떼 주세요</string>
 
     <string name="manual_hello">Good Tilt에 오신걸 환영합니다.</string>
     <string name="manual_hello_info">Good Tilt는 휴대폰을 기울여 원하는 제스처를 수행하게 해주는 제스처 앱입니다. 화면 가장자리를 누르고 휴대폰을 기울이면 각도에 따라 원하는 동작을 실행할 수 있습니다.</string>

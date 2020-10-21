@@ -45,7 +45,7 @@
         app:layout_constraintDimensionRatio="h, 1:1"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tiltInfo" />
+        app:layout_constraintTop_toBottomOf="@+id/autoConfig" />
     <LinearLayout
         android:id="@+id/prefSensFrag"
         android:layout_width="0dp"
@@ -68,10 +68,22 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/manual_sens_info"
-        android:layout_marginTop="@dimen/margin_items"
+        android:textSize="@dimen/text_small"
+        android:layout_marginStart="@dimen/margin_side"
+        android:layout_marginEnd="@dimen/margin_side"
+        app:layout_constraintBottom_toBottomOf="@+id/autoConfig"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/toolBar" />
+
+    <TextView
+        android:id="@+id/tiltCount"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="@dimen/text_big"
+        app:layout_constraintBottom_toBottomOf="@+id/tiltView2"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
 
     <TextView
         android:id="@+id/next"
@@ -84,6 +96,17 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
 
+    <Button
+        android:id="@+id/autoConfig"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/margin_side"
+        android:layout_marginEnd="@dimen/margin_side"
+        android:text="@string/btn_start"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/toolBar" />
+
     <TextView
         android:id="@+id/prev"
         android:layout_width="wrap_content"
@@ -94,5 +117,45 @@
         android:layout_marginStart="@dimen/margin_bottom"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
+
+    <ImageView
+        android:id="@+id/arrowLeft"
+        android:layout_width="@dimen/margin_side"
+        android:layout_height="@dimen/margin_side"
+        android:layout_marginStart="@dimen/margin_side"
+        app:layout_constraintBottom_toBottomOf="@+id/tiltView2"
+        app:layout_constraintStart_toStartOf="@+id/tiltView2"
+        app:layout_constraintTop_toTopOf="@+id/tiltView2"
+        app:srcCompat="@drawable/ic_baseline_arrow_back_24" />
+
+    <ImageView
+        android:id="@+id/arrowRight"
+        android:layout_width="@dimen/margin_side"
+        android:layout_height="@dimen/margin_side"
+        android:layout_marginEnd="@dimen/margin_side"
+        app:layout_constraintBottom_toBottomOf="@+id/tiltView2"
+        app:layout_constraintEnd_toEndOf="@+id/tiltView2"
+        app:layout_constraintTop_toTopOf="@+id/tiltView2"
+        app:srcCompat="@drawable/ic_baseline_arrow_forward_24" />
+
+    <ImageView
+        android:id="@+id/arrowDown"
+        android:layout_width="@dimen/margin_side"
+        android:layout_height="@dimen/margin_side"
+        android:layout_marginBottom="@dimen/margin_side"
+        app:layout_constraintBottom_toBottomOf="@+id/tiltView2"
+        app:layout_constraintEnd_toEndOf="@+id/tiltView2"
+        app:layout_constraintStart_toStartOf="@+id/tiltView2"
+        app:srcCompat="@drawable/ic_baseline_arrow_downward_24" />
+
+    <ImageView
+        android:id="@+id/arrowUp"
+        android:layout_width="@dimen/margin_side"
+        android:layout_height="@dimen/margin_side"
+        android:layout_marginTop="@dimen/margin_side"
+        app:layout_constraintTop_toTopOf="@+id/tiltView2"
+        app:layout_constraintEnd_toEndOf="@+id/tiltView2"
+        app:layout_constraintStart_toStartOf="@+id/tiltView2"
+        app:srcCompat="@drawable/ic_baseline_arrow_upward_24" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

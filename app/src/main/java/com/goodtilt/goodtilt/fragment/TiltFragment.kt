@@ -10,6 +10,8 @@ import android.view.LayoutInflater
 import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
+import android.view.animation.Animation
+import android.view.animation.AnimationUtils
 import androidx.fragment.app.Fragment
 import androidx.preference.PreferenceManager
 import com.goodtilt.goodtilt.ManualActivity
@@ -20,11 +22,6 @@ import kotlinx.android.synthetic.main.frag_tilt.*
 import kotlinx.android.synthetic.main.frag_tilt.overlayLeft
 import kotlinx.android.synthetic.main.frag_tilt.overlayRight
 import kotlinx.android.synthetic.main.frag_tilt.view.*
-import kotlinx.android.synthetic.main.frag_tilt.view.next
-import kotlinx.android.synthetic.main.frag_tilt.view.overlayLeft
-import kotlinx.android.synthetic.main.frag_tilt.view.overlayRight
-import kotlinx.android.synthetic.main.frag_tilt.view.prev
-import kotlinx.android.synthetic.main.frag_tilt.view.tiltView2
 import kotlin.math.PI
 
 class TiltFragment(private val isManual: Boolean = true) : Fragment() {
@@ -32,6 +29,8 @@ class TiltFragment(private val isManual: Boolean = true) : Fragment() {
     private lateinit var sensorManager: SensorManager
     lateinit var listener: SharedPreferences.OnSharedPreferenceChangeListener
     lateinit var preference: SharedPreferences
+    private var configStage = DeviceStatus.IDLE
+    private var configCount = 0
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -51,33 +50,129 @@ class TiltFragment(private val isManual: Boolean = true) : Fragment() {
 
             val touchListener = View.OnTouchListener { view, motionEvent ->
                 if (motionEvent.action == MotionEvent.ACTION_DOWN) {
-                    sensorListener.initBase(1, view == overlayRight)
                     tiltView2.rightHand = (view == overlayRight)
                     tiltView2.updatePath()
+                    sensorListener.initBase(1, view == overlayRight)
                     changeListenerState(true)
                     view.setBackgroundResource(R.color.OverlayClicked)
+                    updateArrow()
                 } else if (motionEvent.action == MotionEvent.ACTION_UP || motionEvent.action == MotionEvent.ACTION_CANCEL) {
                     view.setBackgroundResource(R.color.OverlayDefault)
-                    sensorListener.updatePreference(context, tiltView2.getCoord(), DeviceStatus.TILT_IN)
-                    tiltView2.updatePath()
+                    if (configStage != DeviceStatus.IDLE) {
+                        sensorListener.updatePreference(
+                            context,
+                            tiltView2.getCoord(),
+                            configStage
+                        )
+                        configCount -= 1
+                        if (configCount == 0) {
+                            when (configStage) {
+                                DeviceStatus.TILT_IN -> configStage = DeviceStatus.TILT_OUT
+                                DeviceStatus.TILT_OUT -> configStage = DeviceStatus.TILT_UP
+                                DeviceStatus.TILT_UP -> configStage = DeviceStatus.TILT_DOWN
+                                DeviceStatus.TILT_DOWN -> configStage = DeviceStatus.IDLE
+                            }
+                            updateConfigView()
+                            configCount = 3
+                        }
+                        updateConfigCount()
+                        tiltView2.updatePath()
+                    }
                     changeListenerState(false)
                 }
                 true
             }
             overlayLeft.setOnTouchListener(touchListener)
             overlayRight.setOnTouchListener(touchListener)
+            autoConfig.setOnClickListener { view ->
+                autoConfig.visibility = View.GONE
+                configStage = DeviceStatus.TILT_IN
+                configCount = 3
+                updateConfigView(this)
+                updateConfigCount(this)
+                true
+            }
 
             if (isManual) {
                 val manualActivity = activity as ManualActivity
                 next.setOnClickListener(manualActivity.nextListener)
                 prev.setOnClickListener(manualActivity.prevListener)
+                configStage = DeviceStatus.TILT_IN
+                configCount = 3
             } else {
                 next.visibility = View.GONE
                 prev.visibility = View.GONE
                 prefSensFrag.visibility = View.VISIBLE
             }
+            updateConfigView(this)
+            updateConfigCount(this)
         }
         return rootView
+    }
+
+    fun updateConfigCount(v: View? = view) {
+        v?.tiltCount?.setText(configCount.toString())
+    }
+
+    fun updateArrow(v: View? = view) {
+        if (configStage == DeviceStatus.TILT_UP)
+            v?.arrowUp?.visibility = View.VISIBLE
+        else
+            v?.arrowUp?.visibility = View.INVISIBLE
+        if (configStage == DeviceStatus.TILT_DOWN)
+            v?.arrowDown?.visibility = View.VISIBLE
+        else
+            v?.arrowDown?.visibility = View.INVISIBLE
+        if (v?.tiltView2?.rightHand!!){
+            if (configStage == DeviceStatus.TILT_IN)
+                v?.arrowRight?.visibility = View.VISIBLE
+            else
+                v?.arrowRight?.visibility = View.INVISIBLE
+            if (configStage == DeviceStatus.TILT_OUT)
+                v?.arrowLeft?.visibility = View.VISIBLE
+            else
+                v?.arrowLeft?.visibility = View.INVISIBLE
+        } else {
+            if (configStage == DeviceStatus.TILT_IN)
+                v?.arrowLeft?.visibility = View.VISIBLE
+            else
+                v?.arrowLeft?.visibility = View.INVISIBLE
+            if (configStage == DeviceStatus.TILT_OUT)
+                v?.arrowRight?.visibility = View.VISIBLE
+            else
+                v?.arrowRight?.visibility = View.INVISIBLE
+        }
+    }
+
+    fun updateConfigView(v: View? = view) {
+        when (configStage) {
+            DeviceStatus.IDLE -> {
+                v?.tiltCount?.alpha = 0F
+                v?.autoConfig?.visibility = View.VISIBLE
+                v?.tiltInfo?.setText("")
+            }
+            DeviceStatus.TILT_IN -> {
+                v?.tiltCount?.alpha = 1F
+                v?.autoConfig?.visibility = View.INVISIBLE
+                v?.tiltInfo?.setText(resources.getString(R.string.tilt_config_in))
+            }
+            DeviceStatus.TILT_OUT -> {
+                v?.tiltCount?.alpha = 1F
+                v?.autoConfig?.visibility = View.INVISIBLE
+                v?.tiltInfo?.setText(resources.getString(R.string.tilt_config_out))
+            }
+            DeviceStatus.TILT_UP -> {
+                v?.tiltCount?.alpha = 1F
+                v?.autoConfig?.visibility = View.INVISIBLE
+                v?.tiltInfo?.setText(resources.getString(R.string.tilt_config_up))
+            }
+            DeviceStatus.TILT_DOWN -> {
+                v?.tiltCount?.alpha = 1F
+                v?.autoConfig?.visibility = View.INVISIBLE
+                v?.tiltInfo?.setText(resources.getString(R.string.tilt_config_down))
+            }
+        }
+        updateArrow(v)
     }
 
     fun printResult(evt: SensorEvent) {
@@ -110,7 +205,20 @@ class TiltFragment(private val isManual: Boolean = true) : Fragment() {
     }
 
     fun printAction(action: Int) {
-        this.view?.tiltInfo?.setText(action.toString())
+        if (configStage == DeviceStatus.IDLE){
+            when(action){
+                DeviceStatus.TILT_IN.actionIndex-> tiltCount?.setText(resources.getString(R.string.left_tilt_action))
+                DeviceStatus.TILT_OUT.actionIndex-> tiltCount?.setText(resources.getString(R.string.right_tilt_action))
+                DeviceStatus.TILT_UP.actionIndex-> tiltCount?.setText(resources.getString(R.string.up_tilt_action))
+                DeviceStatus.TILT_DOWN.actionIndex-> tiltCount?.setText(resources.getString(R.string.down_tilt_action))
+            }
+            val fadeOut = AnimationUtils.loadAnimation(context, R.anim.fade_out)
+            tiltCount.apply {
+                alpha = 1F
+                animate().alpha(0f).setDuration(1500L).start()
+            }
+
+        }
     }
 
     override fun onPause() {

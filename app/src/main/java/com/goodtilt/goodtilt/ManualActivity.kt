@@ -34,9 +34,15 @@ class ManualActivity : AppCompatActivity() {
         val next = manualPager.currentItem + 1
         if (next < manualPager.adapter?.itemCount!!)
             manualPager.setCurrentItem(next, true)
-        else
-            startActivity(Intent(this, MainActivity::class.java).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK))
-    }
+        else {
+            PreferenceManager.getDefaultSharedPreferences(this).edit().putBoolean("configured",true).commit()
+            startActivity(
+                Intent(
+                    this,
+                    MainActivity::class.java
+                ).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+            )
+        }    }
 
     inner class ManualAdapter(fa: FragmentActivity) : FragmentStateAdapter(fa) {
         override fun getItemCount(): Int {
