@@ -50,10 +50,10 @@ class GuideFragment : Fragment(){
         PreferenceManager.getDefaultSharedPreferences(context).apply {
             val D2R = PI.toFloat()/180.0f
             rootView.tiltView2.updateSetting(
-                getInt("upside_sensitivity", 50)/100.0f,
-                getInt("downside_sensitivity", 50)/100.0f,
-                getInt("inside_sensitivity", 50)/100.0f,
-                getInt("outside_sensitivity", 50)/100.0f,
+                getInt("upside_sensitivity", 40)/100.0f+0.2f,
+                getInt("downside_sensitivity", 30)/100.0f+0.2f,
+                getInt("inside_sensitivity", 40)/100.0f+0.2f,
+                getInt("outside_sensitivity", 30)/100.0f+0.2f,
                 getInt("min_angle", 10).toFloat(),
                 getInt("max_angle", 20).toFloat(),
                 (0.0f + getInt("tan_quad_1", 45)) * D2R,

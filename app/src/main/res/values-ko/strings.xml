@@ -30,8 +30,8 @@
     <string name="area_height">터치 영역 높이</string>
     <string name="area_vertical_position">터치 영역 위치</string>
 
-    <string name="left_tilt_action">왼쪽 기울임 동작</string>
-    <string name="right_tilt_action">오른쪽 기울임 동작</string>
+    <string name="in_tilt_action">안쪽 기울임 동작</string>
+    <string name="out_tilt_action">바깥쪽 기울임 동작</string>
     <string name="up_tilt_action">위쪽 기울임 동작</string>
     <string name="down_tilt_action">아래쪽 기울임 동작</string>
 
