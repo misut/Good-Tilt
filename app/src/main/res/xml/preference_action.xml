@@ -9,14 +9,14 @@
             android:entries="@array/action_string"
             android:entryValues="@array/action_key"
             android:key="tilt_left"
-            android:title="@string/left_tilt_action"
+            android:title="@string/in_tilt_action"
             app:iconSpaceReserved="false" />
         <ListPreference
             android:defaultValue="NONE"
             android:entries="@array/action_string"
             android:entryValues="@array/action_key"
             android:key="tilt_right"
-            android:title="@string/right_tilt_action"
+            android:title="@string/out_tilt_action"
             app:iconSpaceReserved="false" />
         <ListPreference
             android:defaultValue="NONE"
@@ -42,14 +42,14 @@
             android:entries="@array/action_string"
             android:entryValues="@array/action_key"
             android:key="swipe_tilt_left"
-            android:title="@string/left_tilt_action"
+            android:title="@string/in_tilt_action"
             app:iconSpaceReserved="false" />
         <ListPreference
             android:defaultValue="NONE"
             android:entries="@array/action_string"
             android:entryValues="@array/action_key"
             android:key="swipe_tilt_right"
-            android:title="@string/right_tilt_action"
+            android:title="@string/out_tilt_action"
             app:iconSpaceReserved="false" />
         <ListPreference
             android:defaultValue="NONE"

@@ -33,10 +33,10 @@
     <string name="area_height">Touch Area Height</string>
     <string name="area_vertical_position">Touch Area Position</string>
 
-    <string name="left_tilt_action">Left Side Tilt</string>
-    <string name="right_tilt_action">Right Side Tilt</string>
-    <string name="up_tilt_action">Up Side Tilt</string>
-    <string name="down_tilt_action">Down Side Tilt</string>
+    <string name="in_tilt_action">Inside Tilt</string>
+    <string name="out_tilt_action">Outside Tilt</string>
+    <string name="up_tilt_action">Upside Tilt</string>
+    <string name="down_tilt_action">Downside Tilt</string>
 
     <string name="upside_sensitivity">Upside Sensitivity</string>
     <string name="downside_sensitivity">Downside Sensitivity</string>

@@ -10,8 +10,6 @@ import android.view.LayoutInflater
 import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
-import android.view.animation.Animation
-import android.view.animation.AnimationUtils
 import androidx.fragment.app.Fragment
 import androidx.preference.PreferenceManager
 import com.goodtilt.goodtilt.ManualActivity
@@ -187,10 +185,10 @@ class TiltFragment(private val isManual: Boolean = true) : Fragment() {
         PreferenceManager.getDefaultSharedPreferences(context).apply {
             val D2R = PI.toFloat() / 180.0f
             tiltView2.updateSetting(
-                getInt("upside_sensitivity", 50) / 100.0f,
-                getInt("downside_sensitivity", 50) / 100.0f,
-                getInt("inside_sensitivity", 50) / 100.0f,
-                getInt("outside_sensitivity", 50) / 100.0f,
+                getInt("upside_sensitivity", 50) / 100.0f+0.2f,
+                getInt("downside_sensitivity", 50) / 100.0f+0.2f,
+                getInt("inside_sensitivity", 50) / 100.0f+0.2f,
+                getInt("outside_sensitivity", 50) / 100.0f+0.2f,
                 getInt("min_angle", 10).toFloat(),
                 getInt("max_angle", 20).toFloat(),
                 ((0.0f + getInt("tan_quad_1", 45)) * D2R).toFloat(),
@@ -207,8 +205,8 @@ class TiltFragment(private val isManual: Boolean = true) : Fragment() {
     fun printAction(action: Int) {
         if (configStage == DeviceStatus.IDLE){
             when(action){
-                DeviceStatus.TILT_IN.actionIndex-> tiltCount?.setText(resources.getString(R.string.left_tilt_action))
-                DeviceStatus.TILT_OUT.actionIndex-> tiltCount?.setText(resources.getString(R.string.right_tilt_action))
+                DeviceStatus.TILT_IN.actionIndex-> tiltCount?.setText(resources.getString(R.string.in_tilt_action))
+                DeviceStatus.TILT_OUT.actionIndex-> tiltCount?.setText(resources.getString(R.string.out_tilt_action))
                 DeviceStatus.TILT_UP.actionIndex-> tiltCount?.setText(resources.getString(R.string.up_tilt_action))
                 DeviceStatus.TILT_DOWN.actionIndex-> tiltCount?.setText(resources.getString(R.string.down_tilt_action))
             }

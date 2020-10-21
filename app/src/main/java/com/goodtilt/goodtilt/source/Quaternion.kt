@@ -1,5 +1,7 @@
 package com.goodtilt.goodtilt.source
 
+import android.util.Log
+
 class Quaternion (var x : Double, var y : Double, var z : Double, var w : Double) {
     constructor () : this(0.0, 0.0, 0.0, 0.0)
 
