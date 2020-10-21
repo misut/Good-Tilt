@@ -20,6 +20,7 @@
     <string name="SWIPE_HALT">스와이프 중지</string>
 
     <string name="LAUNCH_APP">앱 실행하기</string>
+    <string name="LAUNCH_APP_CONFIG">앱을 선택해주세요</string>
 
     <string name="setting_action">탭 동작 설정</string>
     <string name="setting_swipe">더블 탭 동작 설정</string>
@@ -51,12 +52,16 @@
 
     <string name="vibration">진동</string>
     <string name="delay">지연시간</string>
+    <string name="show_notif">알림창 표시</string>
 
     <string name="btn_next">다음</string>
     <string name="btn_prev">이전</string>
     <string name="btn_skip">건너뛰기</string>
     <string name="btn_request">요청하기</string>
     <string name="btn_start">자동 설정</string>
+
+    <string name="notif_title">Good-Tilt가 작동중입니다.</string>
+    <string name="notif_content">설정을 원하면 탭해주세요.</string>
 
     <string name="tilt_config_in">몸 쪽으로 편한 만큼 기울인 뒤 화면 가장자리에서 손을 떼 주세요.</string>
     <string name="tilt_config_out">몸 바깥 쪽으로 편한 만큼 기울인 뒤 화면 가장자리에서 손을 떼 주세요</string>
@@ -77,4 +82,11 @@
     <string name="manual_permission_info">Good Tilt 사용을 위해서 아래와 같은 권한을 필요로 합니다.</string>
     <string name="manual_permission_overlay">다른 앱 위에 표시 권한</string>
     <string name="manual_permission_access">접근성 권한</string>
+
+    <string name="toast_overlay">오버레이 권한을 허용해주세요</string>
+    <string name="toast_access">접근성 권한을 허용해주세요</string>
+    <string name="cannot_use">사용 중에는 설정할 수 없습니다.</string>
+
+    <string name="switch_using">사용 중</string>
+    <string name="switch_not_using">사용 중지</string>
 </resources>

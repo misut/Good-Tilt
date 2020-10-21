@@ -58,29 +58,21 @@ class Discriminator(var u: Float, var d: Float, var i: Float, var o: Float, var 
 
     fun updateStatus(pos: FloatArray, rightHand: Boolean) {
         var res = ellipsify(pos, rightHand)
-        var cur = pos[1]/pos[0]
+        var cur = pos[1]/pos[0] * (if (rightHand) 1F else -1F)
         when(status) {
             DeviceStatus.IDLE -> {
                 if(res >= outer) {
-                    if(pos[0] > 0) {
-                        if(cur in t4..t1) {
-                            if(rightHand)
-                                status = DeviceStatus.TILT_IN
-                            else
-                                status = DeviceStatus.TILT_OUT
-                        }
+                    if(pos[0] * (if (rightHand) 1F else -1F) > 0) {
+                        if(cur in t4..t1)
+                            status = DeviceStatus.TILT_OUT
                         else if(cur > t1)
                             status = DeviceStatus.TILT_DOWN
                         else if(cur < t4)
                             status = DeviceStatus.TILT_UP
                     }
                     else {
-                        if(cur in t2..t3) {
-                            if(rightHand)
-                                status = DeviceStatus.TILT_OUT
-                            else
-                                status = DeviceStatus.TILT_IN
-                        }
+                        if(cur in t2..t3)
+                            status = DeviceStatus.TILT_IN
                         else if(cur > t3)
                             status = DeviceStatus.TILT_UP
                         else if(cur < t2)

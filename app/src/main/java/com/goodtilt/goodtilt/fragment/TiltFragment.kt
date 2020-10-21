@@ -10,8 +10,11 @@ import android.view.LayoutInflater
 import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
+import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.fragment.app.Fragment
 import androidx.preference.PreferenceManager
+import androidx.viewpager2.widget.ViewPager2
 import com.goodtilt.goodtilt.ManualActivity
 import com.goodtilt.goodtilt.MisutListener
 import com.goodtilt.goodtilt.R
@@ -21,6 +24,9 @@ import kotlinx.android.synthetic.main.frag_tilt.overlayLeft
 import kotlinx.android.synthetic.main.frag_tilt.overlayRight
 import kotlinx.android.synthetic.main.frag_tilt.view.*
 import kotlin.math.PI
+import kotlin.math.atan2
+import kotlin.math.max
+import kotlin.math.min
 
 class TiltFragment(private val isManual: Boolean = true) : Fragment() {
     private val sensorListener = MisutListener(::printResult, ::printAction)
@@ -29,6 +35,9 @@ class TiltFragment(private val isManual: Boolean = true) : Fragment() {
     lateinit var preference: SharedPreferences
     private var configStage = DeviceStatus.IDLE
     private var configCount = 0
+    val D2R = PI.toFloat() / 180.0f
+
+    private var adjustViews = arrayOfNulls<ImageView>(4)
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -45,6 +54,10 @@ class TiltFragment(private val isManual: Boolean = true) : Fragment() {
         rootView.apply {
             overlayLeft.updateFromPreference(preference)
             overlayRight.updateFromPreference(preference)
+            adjustViews[0] = adjustDR
+            adjustViews[1] = adjustDL
+            adjustViews[2] = adjustUL
+            adjustViews[3] = adjustUR
 
             val touchListener = View.OnTouchListener { view, motionEvent ->
                 if (motionEvent.action == MotionEvent.ACTION_DOWN) {
@@ -52,10 +65,11 @@ class TiltFragment(private val isManual: Boolean = true) : Fragment() {
                     tiltView2.updatePath()
                     sensorListener.initBase(1, view == overlayRight)
                     changeListenerState(true)
-                    view.setBackgroundResource(R.color.OverlayClicked)
+                    view.setBackgroundResource(R.color.overlayClicked)
                     updateArrow()
+                    updateTanAdjust()
                 } else if (motionEvent.action == MotionEvent.ACTION_UP || motionEvent.action == MotionEvent.ACTION_CANCEL) {
-                    view.setBackgroundResource(R.color.OverlayDefault)
+                    view.setBackgroundResource(R.color.overlayDefault)
                     if (configStage != DeviceStatus.IDLE) {
                         sensorListener.updatePreference(
                             context,
@@ -90,6 +104,41 @@ class TiltFragment(private val isManual: Boolean = true) : Fragment() {
                 updateConfigCount(this)
                 true
             }
+            val adjustListener = View.OnTouchListener { view, motionEvent ->
+                if (motionEvent.action == MotionEvent.ACTION_DOWN)
+                    view.tag = 1
+                    activity?.findViewById<ViewPager2>(R.id.viewPager)?.isUserInputEnabled = false
+                false
+            }
+            adjustViews.forEach {
+                it?.tag = 0
+                it?.setOnTouchListener(adjustListener)
+            }
+
+            tiltView2.setOnTouchListener { view, motionEvent ->
+                if (motionEvent.action == MotionEvent.ACTION_DOWN || motionEvent.action == MotionEvent.ACTION_MOVE) {
+                    for (i in 1..4) {
+                        if (adjustViews[i - 1]?.tag as Int == 1) {
+                            var tan = (atan2(
+                                motionEvent.y - tiltView2.centerY,
+                                (motionEvent.x - tiltView2.centerX) * if (tiltView2.rightHand) 1F else -1F
+                            ) / D2R).toInt() - (i - 1) * 90 + 360
+                            tan %= 360
+                            tan = min(max(0, tan), 90)
+                            preference.edit().putInt(
+                                "tan_quad_" + i.toString(),
+                                tan
+                            ).apply()
+                        }
+                        //updateTanAdjust(i)
+                        context?.let { sensorListener.applyPreference(it) }
+                    }
+                } else if (motionEvent.action == MotionEvent.ACTION_CANCEL || motionEvent.action == MotionEvent.ACTION_UP) {
+                    adjustViews.forEach { it?.tag = 0 }
+                    activity?.findViewById<ViewPager2>(R.id.viewPager)?.isUserInputEnabled = true
+                }
+                true
+            }
 
             if (isManual) {
                 val manualActivity = activity as ManualActivity
@@ -108,6 +157,24 @@ class TiltFragment(private val isManual: Boolean = true) : Fragment() {
         return rootView
     }
 
+    fun updateTanAdjust(dim: Int = 0) {
+        var range: IntRange
+        if (dim == 0)
+            range = 1..4
+        else
+            range = dim..dim
+
+        for (i in range) {
+            val v = adjustViews[i - 1]
+            tiltView2.radPosition(i).apply {
+                val params = v?.layoutParams as ConstraintLayout.LayoutParams
+                params.leftMargin = first
+                params.topMargin = second
+                v.layoutParams = params
+            }
+        }
+    }
+
     fun updateConfigCount(v: View? = view) {
         v?.tiltCount?.setText(configCount.toString())
     }
@@ -121,7 +188,7 @@ class TiltFragment(private val isManual: Boolean = true) : Fragment() {
             v?.arrowDown?.visibility = View.VISIBLE
         else
             v?.arrowDown?.visibility = View.INVISIBLE
-        if (v?.tiltView2?.rightHand!!){
+        if (v?.tiltView2?.rightHand!!) {
             if (configStage == DeviceStatus.TILT_IN)
                 v?.arrowRight?.visibility = View.VISIBLE
             else
@@ -182,33 +249,33 @@ class TiltFragment(private val isManual: Boolean = true) : Fragment() {
     }
 
     fun updateTiltView() {
-        PreferenceManager.getDefaultSharedPreferences(context).apply {
-            val D2R = PI.toFloat() / 180.0f
+        preference.apply {
             tiltView2.updateSetting(
-                getInt("upside_sensitivity", 50) / 100.0f+0.2f,
-                getInt("downside_sensitivity", 50) / 100.0f+0.2f,
-                getInt("inside_sensitivity", 50) / 100.0f+0.2f,
-                getInt("outside_sensitivity", 50) / 100.0f+0.2f,
+                getInt("upside_sensitivity", 50) / 100.0f + 0.2f,
+                getInt("downside_sensitivity", 50) / 100.0f + 0.2f,
+                getInt("inside_sensitivity", 50) / 100.0f + 0.2f,
+                getInt("outside_sensitivity", 50) / 100.0f + 0.2f,
                 getInt("min_angle", 10).toFloat(),
                 getInt("max_angle", 20).toFloat(),
-                ((0.0f + getInt("tan_quad_1", 45)) * D2R).toFloat(),
-                ((90.0f + getInt("tan_quad_2", 45)) * D2R).toFloat(),
-                ((180.0f + getInt("tan_quad_3", 45)) * D2R).toFloat(),
-                ((270.0f + getInt("tan_quad_4", 45)) * D2R).toFloat()
+                ((0.0f + getInt("tan_quad_1", 45)) * D2R),
+                ((90.0f + getInt("tan_quad_2", 45)) * D2R),
+                ((180.0f + getInt("tan_quad_3", 45)) * D2R),
+                ((270.0f + getInt("tan_quad_4", 45)) * D2R)
             )
             overlayLeft.updateFromPreference(this)
             overlayRight.updateFromPreference(this)
         }
+        updateTanAdjust()
         context?.let { sensorListener.applyPreference(it) }
     }
 
     fun printAction(action: Int) {
-        if (configStage == DeviceStatus.IDLE){
-            when(action){
-                DeviceStatus.TILT_IN.actionIndex-> tiltCount?.setText(resources.getString(R.string.in_tilt_action))
-                DeviceStatus.TILT_OUT.actionIndex-> tiltCount?.setText(resources.getString(R.string.out_tilt_action))
-                DeviceStatus.TILT_UP.actionIndex-> tiltCount?.setText(resources.getString(R.string.up_tilt_action))
-                DeviceStatus.TILT_DOWN.actionIndex-> tiltCount?.setText(resources.getString(R.string.down_tilt_action))
+        if (configStage == DeviceStatus.IDLE) {
+            when (action) {
+                DeviceStatus.TILT_IN.actionIndex -> tiltCount?.setText(resources.getString(R.string.in_tilt_action))
+                DeviceStatus.TILT_OUT.actionIndex -> tiltCount?.setText(resources.getString(R.string.out_tilt_action))
+                DeviceStatus.TILT_UP.actionIndex -> tiltCount?.setText(resources.getString(R.string.up_tilt_action))
+                DeviceStatus.TILT_DOWN.actionIndex -> tiltCount?.setText(resources.getString(R.string.down_tilt_action))
             }
             tiltCount.apply {
                 alpha = 1F

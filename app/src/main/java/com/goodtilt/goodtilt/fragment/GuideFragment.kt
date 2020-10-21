@@ -11,7 +11,6 @@ import android.view.LayoutInflater
 import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
-import androidx.core.content.ContextCompat.getSystemService
 import androidx.fragment.app.Fragment
 import androidx.preference.PreferenceManager
 import com.goodtilt.goodtilt.ManualActivity
@@ -33,10 +32,6 @@ class GuideFragment : Fragment(){
     private lateinit var sensorManager: SensorManager
     private var guideStep = 0
     private var actionCount = 0
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-    }
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -75,7 +70,7 @@ class GuideFragment : Fragment(){
                         imageView3.visibility = View.VISIBLE
                         imageView2.setImageResource(R.drawable.ic_baseline_check_24)
                     }
-                    view.setBackgroundResource(R.color.OverlayClicked)
+                    view.setBackgroundResource(R.color.overlayClicked)
                     sensorListener.initBase(1, view == overlayRight)
                     tiltView2.rightHand = (view == overlayRight)
                     tiltView2.updatePath()
@@ -86,7 +81,7 @@ class GuideFragment : Fragment(){
                         textView3.visibility = View.INVISIBLE
                         imageView2.setImageResource(R.drawable.ic_baseline_close_24)
                     }
-                    view.setBackgroundResource(R.color.OverlayDefault)
+                    view.setBackgroundResource(R.color.overlayDefault)
                     changeListenerState(false)
                 }
                 true

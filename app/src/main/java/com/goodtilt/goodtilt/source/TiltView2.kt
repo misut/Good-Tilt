@@ -8,6 +8,8 @@ import android.graphics.Path
 import android.hardware.SensorEvent
 import android.util.AttributeSet
 import android.view.View
+import com.goodtilt.goodtilt.R
+import kotlinx.android.synthetic.main.frag_tilt.view.*
 import kotlin.math.abs
 import kotlin.math.cos
 import kotlin.math.sin
@@ -30,17 +32,17 @@ class TiltView2 : View {
     private var tanPath = Path()
     private var targetPath = Path()
 
-    private var centerX = 0F
-    private var centerY = 0F
+    var centerX = 0F
+    var centerY = 0F
 
     private var uCoeff = 0F
     private var dCoeff = 0F
     private var iCoeff = 0F
     private var oCoeff = 0F
-    private var rad1 = 0F
-    private var rad2 = 0F
-    private var rad3 = 0F
-    private var rad4 = 0F
+    var rad1 = 0F
+    var rad2 = 0F
+    var rad3 = 0F
+    var rad4 = 0F
     private var inner = 0F
     private var outer = 0F
 
@@ -48,7 +50,7 @@ class TiltView2 : View {
 
     var xCoord = 0F
     var yCoord = 0F
-    var rightHand = false
+    var rightHand = true
 
     init {
         greenPaint.color = Color.GREEN
@@ -87,22 +89,36 @@ class TiltView2 : View {
         return floatArrayOf(xCoord / coeff, yCoord / coeff)
     }
 
+    fun radPosition(radId : Int): Pair<Int, Int>{
+        var rad = 0F
+        when(radId){
+            1 -> rad = rad1
+            2 -> rad = rad2
+            3 -> rad = rad3
+            4 -> rad = rad4
+        }
+        val rx = cos(rad) * centerX * 0.75F * if (rightHand) 1F else -1F
+        val ry = sin(rad) * centerX * 0.75F
+        val offset = resources.getDimension(R.dimen.margin_side) / 2F
+        return Pair((centerX + rx - offset).toInt(), (centerY + ry - offset).toInt())
+    }
+
     fun updatePath() {
-        val baselen = if(centerX<centerY) centerX else centerY
+        val baselen = centerX * 0.75F
+        val symmetric = if (rightHand) 1F else -1F
         innerPath = graphPath(inner)
         outerPath = graphPath(outer)
         tanPath = Path()
-        tanPath.moveTo(baselen * cos(rad1), baselen * sin(rad1))
+        tanPath.moveTo(symmetric * baselen * cos(rad1), baselen * sin(rad1))
         tanPath.lineTo(0F, 0F)
-        tanPath.moveTo(baselen * cos(rad2), baselen * sin(rad2))
+        tanPath.moveTo(symmetric *baselen * cos(rad2), baselen * sin(rad2))
         tanPath.lineTo(0F, 0F)
-        tanPath.moveTo(baselen * cos(rad3), baselen * sin(rad3))
+        tanPath.moveTo(symmetric * baselen * cos(rad3), baselen * sin(rad3))
         tanPath.lineTo(0F, 0F)
-        tanPath.moveTo(baselen * cos(rad4), baselen * sin(rad4))
+        tanPath.moveTo(symmetric * baselen * cos(rad4), baselen * sin(rad4))
         tanPath.lineTo(0F, 0F)
         tanPath.offset(centerX, centerY)
     }
-
 
     fun updateSetting(u: Float, d: Float, i:Float, o: Float, inn: Float, out: Float, r1: Float, r2: Float, r3: Float, r4: Float) {
         uCoeff = u

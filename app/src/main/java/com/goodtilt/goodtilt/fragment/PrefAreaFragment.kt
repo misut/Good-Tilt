@@ -8,17 +8,9 @@ import androidx.preference.ListPreference
 import androidx.preference.PreferenceFragmentCompat
 import com.goodtilt.goodtilt.R
 
-class PrefAreaFragment() : PreferenceFragmentCompat(){
+class PrefAreaFragment() : PreferenceFragmentCompat() {
 
     override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {
         setPreferencesFromResource(R.xml.preference_area, rootKey)
-    }
-
-    override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
-        return super.onCreateView(inflater, container, savedInstanceState)
     }
 }

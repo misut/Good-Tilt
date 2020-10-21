@@ -2,6 +2,18 @@
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
     <SeekBarPreference
+        android:defaultValue="10"
+        android:key="min_angle"
+        android:max="30"
+        android:title="@string/minimum_angle"
+        app:iconSpaceReserved="false" />
+    <SeekBarPreference
+        android:defaultValue="15"
+        android:key="max_angle"
+        android:max="30"
+        android:title="@string/maximum_angle"
+        app:iconSpaceReserved="false" />
+    <SeekBarPreference
         android:defaultValue="40"
         android:key="upside_sensitivity"
         android:max="80"
@@ -24,41 +36,5 @@
         android:key="outside_sensitivity"
         android:max="80"
         android:title="@string/outside_sensitivity"
-        app:iconSpaceReserved="false" />
-    <SeekBarPreference
-        android:defaultValue="10"
-        android:key="min_angle"
-        android:max="30"
-        android:title="@string/minimum_angle"
-        app:iconSpaceReserved="false" />
-    <SeekBarPreference
-        android:defaultValue="15"
-        android:key="max_angle"
-        android:max="30"
-        android:title="@string/maximum_angle"
-        app:iconSpaceReserved="false" />
-    <SeekBarPreference
-        android:defaultValue="45"
-        android:key="tan_quad_1"
-        android:max="90"
-        android:title="@string/tangent_quad_1"
-        app:iconSpaceReserved="false" />
-    <SeekBarPreference
-        android:defaultValue="45"
-        android:key="tan_quad_2"
-        android:max="90"
-        android:title="@string/tangent_quad_2"
-        app:iconSpaceReserved="false" />
-    <SeekBarPreference
-        android:defaultValue="45"
-        android:key="tan_quad_3"
-        android:max="90"
-        android:title="@string/tangent_quad_3"
-        app:iconSpaceReserved="false" />
-    <SeekBarPreference
-        android:defaultValue="45"
-        android:key="tan_quad_4"
-        android:max="90"
-        android:title="@string/tangent_quad_4"
         app:iconSpaceReserved="false" />
 </PreferenceScreen>

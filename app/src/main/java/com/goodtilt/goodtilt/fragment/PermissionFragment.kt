@@ -103,13 +103,13 @@ class PermissionFragment : Fragment(){
         when (requestCode) {
             ACTION_MANAGE_OVERLAY_PERMISSION_REQUEST_CODE -> {
                 if (!checkOverlayPermission())
-                    Toast.makeText(activity, "오버레이 권한을 허용해주세요", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(activity, resources.getString(R.string.toast_overlay), Toast.LENGTH_SHORT).show()
                 else
                     next.isEnabled = checkAccessibilityPermissions(TiltAccessibilityService::class.java)
             }
             ACTION_MANAGE_ACCESSIBILITY_PERMISSION_REQUEST_CODE -> {
                 if (!checkAccessibilityPermissions(TiltAccessibilityService::class.java))
-                    Toast.makeText(activity, "접근성 권한을 허용해주세요", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(activity, resources.getString(R.string.toast_access), Toast.LENGTH_SHORT).show()
                 else
                     next.isEnabled = checkOverlayPermission()
             }

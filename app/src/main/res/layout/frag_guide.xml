@@ -21,7 +21,7 @@
         android:id="@+id/overlayLeft"
         android:layout_width="50dp"
         android:layout_height="400dp"
-        android:background="@color/OverlayDefault"
+        android:background="@color/overlayDefault"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         android:orientation="horizontal">
@@ -31,7 +31,7 @@
         android:id="@+id/overlayRight"
         android:layout_width="50dp"
         android:layout_height="400dp"
-        android:background="@color/OverlayDefault"
+        android:background="@color/overlayDefault"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         android:orientation="horizontal">

@@ -17,41 +17,62 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"/>
 
-
-    <com.goodtilt.goodtilt.source.OverlaySideView
-        android:id="@+id/overlayLeft"
-        android:layout_width="50dp"
-        android:layout_height="400dp"
-        android:background="@color/OverlayDefault"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        android:orientation="horizontal">
-    </com.goodtilt.goodtilt.source.OverlaySideView>
-
-    <com.goodtilt.goodtilt.source.OverlaySideView
-        android:id="@+id/overlayRight"
-        android:layout_width="50dp"
-        android:layout_height="400dp"
-        android:background="@color/OverlayDefault"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        android:orientation="horizontal">
-    </com.goodtilt.goodtilt.source.OverlaySideView>
-
-    <com.goodtilt.goodtilt.source.TiltView2
-        android:id="@+id/tiltView2"
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/tiltViewContainer"
         android:layout_width="0dp"
         android:layout_height="0dp"
         app:layout_constraintDimensionRatio="h, 1:1"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/autoConfig" />
+        app:layout_constraintTop_toBottomOf="@+id/autoConfig">
+        <com.goodtilt.goodtilt.source.TiltView2
+            android:id="@+id/tiltView2"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintTop_toTopOf="parent"/>
+
+        <ImageView
+            android:id="@+id/adjustUL"
+            android:layout_width="@dimen/margin_side"
+            android:layout_height="@dimen/margin_side"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:srcCompat="@drawable/ic_baseline_adjust_24" />
+
+        <ImageView
+            android:id="@+id/adjustUR"
+            android:layout_width="@dimen/margin_side"
+            android:layout_height="@dimen/margin_side"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:srcCompat="@drawable/ic_baseline_adjust_24" />
+
+        <ImageView
+            android:id="@+id/adjustDL"
+            android:layout_width="@dimen/margin_side"
+            android:layout_height="@dimen/margin_side"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:srcCompat="@drawable/ic_baseline_adjust_24" />
+
+        <ImageView
+            android:id="@+id/adjustDR"
+            android:layout_width="@dimen/margin_side"
+            android:layout_height="@dimen/margin_side"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:srcCompat="@drawable/ic_baseline_adjust_24" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
     <LinearLayout
         android:id="@+id/prefSensFrag"
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:visibility="gone"
-        app:layout_constraintTop_toBottomOf="@id/tiltView2"
+        app:layout_constraintTop_toBottomOf="@+id/tiltViewContainer"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent">
@@ -81,7 +102,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textSize="@dimen/text_big"
-        app:layout_constraintBottom_toBottomOf="@+id/tiltView2"
+        app:layout_constraintBottom_toBottomOf="@+id/tiltViewContainer"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
 
@@ -118,14 +139,16 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
 
+
+
     <ImageView
         android:id="@+id/arrowLeft"
         android:layout_width="@dimen/margin_side"
         android:layout_height="@dimen/margin_side"
         android:layout_marginStart="@dimen/margin_side"
-        app:layout_constraintBottom_toBottomOf="@+id/tiltView2"
-        app:layout_constraintStart_toStartOf="@+id/tiltView2"
-        app:layout_constraintTop_toTopOf="@+id/tiltView2"
+        app:layout_constraintBottom_toBottomOf="@+id/tiltViewContainer"
+        app:layout_constraintStart_toStartOf="@+id/tiltViewContainer"
+        app:layout_constraintTop_toTopOf="@+id/tiltViewContainer"
         app:srcCompat="@drawable/ic_baseline_arrow_back_24" />
 
     <ImageView
@@ -133,9 +156,9 @@
         android:layout_width="@dimen/margin_side"
         android:layout_height="@dimen/margin_side"
         android:layout_marginEnd="@dimen/margin_side"
-        app:layout_constraintBottom_toBottomOf="@+id/tiltView2"
-        app:layout_constraintEnd_toEndOf="@+id/tiltView2"
-        app:layout_constraintTop_toTopOf="@+id/tiltView2"
+        app:layout_constraintBottom_toBottomOf="@+id/tiltViewContainer"
+        app:layout_constraintEnd_toEndOf="@+id/tiltViewContainer"
+        app:layout_constraintTop_toTopOf="@+id/tiltViewContainer"
         app:srcCompat="@drawable/ic_baseline_arrow_forward_24" />
 
     <ImageView
@@ -143,9 +166,9 @@
         android:layout_width="@dimen/margin_side"
         android:layout_height="@dimen/margin_side"
         android:layout_marginBottom="@dimen/margin_side"
-        app:layout_constraintBottom_toBottomOf="@+id/tiltView2"
-        app:layout_constraintEnd_toEndOf="@+id/tiltView2"
-        app:layout_constraintStart_toStartOf="@+id/tiltView2"
+        app:layout_constraintBottom_toBottomOf="@+id/tiltViewContainer"
+        app:layout_constraintEnd_toEndOf="@+id/tiltViewContainer"
+        app:layout_constraintStart_toStartOf="@+id/tiltViewContainer"
         app:srcCompat="@drawable/ic_baseline_arrow_downward_24" />
 
     <ImageView
@@ -153,9 +176,29 @@
         android:layout_width="@dimen/margin_side"
         android:layout_height="@dimen/margin_side"
         android:layout_marginTop="@dimen/margin_side"
-        app:layout_constraintTop_toTopOf="@+id/tiltView2"
-        app:layout_constraintEnd_toEndOf="@+id/tiltView2"
-        app:layout_constraintStart_toStartOf="@+id/tiltView2"
+        app:layout_constraintTop_toTopOf="@+id/tiltViewContainer"
+        app:layout_constraintEnd_toEndOf="@+id/tiltViewContainer"
+        app:layout_constraintStart_toStartOf="@+id/tiltViewContainer"
         app:srcCompat="@drawable/ic_baseline_arrow_upward_24" />
+
+    <com.goodtilt.goodtilt.source.OverlaySideView
+        android:id="@+id/overlayLeft"
+        android:layout_width="50dp"
+        android:layout_height="400dp"
+        android:background="@color/overlayDefault"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        android:orientation="horizontal">
+    </com.goodtilt.goodtilt.source.OverlaySideView>
+
+    <com.goodtilt.goodtilt.source.OverlaySideView
+        android:id="@+id/overlayRight"
+        android:layout_width="50dp"
+        android:layout_height="400dp"
+        android:background="@color/overlayDefault"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        android:orientation="horizontal">
+    </com.goodtilt.goodtilt.source.OverlaySideView>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

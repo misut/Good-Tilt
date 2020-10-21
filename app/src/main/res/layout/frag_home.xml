@@ -16,7 +16,7 @@
 
     <fragment
         android:id="@+id/fragment"
-        android:name="com.goodtilt.goodtilt.fragment.SettingFragment"
+        android:name="com.goodtilt.goodtilt.fragment.PrefActionFragment"
         android:layout_width="0dp"
         android:layout_height="0dp"
         app:layout_constraintBottom_toBottomOf="parent"

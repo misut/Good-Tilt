@@ -3,6 +3,7 @@
     <color name="colorPrimary">#66cc66</color>
     <color name="colorPrimaryDark">#66cc66</color>
     <color name="colorAccent">#03DAC5</color>
-    <color name="OverlayDefault">#2D66cc66</color>
-    <color name="OverlayClicked">#5D5eba7d</color>
+    <color name="overlayDefault">#2D66cc66</color>
+    <color name="overlayClicked">#5D5eba7d</color>
+    <color name="whiteSpace">#8DFFFFFF</color>
 </resources>

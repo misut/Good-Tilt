@@ -6,10 +6,13 @@ import android.app.ActivityManager
 import android.content.Context
 import android.content.Intent
 import android.content.res.Resources
+import android.graphics.Color
 import android.net.Uri
 import android.os.Bundle
 import android.provider.Settings
 import android.view.Menu
+import android.view.MotionEvent
+import android.view.View
 import android.view.accessibility.AccessibilityManager
 import android.widget.Switch
 import android.widget.Toast
@@ -36,7 +39,7 @@ const val MODE_SERVICE = 1
 class MainActivity : AppCompatActivity() {
     private var listening = true
     private var serviceRunning = false
-    lateinit var serviceSwitch : Switch
+    private lateinit var serviceSwitch : Switch
 
     inner class MainAdapter(fa: FragmentActivity) : FragmentStateAdapter(fa) {
         override fun getItemCount(): Int {
@@ -108,7 +111,7 @@ class MainActivity : AppCompatActivity() {
         serviceSwitch.setOnCheckedChangeListener { compoundButton, checked ->
             if (checked) {
                 if (!checkOverlayPermission()) {
-                    Toast.makeText(this, "오버레이 권한을 허용해주세요", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(this, resources.getString(R.string.toast_overlay), Toast.LENGTH_SHORT).show()
                     compoundButton.isChecked = false
                     val uri: Uri = Uri.fromParts("package", packageName, null)
                     val intent = Intent(Settings.ACTION_MANAGE_OVERLAY_PERMISSION, uri)
@@ -117,7 +120,7 @@ class MainActivity : AppCompatActivity() {
                 }
 
                 if (!checkAccessibilityPermissions(TiltAccessibilityService::class.java)) {
-                    Toast.makeText(this, "접근성 권한을 허용해주세요", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(this, resources.getString(R.string.toast_access), Toast.LENGTH_SHORT).show()
                     compoundButton.isChecked = false
                     val intent = Intent(Settings.ACTION_ACCESSIBILITY_SETTINGS)
                     startActivityForResult(
@@ -127,12 +130,15 @@ class MainActivity : AppCompatActivity() {
                     return@setOnCheckedChangeListener
                 }
                 startForegroundService(Intent(this, EventService::class.java))
+                whiteAlert.visibility = View.VISIBLE
             } else {
                 val intent = Intent(this, EventService::class.java)
                 stopService(intent)
+                whiteAlert.visibility = View.GONE
             }
             updateToolbar(checked)
         }
+        whiteAlert.setOnTouchListener{_, _ -> true}
         updateToolbar(serviceSwitch.isChecked)
         return super.onCreateOptionsMenu(menu)
     }
@@ -143,13 +149,13 @@ class MainActivity : AppCompatActivity() {
             val textColor = resources.getColor(android.R.color.background_light, this.theme)
             mainToolbar.setTitleTextColor(textColor)
             serviceSwitch.setTextColor(textColor)
-            serviceSwitch.setText("사용 중")
+            serviceSwitch.setText(resources.getString(R.string.switch_using))
 
         } else {
             mainToolbar.setBackgroundResource(android.R.color.background_light)
             val textColor = resources.getColor(android.R.color.black, this.theme)
             mainToolbar.setTitleTextColor(textColor)
-            serviceSwitch.setText("사용 중지")
+            serviceSwitch.setText(resources.getString(R.string.switch_not_using))
             serviceSwitch.setTextColor(textColor)
         }
     }
@@ -159,11 +165,11 @@ class MainActivity : AppCompatActivity() {
         when (requestCode) {
             ACTION_MANAGE_OVERLAY_PERMISSION_REQUEST_CODE -> {
                 if (!checkOverlayPermission())
-                    Toast.makeText(this, "오버레이 권한을 허용해주세요", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(this, resources.getString(R.string.toast_overlay), Toast.LENGTH_SHORT).show()
             }
             ACTION_MANAGE_ACCESSIBILITY_PERMISSION_REQUEST_CODE -> {
                 if (!checkAccessibilityPermissions(TiltAccessibilityService::class.java)) {
-                    Toast.makeText(this, "접근성 권한을 허용해주세요", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(this, resources.getString(R.string.toast_access), Toast.LENGTH_SHORT).show()
                 }
             }
         }

@@ -21,6 +21,7 @@
     <string name="SWIPE_HALT">Stop Swipe</string>
 
     <string name="LAUNCH_APP">Launch Application</string>
+    <string name="LAUNCH_APP_CONFIG">Select Application</string>
 
     <string name="setting_action">Tap Action Settings</string>
     <string name="setting_swipe">Double Tap Action Setting</string>
@@ -52,12 +53,16 @@
 
     <string name="vibration">Vibration</string>
     <string name="delay">Delay</string>
+    <string name="show_notif">Show Notification</string>
 
     <string name="btn_next">Next</string>
     <string name="btn_prev">Previous</string>
     <string name="btn_skip">Skip</string>
     <string name="btn_request">Request</string>
     <string name="btn_start">Automatic Configuration</string>
+
+    <string name="notif_title">Good-Tilt가 작동중입니다.</string>
+    <string name="notif_content">설정을 원하면 탭해주세요.</string>
 
     <string name="tilt_config_in">몸 쪽으로 편한 만큼 기울인 뒤 화면 가장자리에서 손을 떼 주세요.</string>
     <string name="tilt_config_out">몸 바깥 쪽으로 편한 만큼 기울인 뒤 화면 가장자리에서 손을 떼 주세요</string>
@@ -79,4 +84,10 @@
     <string name="manual_permission_overlay">다른 앱 위에 표시 권한</string>
     <string name="manual_permission_access">접근성 권한</string>
 
+    <string name="toast_overlay">오버레이 권한을 허용해주세요</string>
+    <string name="toast_access">접근성 권한을 허용해주세요</string>
+    <string name="cannot_use">사용 중에는 설정할 수 없습니다.</string>
+
+    <string name="switch_using">사용 중</string>
+    <string name="switch_not_using">사용 중지</string>
 </resources>

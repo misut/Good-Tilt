@@ -1,14 +1,9 @@
 package com.goodtilt.goodtilt
 
 import android.annotation.SuppressLint
-import android.app.Notification
-import android.app.NotificationChannel
-import android.app.NotificationManager
-import android.app.Service
+import android.app.*
 import android.content.Context
 import android.content.Intent
-import android.content.pm.PackageManager
-import android.graphics.Color
 import android.graphics.PixelFormat
 import android.hardware.Sensor
 import android.hardware.SensorManager
@@ -65,8 +60,9 @@ class EventService : Service() {
     @SuppressLint("ClickableViewAccessibility")
     override fun onCreate() {
         super.onCreate()
-        var isVibrate = false;
-        var isTransparent = false;
+        var isVibrate = false
+        var isNotification = false
+        var isTransparent = false
         swipePosX = resources.displayMetrics.widthPixels / 2.0f
         swipePosY = resources.displayMetrics.heightPixels / 2.0f
         sensorListener.applyPreference(this)
@@ -97,10 +93,11 @@ class EventService : Service() {
             //getInt("overlay_y", swipePosY.toInt())?.let { params.y = it}
             getBoolean("transparent", false)?.let { isTransparent = it }
             getBoolean("vibration", false)?.let { isVibrate = it }
+            getBoolean("show_notif", true)?.let { isNotification = it }
 
-            getInt("area_width", 50)?.let {area_width = it}
-            getInt("area_height", 500)?.let {area_height = it}
-            getInt("area_vertical_position", 500)?.let {area_vertical_pos = it}
+            getInt("area_width", 50)?.let { area_width = it }
+            getInt("area_height", 500)?.let { area_height = it }
+            getInt("area_vertical_position", 500)?.let { area_vertical_pos = it }
         }
 
         val strId = getString(R.string.channel_id)
@@ -108,15 +105,21 @@ class EventService : Service() {
         val notificationManager =
             getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
         var channel = notificationManager.getNotificationChannel(strId)
+        val intent = Intent(this, MainActivity::class.java).apply {
+            flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+        }
+        val pendingIntent: PendingIntent = PendingIntent.getActivity(this, 0, intent, 0)
         if (channel == null) {
             channel = NotificationChannel(strId, strTitle, NotificationManager.IMPORTANCE_HIGH)
             notificationManager.createNotificationChannel(channel)
         }
         val notification: Notification = NotificationCompat.Builder(this, strId)
             .setSmallIcon(R.drawable.ic_launcher_background)
-            .setContentTitle("Event Generator is working")
-            .setContentText(actionList[0].str(this) + "버튼 기능 작동중...")
-            .setPriority(NotificationCompat.PRIORITY_DEFAULT).build()
+            .setContentTitle(resources.getString(R.string.notif_title))
+            .setContentText(resources.getString(R.string.notif_content))
+            .setAutoCancel(true)
+            .setContentIntent(pendingIntent)
+            .setPriority(NotificationCompat.PRIORITY_MIN).build()
         startForeground(1, notification)
 
         if (isVibrate) {
@@ -130,32 +133,29 @@ class EventService : Service() {
                     btnPressTime = System.currentTimeMillis()
                     changeListenerState(LISTENER_DOUBLE, view == overlayView[1])
                     if (!isTransparent)
-                        view.setBackgroundColor(Color.GREEN);
+                        view.setBackgroundColor(resources.getColor(R.color.colorAccent, theme))
                     floatingView.setImageResource(R.drawable.ic_baseline_done_all_24)
-                    floatingParams.x = motionEvent.rawX.toInt()
-                    floatingParams.y = motionEvent.rawY.toInt() - 250
-                    wm.updateViewLayout(floatingView, floatingParams)
                 } else { //Normal Press
                     btnPressTime = System.currentTimeMillis()
                     changeListenerState(LISTENER_SINGLE, view == overlayView[1])
                     if (!isTransparent)
-                        view.setBackgroundColor(Color.RED);
+                        view.setBackgroundColor(resources.getColor(R.color.overlayClicked, theme))
                     floatingView.setImageResource(R.drawable.ic_baseline_done_24)
-                    floatingParams.x = motionEvent.rawX.toInt()
-                    floatingParams.y = motionEvent.rawY.toInt() - 250
-                    wm.updateViewLayout(floatingView, floatingParams)
                 }
+                floatingParams.x = motionEvent.rawX.toInt()
+                floatingParams.y = motionEvent.rawY.toInt() - 250
+                wm.updateViewLayout(floatingView, floatingParams)
             } else if (motionEvent.action == MotionEvent.ACTION_UP || motionEvent.action == MotionEvent.ACTION_CANCEL) { //||
                 changeListenerState(LISTENER_IDLE)
                 floatingView.setImageResource(0)
                 if (!isTransparent)
-                    view.setBackgroundColor(Color.YELLOW);
+                    view.setBackgroundColor(resources.getColor(R.color.overlayDefault, theme))
             } else if (motionEvent.action == MotionEvent.ACTION_OUTSIDE && TiltAccessibilityService.isGesturing()) {
                 if (TiltAccessibilityService.touchOutside()) {
                     vibrate()
                     changeListenerState(LISTENER_IDLE)
                     if (!isTransparent)
-                        view.setBackgroundColor(Color.YELLOW);
+                        view.setBackgroundColor(resources.getColor(R.color.overlayDefault, theme))
                     floatingView.setImageResource(0)
                 }
             } else if (motionEvent.action == MotionEvent.ACTION_MOVE) {
@@ -174,11 +174,12 @@ class EventService : Service() {
             PixelFormat.TRANSLUCENT
         )
         //HERE
-        params.y = ((resources.displayMetrics.heightPixels - params.height)/ 1000F * area_vertical_pos).toInt()
+        params.y =
+            ((resources.displayMetrics.heightPixels - params.height) / 1000F * area_vertical_pos).toInt()
 
 
         floatingParams = WindowManager.LayoutParams(
-            0, 0,
+            60, 60,
             WindowManager.LayoutParams.TYPE_APPLICATION_OVERLAY,
             WindowManager.LayoutParams.FLAG_NOT_TOUCH_MODAL or WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE or WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE,
             PixelFormat.TRANSLUCENT
@@ -189,10 +190,14 @@ class EventService : Service() {
         val inflate = getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
         for (i in 0..1) {
             overlayView[i] = inflate.inflate(R.layout.view_overlay, null)
-            overlayView[i]?.setOnTouchListener(touchListener);
-            if (!isTransparent) {
-                overlayView[i]?.setBackgroundColor(Color.YELLOW)
-            }
+            overlayView[i]?.setOnTouchListener(touchListener)
+            if (!isTransparent)
+                overlayView[i]?.setBackgroundColor(
+                    resources.getColor(
+                        R.color.overlayDefault,
+                        theme
+                    )
+                )
         }
         floatingView = inflate.inflate(R.layout.singie_image, null) as ImageView
 
@@ -200,7 +205,7 @@ class EventService : Service() {
         wm.addView(overlayView[0], params) // 윈도우에 layout 을 추가 한다.
         params.gravity = Gravity.END or Gravity.TOP
         params.flags = params.flags or WindowManager.LayoutParams.FLAG_WATCH_OUTSIDE_TOUCH
-        floatingParams.gravity =  Gravity.START or Gravity.TOP
+        floatingParams.gravity = Gravity.START or Gravity.TOP
         wm.addView(overlayView[1], params)
         wm.addView(floatingView, floatingParams)
     }

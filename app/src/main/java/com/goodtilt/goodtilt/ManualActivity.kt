@@ -6,8 +6,6 @@ import android.os.Bundle
 import android.view.View
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
-import androidx.fragment.app.FragmentManager
-import androidx.fragment.app.FragmentStatePagerAdapter
 import androidx.preference.PreferenceManager
 import androidx.viewpager2.adapter.FragmentStateAdapter
 import com.goodtilt.goodtilt.fragment.*
@@ -21,19 +19,19 @@ class ManualActivity : AppCompatActivity() {
 
     val skipListener = View.OnClickListener {
         skipGuide = true
-        manualPager.setCurrentItem(4, true)
+        viewPager.setCurrentItem(4, true)
     }
 
     val noneSkipListener = View.OnClickListener {
         skipGuide = false
-        manualPager.setCurrentItem(3, true)
+        viewPager.setCurrentItem(3, true)
     }
 
 
     val nextListener = View.OnClickListener {
-        val next = manualPager.currentItem + 1
-        if (next < manualPager.adapter?.itemCount!!)
-            manualPager.setCurrentItem(next, true)
+        val next = viewPager.currentItem + 1
+        if (next < viewPager.adapter?.itemCount!!)
+            viewPager.setCurrentItem(next, true)
         else {
             PreferenceManager.getDefaultSharedPreferences(this).edit().putBoolean("configured",true).commit()
             startActivity(
@@ -64,11 +62,11 @@ class ManualActivity : AppCompatActivity() {
 
 
     override fun onBackPressed() {
-        val prev = manualPager.currentItem - 1
+        val prev = viewPager.currentItem - 1
         if (prev == 3 && skipGuide)
-            manualPager.setCurrentItem(prev - 1, true)
+            viewPager.setCurrentItem(prev - 1, true)
         else if (prev >= 0)
-            manualPager.setCurrentItem(prev, true)
+            viewPager.setCurrentItem(prev, true)
         else
             super.onBackPressed()
     }
@@ -80,7 +78,7 @@ class ManualActivity : AppCompatActivity() {
         PreferenceManager.getDefaultSharedPreferences(this).apply {
             //getString("tilt_left", "NONE")?.let { actionList[0] = KeyAction.valueOf(it) }
         }
-        manualPager.isUserInputEnabled = false
-        manualPager.adapter = ManualAdapter(this)
+        viewPager.isUserInputEnabled = false
+        viewPager.adapter = ManualAdapter(this)
     }
 }
