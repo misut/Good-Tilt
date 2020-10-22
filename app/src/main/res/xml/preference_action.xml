@@ -5,14 +5,14 @@
         android:title="@string/setting_action"
         app:iconSpaceReserved="false">
         <ListPreference
-            android:defaultValue="NONE"
+            android:defaultValue="BACK"
             android:entries="@array/action_string"
             android:entryValues="@array/action_key"
             android:key="tilt_left"
             android:title="@string/in_tilt_action"
             app:iconSpaceReserved="false" />
         <ListPreference
-            android:defaultValue="NONE"
+            android:defaultValue="RECENT"
             android:entries="@array/action_string"
             android:entryValues="@array/action_key"
             android:key="tilt_right"
@@ -71,7 +71,7 @@
         android:title="@string/setting_general"
         app:iconSpaceReserved="false">
         <SwitchPreference
-            android:defaultValue="false"
+            android:defaultValue="true"
             android:key="vibration"
             android:title="@string/vibration"
             app:iconSpaceReserved="false"/>

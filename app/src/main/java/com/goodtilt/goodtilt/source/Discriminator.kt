@@ -13,7 +13,7 @@ enum class DeviceStatus(val actionIndex: Int) {
 }
 
 class Discriminator(var u: Float, var d: Float, var i: Float, var o: Float, var inner: Float, var outer: Float, var r1: Float, var r2: Float, var r3: Float, var r4: Float) {
-    constructor() : this(0.6f,0.5f, 0.6f, 0.5f, 10.0f,15.0f, (PI/4f).toFloat(), (3*PI/4f).toFloat(), (5*PI/4f).toFloat(), (7*PI/4f).toFloat()) {
+    constructor() : this(0.7f,0.4f, 0.7f, 0.4f, 10.0f,15.0f, (PI/4f).toFloat(), (3*PI/4f).toFloat(), (5*PI/4f).toFloat(), (7*PI/4f).toFloat()) {
         this.t1 = tan(r1).toFloat()
         this.t2 = tan(r2).toFloat()
         this.t3 = tan(r3).toFloat()
@@ -64,7 +64,7 @@ class Discriminator(var u: Float, var d: Float, var i: Float, var o: Float, var 
                 if(res >= outer) {
                     if(pos[0] * (if (rightHand) 1F else -1F) > 0) {
                         if(cur in t4..t1)
-                            status = DeviceStatus.TILT_OUT
+                            status = DeviceStatus.TILT_IN
                         else if(cur > t1)
                             status = DeviceStatus.TILT_DOWN
                         else if(cur < t4)
@@ -72,7 +72,7 @@ class Discriminator(var u: Float, var d: Float, var i: Float, var o: Float, var 
                     }
                     else {
                         if(cur in t2..t3)
-                            status = DeviceStatus.TILT_IN
+                            status = DeviceStatus.TILT_OUT
                         else if(cur > t3)
                             status = DeviceStatus.TILT_UP
                         else if(cur < t2)

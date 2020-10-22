@@ -28,7 +28,7 @@
     <string name="setting_sensitivity">민감도 설정</string>
     <string name="setting_area">터치 영역 설정</string>
 
-    <string name="area_transparent">터치 영역 투명</string>
+    <string name="area_invisible">터치 영역 투명</string>
     <string name="area_width">터치 영역 너비</string>
     <string name="area_height">터치 영역 높이</string>
     <string name="area_vertical_position">터치 영역 위치</string>
@@ -60,7 +60,7 @@
     <string name="btn_request">요청하기</string>
     <string name="btn_start">자동 설정</string>
 
-    <string name="notif_title">Good-Tilt가 작동중입니다.</string>
+    <string name="notif_title">Good Tilt가 작동중입니다.</string>
     <string name="notif_content">설정을 원하면 탭해주세요.</string>
 
     <string name="tilt_config_in">몸 쪽으로 편한 만큼 기울인 뒤 화면 가장자리에서 손을 떼 주세요.</string>
@@ -69,23 +69,25 @@
     <string name="tilt_config_down">아래쪽으로 편한 만큼 기울인 뒤 화면 가장자리에서 손을 떼 주세요</string>
 
     <string name="manual_hello">Good Tilt에 오신걸 환영합니다.</string>
-    <string name="manual_hello_info">Good Tilt는 휴대폰을 기울여 원하는 제스처를 수행하게 해주는 제스처 앱입니다. 화면 가장자리를 누르고 휴대폰을 기울이면 각도에 따라 원하는 동작을 실행할 수 있습니다.</string>
+    <string name="manual_hello_info">Good Tilt는 사용자가 스마트폰을 기울이는 동작을 인식해 한 손 조작을 편하게 만들어주는 서비스입니다. \n\n화면 가장자리를 터치한 상태로 스마트폰을 기울이면 원하는 동작을 실행할 수 있습니다.</string>
     <string name="manual_guide">사용 방법</string>
-    <string name="manual_guide_need">사용 방법에 대한 설명을 듣겠습니까?</string>
-    <string name="manual_guide_step1">화면 가장자리의 부분을 터치해주세요.\n 실제 사용중에는 가장자리 영역이 보이지 않습니다.</string>
-    <string name="manual_guide_step2">녹색 원이 원 밖으로 나갈 만큼 휴대폰을 상/하/좌/우로 기울여주세요. 실제 사용 중에는 녹색 원과 영역은 보이지 않습니다.</string>
-    <string name="manual_guide_step3">지정된 제스처 발생 (상단바 내리기) 성공했습니다. 터치를 유지한 채로 안쪽 원으로 들어왔다 다시 나가면 제스처가 다시 실행됩니다.</string>
-    <string name="manual_sens_info">휴대폰을 기울여주세요</string>
-    <string name="manual_area_info">기능을 사용하기 위해서는 휴대폰 가장자리를 엄지손가락 등으로 터치하면서 휴대폰을 기울여야 합니다. 터치 영역이 너무 넓으면 다른 앱 사용에 방해가 되며, 너무 좁을 경우 터치 인식을 제대로 받지 못할 수 있습니다.</string>
+    <string name="manual_guide_need">사용 방법에 대한 설명을 들으시려면 아래의 다음 버튼을 눌러주세요.</string>
+    <string name="manual_guide_step1">화면 가장자리 부분을 터치해주세요. \n(실제 사용중에는 가장자리 영역이 보이지 않습니다.)</string>
+    <string name="manual_guide_step2">녹색 원이 바깥 원 밖으로 나갈 만큼 스마트폰을 기울여주세요. \n(실제 사용 중에는 녹색 원과 영역은 보이지 않습니다.)</string>
+    <string name="manual_guide_step3">상단바 내리기 액션이 발생했습니다. \n(상단바 내리기 액션은 예시입니다. 이후 원하는 액션으로 재설정 가능합니다.)</string>
+
+    <string name="manual_sens_info">스마트폰을 기울여주세요</string>
+
+    <string name="manual_area_info">Good-Tilt를 사용하기 위해서는 화면 가장자리에 위치한 터치 영역이 필요합니다. \n\n터치 영역이 너무 넓으면 다른 앱 사용에 방해가 되며, \n너무 좁을 경우 터치에 어려움이 생길 수 있습니다. \n(튜토리얼 이후에도 다시 설정할 수 있습니다.)</string>
 
     <string name="manual_permission">권한 설정</string>
-    <string name="manual_permission_info">Good Tilt 사용을 위해서 아래와 같은 권한을 필요로 합니다.</string>
+    <string name="manual_permission_info">원할한 서비스 사용을 위해서 아래의 권한이 필요합니다. \n요청하기 버튼을 눌러 권한을 허용해주세요.</string>
     <string name="manual_permission_overlay">다른 앱 위에 표시 권한</string>
-    <string name="manual_permission_access">접근성 권한</string>
+    <string name="manual_permission_access">접근성 권한 \n(설치된 서비스에서 Good-Tilt를 선택해주세요)</string>
 
-    <string name="toast_overlay">오버레이 권한을 허용해주세요</string>
+    <string name="toast_overlay">다른 앱 위에 표시 권한을 허용해주세요</string>
     <string name="toast_access">접근성 권한을 허용해주세요</string>
-    <string name="cannot_use">사용 중에는 설정할 수 없습니다.</string>
+    <string name="cannot_use">서비스 사용 중에는 설정할 수 없습니다.</string>
 
     <string name="switch_using">사용 중</string>
     <string name="switch_not_using">사용 중지</string>

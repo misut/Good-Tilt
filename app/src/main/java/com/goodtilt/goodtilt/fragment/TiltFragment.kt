@@ -255,11 +255,11 @@ class TiltFragment(private val isManual: Boolean = true) : Fragment() {
         preference.apply {
             tiltView2.updateSetting(
                 getInt("upside_sensitivity", 50) / 100.0f + 0.2f,
-                getInt("downside_sensitivity", 50) / 100.0f + 0.2f,
+                getInt("downside_sensitivity", 20) / 100.0f + 0.2f,
                 getInt("inside_sensitivity", 50) / 100.0f + 0.2f,
-                getInt("outside_sensitivity", 50) / 100.0f + 0.2f,
-                getInt("min_angle", 10).toFloat(),
-                getInt("max_angle", 20).toFloat(),
+                getInt("outside_sensitivity", 20) / 100.0f + 0.2f,
+                getInt("min_angle", 8).toFloat(),
+                getInt("max_angle", 12).toFloat(),
                 ((0.0f + getInt("tan_quad_1", 45)) * D2R),
                 ((90.0f + getInt("tan_quad_2", 45)) * D2R),
                 ((180.0f + getInt("tan_quad_3", 45)) * D2R),

@@ -25,6 +25,6 @@
     <SwitchPreference
         android:defaultValue="true"
         android:key="transparent"
-        android:title="@string/area_transparent"
+        android:title="@string/area_invisible"
         app:iconSpaceReserved="false" />
 </PreferenceScreen>
