@@ -27,7 +27,7 @@ class IntroActivity : AppCompatActivity() {
         setContentView(R.layout.activity_intro)
 
         PreferenceManager.getDefaultSharedPreferences(this).apply {
-            getBoolean("configured", false)?.let { configured = it }
+            configured = getBoolean("configured", false)
         }
 
         if (configured) {

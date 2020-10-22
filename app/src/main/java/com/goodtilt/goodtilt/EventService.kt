@@ -61,7 +61,6 @@ class EventService : Service() {
     override fun onCreate() {
         super.onCreate()
         var isVibrate = false
-        var isNotification = false
         var isTransparent = false
         swipePosX = resources.displayMetrics.widthPixels / 2.0f
         swipePosY = resources.displayMetrics.heightPixels / 2.0f
@@ -91,13 +90,12 @@ class EventService : Service() {
             getString("app_swipe_tilt_down", "")?.let { appList[7] = it }
             //getInt("overlay_x", swipePosX.toInt())?.let { params.x = it}
             //getInt("overlay_y", swipePosY.toInt())?.let { params.y = it}
-            getBoolean("transparent", false)?.let { isTransparent = it }
-            getBoolean("vibration", false)?.let { isVibrate = it }
-            getBoolean("show_notif", true)?.let { isNotification = it }
+            getBoolean("transparent", false).let { isTransparent = it }
+            getBoolean("vibration", false).let { isVibrate = it }
 
-            getInt("area_width", 50)?.let { area_width = it }
-            getInt("area_height", 500)?.let { area_height = it }
-            getInt("area_vertical_position", 500)?.let { area_vertical_pos = it }
+            getInt("area_width", 50).let { area_width = it }
+            getInt("area_height", 500).let { area_height = it }
+            getInt("area_vertical_position", 500).let { area_vertical_pos = it }
         }
 
         val strId = getString(R.string.channel_id)
@@ -114,7 +112,7 @@ class EventService : Service() {
             notificationManager.createNotificationChannel(channel)
         }
         val notification: Notification = NotificationCompat.Builder(this, strId)
-            .setSmallIcon(R.drawable.ic_launcher_background)
+            .setSmallIcon(R.mipmap.good_tilt)
             .setContentTitle(resources.getString(R.string.notif_title))
             .setContentText(resources.getString(R.string.notif_content))
             .setAutoCancel(true)

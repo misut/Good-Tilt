@@ -45,7 +45,7 @@ class AreaFragment(private val isManual : Boolean = true) : Fragment(){
             }
         }
         preference = PreferenceManager.getDefaultSharedPreferences(inflater.context)
-        listener = SharedPreferences.OnSharedPreferenceChangeListener{pref, string ->
+        listener = SharedPreferences.OnSharedPreferenceChangeListener{_, _ ->
             updateOverlay()
         }
         return rootView

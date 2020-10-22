@@ -40,7 +40,7 @@ class MisutListener(
                 if(!activated) {
                     activated = true
                     startTime = currentTime
-                    action?.invoke(status.actionIndex)
+                    action.invoke(status.actionIndex)
                 }
             }
             DeviceStatus.STOPOVER -> {
@@ -60,7 +60,7 @@ class MisutListener(
                 if(!activated) {
                     activated = true
                     startTime = currentTime
-                    action?.invoke(status.actionIndex+4)
+                    action.invoke(status.actionIndex+4)
                 }
             }
             DeviceStatus.STOPOVER -> {

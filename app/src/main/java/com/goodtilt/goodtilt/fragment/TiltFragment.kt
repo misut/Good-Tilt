@@ -47,7 +47,7 @@ class TiltFragment(private val isManual: Boolean = true) : Fragment() {
         val rootView = inflater.inflate(R.layout.frag_tilt, container, false)
         sensorManager = inflater.context.getSystemService(Context.SENSOR_SERVICE) as SensorManager
         //sensorListener.applyPreference(inflater.context)
-        listener = SharedPreferences.OnSharedPreferenceChangeListener { pref, string ->
+        listener = SharedPreferences.OnSharedPreferenceChangeListener { _, _ ->
             updateTiltView()
         }
         preference = PreferenceManager.getDefaultSharedPreferences(context)
@@ -83,6 +83,7 @@ class TiltFragment(private val isManual: Boolean = true) : Fragment() {
                                 DeviceStatus.TILT_OUT -> configStage = DeviceStatus.TILT_UP
                                 DeviceStatus.TILT_UP -> configStage = DeviceStatus.TILT_DOWN
                                 DeviceStatus.TILT_DOWN -> configStage = DeviceStatus.IDLE
+                                else -> {}
                             }
                             updateConfigView()
                             configCount = 3
@@ -96,13 +97,12 @@ class TiltFragment(private val isManual: Boolean = true) : Fragment() {
             }
             overlayLeft.setOnTouchListener(touchListener)
             overlayRight.setOnTouchListener(touchListener)
-            autoConfig.setOnClickListener { view ->
+            autoConfig.setOnClickListener {
                 autoConfig.visibility = View.GONE
                 configStage = DeviceStatus.TILT_IN
                 configCount = 3
                 updateConfigView(this)
                 updateConfigCount(this)
-                true
             }
             val adjustListener = View.OnTouchListener { view, motionEvent ->
                 if (motionEvent.action == MotionEvent.ACTION_DOWN)
@@ -115,7 +115,7 @@ class TiltFragment(private val isManual: Boolean = true) : Fragment() {
                 it?.setOnTouchListener(adjustListener)
             }
 
-            tiltView2.setOnTouchListener { view, motionEvent ->
+            tiltView2.setOnTouchListener { _, motionEvent ->
                 if (motionEvent.action == MotionEvent.ACTION_DOWN || motionEvent.action == MotionEvent.ACTION_MOVE) {
                     for (i in 1..4) {
                         if (adjustViews[i - 1]?.tag as Int == 1) {
@@ -157,7 +157,7 @@ class TiltFragment(private val isManual: Boolean = true) : Fragment() {
         return rootView
     }
 
-    fun updateTanAdjust(dim: Int = 0) {
+    private fun updateTanAdjust(dim: Int = 0) {
         var range: IntRange
         if (dim == 0)
             range = 1..4
@@ -175,41 +175,43 @@ class TiltFragment(private val isManual: Boolean = true) : Fragment() {
         }
     }
 
-    fun updateConfigCount(v: View? = view) {
+    private fun updateConfigCount(v: View? = view) {
         v?.tiltCount?.setText(configCount.toString())
     }
 
-    fun updateArrow(v: View? = view) {
-        if (configStage == DeviceStatus.TILT_UP)
-            v?.arrowUp?.visibility = View.VISIBLE
-        else
-            v?.arrowUp?.visibility = View.INVISIBLE
-        if (configStage == DeviceStatus.TILT_DOWN)
-            v?.arrowDown?.visibility = View.VISIBLE
-        else
-            v?.arrowDown?.visibility = View.INVISIBLE
-        if (v?.tiltView2?.rightHand!!) {
-            if (configStage == DeviceStatus.TILT_IN)
-                v?.arrowRight?.visibility = View.VISIBLE
+    private fun updateArrow(v: View? = view) {
+        v?.apply{
+            if (configStage == DeviceStatus.TILT_UP)
+                arrowUp.visibility = View.VISIBLE
             else
-                v?.arrowRight?.visibility = View.INVISIBLE
-            if (configStage == DeviceStatus.TILT_OUT)
-                v?.arrowLeft?.visibility = View.VISIBLE
+                arrowUp.visibility = View.INVISIBLE
+            if (configStage == DeviceStatus.TILT_DOWN)
+                arrowDown.visibility = View.VISIBLE
             else
-                v?.arrowLeft?.visibility = View.INVISIBLE
-        } else {
-            if (configStage == DeviceStatus.TILT_IN)
-                v?.arrowLeft?.visibility = View.VISIBLE
-            else
-                v?.arrowLeft?.visibility = View.INVISIBLE
-            if (configStage == DeviceStatus.TILT_OUT)
-                v?.arrowRight?.visibility = View.VISIBLE
-            else
-                v?.arrowRight?.visibility = View.INVISIBLE
+                arrowDown.visibility = View.INVISIBLE
+            if (tiltView2.rightHand) {
+                if (configStage == DeviceStatus.TILT_IN)
+                    arrowRight.visibility = View.VISIBLE
+                else
+                    arrowRight.visibility = View.INVISIBLE
+                if (configStage == DeviceStatus.TILT_OUT)
+                    arrowLeft.visibility = View.VISIBLE
+                else
+                    arrowLeft.visibility = View.INVISIBLE
+            } else {
+                if (configStage == DeviceStatus.TILT_IN)
+                    arrowLeft.visibility = View.VISIBLE
+                else
+                    arrowLeft.visibility = View.INVISIBLE
+                if (configStage == DeviceStatus.TILT_OUT)
+                    arrowRight.visibility = View.VISIBLE
+                else
+                    arrowRight.visibility = View.INVISIBLE
+            }
         }
     }
 
-    fun updateConfigView(v: View? = view) {
+    private fun updateConfigView(v: View? = view) {
         when (configStage) {
             DeviceStatus.IDLE -> {
                 v?.tiltCount?.alpha = 0F
@@ -236,11 +238,12 @@ class TiltFragment(private val isManual: Boolean = true) : Fragment() {
                 v?.autoConfig?.visibility = View.INVISIBLE
                 v?.tiltInfo?.setText(resources.getString(R.string.tilt_config_down))
             }
+            else -> {}
         }
         updateArrow(v)
     }
 
-    fun printResult(evt: SensorEvent) {
+    private fun printResult(evt: SensorEvent) {
         when (evt.sensor.type) {
             Sensor.TYPE_ROTATION_VECTOR -> {
                 tiltView2.onSensorEvent(evt)
@@ -248,7 +251,7 @@ class TiltFragment(private val isManual: Boolean = true) : Fragment() {
         }
     }
 
-    fun updateTiltView() {
+    private fun updateTiltView() {
         preference.apply {
             tiltView2.updateSetting(
                 getInt("upside_sensitivity", 50) / 100.0f + 0.2f,
@@ -281,7 +284,6 @@ class TiltFragment(private val isManual: Boolean = true) : Fragment() {
                 alpha = 1F
                 animate().alpha(0f).setDuration(1500L).start()
             }
-
         }
     }
 
@@ -299,7 +301,7 @@ class TiltFragment(private val isManual: Boolean = true) : Fragment() {
         super.onResume()
     }
 
-    fun changeListenerState(state: Boolean) {
+    private fun changeListenerState(state: Boolean) {
         if (state) {
             //자이로스코프, 회전벡터 등록
             val sensorRott = sensorManager.getDefaultSensor(Sensor.TYPE_ROTATION_VECTOR)

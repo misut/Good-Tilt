@@ -36,7 +36,7 @@ class PrefActionFragment() : PreferenceFragmentCompat(){
     inner class PrefProvider : Preference.SummaryProvider<ListPreference> {
         override fun provideSummary(preference: ListPreference?): CharSequence {
             if (preference?.value?.equals("LAUNCH_APP_CONFIG")!!){
-                val packageName = preferenceManager.sharedPreferences.getString("app_" + preference?.key, "")!!
+                val packageName = preferenceManager.sharedPreferences.getString("app_" + preference?.key, "") as String
                 context?.packageManager?.apply {
                     val info = getApplicationInfo(packageName, PackageManager.GET_META_DATA)
                     val name = getApplicationLabel(info)
@@ -60,7 +60,7 @@ class PrefActionFragment() : PreferenceFragmentCompat(){
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        val pm = inflater?.context.packageManager
+        val pm = inflater.context.packageManager
         val mainIntent = Intent(Intent.ACTION_MAIN, null)
         mainIntent.addCategory(Intent.CATEGORY_LAUNCHER);
         val pkgAppsList = activity?.packageManager?.queryIntentActivities(
@@ -90,13 +90,13 @@ class PrefActionFragment() : PreferenceFragmentCompat(){
                 }
                 holder.title.setText(pkgAppsList.get(position).loadLabel(pm).toString())
                 holder.icon.setImageDrawable(pkgAppsList.get(position).loadIcon(pm))
-                return convertView!!
+                return convertView
             }
         }
 
 
         listener = SharedPreferences.OnSharedPreferenceChangeListener{ pref, key ->
-            if (key in actionString && pref.getString(key, "NONE").equals("LAUNCH_APP")!!) {
+            if (key in actionString && pref.getString(key, "NONE").equals("LAUNCH_APP")) {
                 pref.edit().putString(key, "LAUNCH_APP_CONFIG").commit()
                 AlertDialog.Builder(context).
                 setTitle(resources.getString(R.string.LAUNCH_APP_CONFIG)).
