@@ -79,6 +79,7 @@
         app:layout_constraintEnd_toEndOf="parent">
 
         <fragment
+            android:id = "@+id/sensitivityFrag"
             android:name="com.goodtilt.goodtilt.fragment.PrefSensitivityFragment"
             android:layout_width="match_parent"
             android:layout_height="match_parent" />
@@ -87,7 +88,7 @@
 
     <TextView
         android:id="@+id/tiltInfo"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:text="@string/manual_sens_info"
         android:textSize="@dimen/text_small"

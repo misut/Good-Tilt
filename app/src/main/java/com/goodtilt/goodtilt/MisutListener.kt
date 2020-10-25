@@ -71,12 +71,10 @@ class MisutListener(
     fun applyPreference(context : Context){
         PreferenceManager.getDefaultSharedPreferences(context).apply {
             discriminator.updateSetting(
-                getInt("upside_sensitivity", 50)/100.0f+0.2f,
-                getInt("downside_sensitivity", 20)/100.0f+0.2f,
-                getInt("inside_sensitivity", 50)/100.0f+0.2f,
-                getInt("outside_sensitivity", 20)/100.0f+0.2f,
-                getInt("min_angle", 8).toFloat(),
-                getInt("max_angle", 12).toFloat(),
+                getInt("upside_sensitivity", 95)/100.0f+0.8f,
+                getInt("downside_sensitivity", 20)/100.0f+0.8f,
+                getInt("inside_sensitivity", 95)/100.0f+0.8f,
+                getInt("outside_sensitivity", 20)/100.0f+0.8f,
                 ((0.0f + getInt("tan_quad_1", 45)) * D2R).toFloat(),
                 ((90.0f + getInt("tan_quad_2", 45)) * D2R).toFloat(),
                 ((180.0f + getInt("tan_quad_3", 45)) * D2R).toFloat(),
@@ -89,10 +87,10 @@ class MisutListener(
     fun updatePreference(context: Context, pos: FloatArray, status: DeviceStatus) {
         discriminator.feed(pos, status, rightHand)
         PreferenceManager.getDefaultSharedPreferences(context).edit().apply () {
-            putInt("upside_sensitivity", (discriminator.u*100.0f).toInt()-20)
-            putInt("downside_sensitivity", (discriminator.d*100.0f).toInt()-20)
-            putInt("inside_sensitivity", (discriminator.i*100.0f).toInt()-20)
-            putInt("outside_sensitivity", (discriminator.o*100.0f).toInt()-20)
+            putInt("upside_sensitivity", (discriminator.u*100.0f).toInt()-80)
+            putInt("downside_sensitivity", (discriminator.d*100.0f).toInt()-80)
+            putInt("inside_sensitivity", (discriminator.i*100.0f).toInt()-80)
+            putInt("outside_sensitivity", (discriminator.o*100.0f).toInt()-80)
             commit()
         }
 

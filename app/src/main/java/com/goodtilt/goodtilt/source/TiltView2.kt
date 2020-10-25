@@ -26,6 +26,7 @@ class TiltView2 : View {
 
     private val greenPaint: Paint = Paint()
     private val blackPaint: Paint = Paint()
+    private val outerPaint: Paint = Paint()
     private val sampling = 1000
     private var outerPath = Path()
     private var innerPath = Path()
@@ -53,8 +54,11 @@ class TiltView2 : View {
     var rightHand = true
 
     init {
-        greenPaint.color = Color.GREEN
+        greenPaint.color = Color.RED
         blackPaint.style = Paint.Style.STROKE
+        blackPaint.strokeWidth = 3F
+        outerPaint.color = Color.rgb(169,245,188)
+        outerPaint.style = Paint.Style.FILL
     }
 
     // x*pos[0]*pos[0]+y*pos[1]*pos[1] = r * r
@@ -120,13 +124,12 @@ class TiltView2 : View {
         tanPath.offset(centerX, centerY)
     }
 
-    fun updateSetting(u: Float, d: Float, i:Float, o: Float, inn: Float, out: Float, r1: Float, r2: Float, r3: Float, r4: Float) {
-        uCoeff = u
-        dCoeff = d
-        iCoeff = i
-        oCoeff = o
-        inner = inn
-        outer = out
+    fun updateSetting(u: Float, d: Float, i:Float, o: Float, r1: Float, r2: Float, r3: Float, r4: Float) {
+        uCoeff = u * u
+        dCoeff = d * d
+        iCoeff = i * i
+        oCoeff = o * o
+        outer = 30F
         rad1 = r1
         rad2 = r2
         rad3 = r3
@@ -145,13 +148,14 @@ class TiltView2 : View {
 
     override fun onDraw(canvas: Canvas?) {
         //canvas?.drawCircle(cX, cY, 100f, blackPaint)
-        canvas?.drawCircle(xCoord + centerX, yCoord + centerY, 10f, greenPaint)
         //canvas?.drawLine(centerX - 100, centerY, centerX + 100, centerY, blackPaint)
         //canvas?.drawLine(centerX , centerY - 100, centerX , centerY + 100, blackPaint)
 
+        canvas?.drawPath(outerPath, outerPaint)
         canvas?.drawPath(outerPath, blackPaint)
-        canvas?.drawPath(innerPath, blackPaint)
+        //canvas?.drawPath(innerPath, blackPaint)
         canvas?.drawPath(tanPath, blackPaint)
+        canvas?.drawCircle(xCoord + centerX, yCoord + centerY, 10f, greenPaint)
     }
 
     fun initPosition(){

@@ -13,4 +13,9 @@ class PrefSensitivityFragment() : PreferenceFragmentCompat() {
     override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {
         setPreferencesFromResource(R.xml.preference_sensitivity, rootKey)
     }
+
+    fun updatePreference(){
+        setPreferenceScreen(null);
+        addPreferencesFromResource(R.xml.preference_sensitivity)
+    }
 }

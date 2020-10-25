@@ -73,7 +73,7 @@
     <string name="manual_guide">사용 방법</string>
     <string name="manual_guide_need">사용 방법에 대한 설명을 들으시려면 아래의 다음 버튼을 눌러주세요.</string>
     <string name="manual_guide_step1">화면 가장자리 부분을 터치해주세요. \n(실제 사용중에는 가장자리 영역이 보이지 않습니다.)</string>
-    <string name="manual_guide_step2">녹색 원이 바깥 원 밖으로 나갈 만큼 스마트폰을 기울여주세요. \n(실제 사용 중에는 녹색 원과 영역은 보이지 않습니다.)</string>
+    <string name="manual_guide_step2">빨간색 원이 색칠된 영역 밖으로 나갈 만큼 스마트폰을 기울여주세요. \n(실제 사용 중에는 원과 영역은 보이지 않습니다.)</string>
     <string name="manual_guide_step3">상단바 내리기 액션이 발생했습니다. \n(상단바 내리기 액션은 예시입니다. 이후 원하는 액션으로 재설정 가능합니다.)</string>
 
     <string name="manual_sens_info">스마트폰을 기울여주세요</string>

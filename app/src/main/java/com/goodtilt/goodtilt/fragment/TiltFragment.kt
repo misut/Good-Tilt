@@ -59,6 +59,7 @@ class TiltFragment(private val isManual: Boolean = true) : Fragment() {
             adjustViews[2] = adjustUL
             adjustViews[3] = adjustUR
 
+
             val touchListener = View.OnTouchListener { view, motionEvent ->
                 if (motionEvent.action == MotionEvent.ACTION_DOWN) {
                     tiltView2.rightHand = (view == overlayRight)
@@ -90,6 +91,7 @@ class TiltFragment(private val isManual: Boolean = true) : Fragment() {
                         }
                         updateConfigCount()
                         tiltView2.updatePath()
+                        childFragmentManager.fragments.forEach { (it as PrefSensitivityFragment).updatePreference() }
                     }
                     changeListenerState(false)
                 }
@@ -130,7 +132,7 @@ class TiltFragment(private val isManual: Boolean = true) : Fragment() {
                                 tan
                             ).apply()
                         }
-                        //updateTanAdjust(i)
+                        updateTanAdjust(i)
                         context?.let { sensorListener.applyPreference(it) }
                     }
                 } else if (motionEvent.action == MotionEvent.ACTION_CANCEL || motionEvent.action == MotionEvent.ACTION_UP) {
@@ -153,6 +155,7 @@ class TiltFragment(private val isManual: Boolean = true) : Fragment() {
             }
             updateConfigView(this)
             updateConfigCount(this)
+
         }
         return rootView
     }
@@ -254,12 +257,10 @@ class TiltFragment(private val isManual: Boolean = true) : Fragment() {
     private fun updateTiltView() {
         preference.apply {
             tiltView2.updateSetting(
-                getInt("upside_sensitivity", 50) / 100.0f + 0.2f,
-                getInt("downside_sensitivity", 20) / 100.0f + 0.2f,
-                getInt("inside_sensitivity", 50) / 100.0f + 0.2f,
-                getInt("outside_sensitivity", 20) / 100.0f + 0.2f,
-                getInt("min_angle", 8).toFloat(),
-                getInt("max_angle", 12).toFloat(),
+                getInt("upside_sensitivity", 95) / 100.0f + 0.8f,
+                getInt("downside_sensitivity", 20) / 100.0f + 0.8f,
+                getInt("inside_sensitivity", 95) / 100.0f + 0.8f,
+                getInt("outside_sensitivity", 20) / 100.0f + 0.8f,
                 ((0.0f + getInt("tan_quad_1", 45)) * D2R),
                 ((90.0f + getInt("tan_quad_2", 45)) * D2R),
                 ((180.0f + getInt("tan_quad_3", 45)) * D2R),
@@ -268,7 +269,6 @@ class TiltFragment(private val isManual: Boolean = true) : Fragment() {
             overlayLeft.updateFromPreference(this)
             overlayRight.updateFromPreference(this)
         }
-        updateTanAdjust()
         context?.let { sensorListener.applyPreference(it) }
     }
 
@@ -295,6 +295,7 @@ class TiltFragment(private val isManual: Boolean = true) : Fragment() {
 
     override fun onResume() {
         updateTiltView()
+        updateTanAdjust()
         overlayLeft.updateFromPreference(preference)
         overlayRight.updateFromPreference(preference)
         preference.registerOnSharedPreferenceChangeListener(listener)

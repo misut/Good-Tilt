@@ -55,8 +55,8 @@
     <string name="delay">Delay</string>
     <string name="show_notif">Show Notification</string>
 
-    <string name="btn_next">Next</string>
-    <string name="btn_prev">Previous</string>
+    <string name="btn_next">Next page</string>
+    <string name="btn_prev">Previous page</string>
     <string name="btn_skip">Skip</string>
     <string name="btn_request">Request</string>
     <string name="btn_start">Automatic Configuration</string>
@@ -74,7 +74,7 @@
     <string name="manual_guide">Instructions</string>
     <string name="manual_guide_need">If you need instructions on how to use Good-Tilt, press Next button below.</string>
     <string name="manual_guide_step1">Touch the green area on the edge.\n(Touch area is invisible while actually using)</string>
-    <string name="manual_guide_step2">Tilt your phone until the green dot goes outside the circle. \n(Green dot is invisible while actually using)</string>
+    <string name="manual_guide_step2">Tilt your phone until the red dot goes outside the green area. \n(dot is invisible while actually using)</string>
     <string name="manual_guide_step3">Notification open action occurred. \n(Notification open action is an example. You can set any actions later)</string>
 
     <string name="manual_sens_info">Tilt your phone</string>

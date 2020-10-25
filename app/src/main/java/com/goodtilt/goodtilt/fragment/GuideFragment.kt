@@ -37,7 +37,6 @@ class GuideFragment : Fragment() {
     private val sensorListener = MisutListener(::printResult, ::printAction)
     private lateinit var sensorManager: SensorManager
     private var guideStep = 0
-    private var actionCount = 0
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -51,12 +50,10 @@ class GuideFragment : Fragment() {
         PreferenceManager.getDefaultSharedPreferences(context).apply {
             val D2R = PI.toFloat() / 180.0f
             rootView.tiltView2.updateSetting(
-                getInt("upside_sensitivity", 50) / 100.0f + 0.2f,
-                getInt("downside_sensitivity", 20) / 100.0f + 0.2f,
-                getInt("inside_sensitivity", 50) / 100.0f + 0.2f,
-                getInt("outside_sensitivity", 20) / 100.0f + 0.2f,
-                getInt("min_angle", 8).toFloat(),
-                getInt("max_angle", 12).toFloat(),
+                getInt("upside_sensitivity", 95) / 100.0f + 0.8f,
+                getInt("downside_sensitivity", 20) / 100.0f + 0.8f,
+                getInt("inside_sensitivity", 95) / 100.0f + 0.8f,
+                getInt("outside_sensitivity", 20) / 100.0f + 0.8f,
                 (0.0f + getInt("tan_quad_1", 45)) * D2R,
                 (90.0f + getInt("tan_quad_2", 45)) * D2R,
                 (180.0f + getInt("tan_quad_3", 45)) * D2R,
@@ -69,7 +66,6 @@ class GuideFragment : Fragment() {
 
             val touchListener = View.OnTouchListener { view, motionEvent ->
                 if (motionEvent.action == MotionEvent.ACTION_DOWN) {
-                    actionCount = 0
                     if (guideStep == 0) {
                         guideStep = 1
                         textView3.visibility = View.VISIBLE
@@ -114,13 +110,10 @@ class GuideFragment : Fragment() {
         val vibrator = activity?.getSystemService(Context.VIBRATOR_SERVICE) as Vibrator
         val vibrateEffect = VibrationEffect.createOneShot(100, 50)
         vibrator.vibrate(vibrateEffect)
-        actionCount += 1
         if (guideStep == 1) {
             guideStep = 2
             textView4.visibility = View.VISIBLE
             imageView3.setImageResource(R.drawable.ic_baseline_check_24)
-        } else if (guideStep == 2 && actionCount > 1) {
-            guideStep = 3
             imageView4.setImageResource(R.drawable.ic_baseline_check_24)
         }
         TiltAccessibilityService.doAction(KeyAction.NOTIFY.action)
