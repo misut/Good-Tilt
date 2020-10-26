@@ -65,7 +65,7 @@ class PrefActionFragment() : PreferenceFragmentCompat(){
         mainIntent.addCategory(Intent.CATEGORY_LAUNCHER);
         val pkgAppsList = activity?.packageManager?.queryIntentActivities(
             mainIntent,
-            PackageManager.MATCH_DEFAULT_ONLY
+            PackageManager.MATCH_ALL
         )!!
         alertAdapter = object : ArrayAdapter<ResolveInfo>(
             inflater.context, R.layout.item_app, pkgAppsList
